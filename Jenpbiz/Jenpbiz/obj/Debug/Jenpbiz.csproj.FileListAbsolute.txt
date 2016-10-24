@@ -49,7 +49,6 @@ D:\dev\Github\Jenpbiz\Jenpbiz\bin\System.Web.WebPages.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\System.Web.WebPages.Deployment.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\System.Web.WebPages.Razor.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\Antlr3.Runtime.pdb
-D:\dev\Github\Jenpbiz\Jenpbiz\bin\Newtonsoft.Json.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\EntityFramework.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\EntityFramework.SqlServer.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\bin\Microsoft.AspNet.Identity.Core.xml
@@ -67,3 +66,4 @@ D:\dev\Github\Jenpbiz\Jenpbiz\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 D:\dev\Github\Jenpbiz\Jenpbiz\obj\Debug\Jenpbiz.csprojResolveAssemblyReference.cache
 D:\dev\Github\Jenpbiz\Jenpbiz\obj\Debug\Jenpbiz.dll
 D:\dev\Github\Jenpbiz\Jenpbiz\obj\Debug\Jenpbiz.pdb
+D:\dev\Github\jenpbiz\Jenpbiz\bin\Newtonsoft.Json.xml
