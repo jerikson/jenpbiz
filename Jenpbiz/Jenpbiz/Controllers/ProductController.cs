@@ -6,13 +6,13 @@ using System.Web.Mvc;
 
 namespace Jenpbiz.Controllers
 {
-    public class HomeController : Controller
+    public class ProductController : Controller
     {
+        // GET: Product
         public ActionResult Index()
         {
-            ViewBag.Title = "Home";
+            ViewBag.Title = "Product";
             return View();
         }
-
     }
 }
