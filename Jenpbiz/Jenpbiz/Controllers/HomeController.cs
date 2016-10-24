@@ -10,6 +10,7 @@ namespace Jenpbiz.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.Title = "index";
             return View();
         }
 
