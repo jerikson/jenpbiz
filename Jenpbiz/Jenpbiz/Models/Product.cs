@@ -14,10 +14,10 @@ namespace Jenpbiz.Models
             public int ProductId { get; set; }
             public string ProductTitle{ get; set; }
             public string ProductDescription { get; set; }
-            public uint ProductPrice { get; set; }
             public string ProductLink { get; set; }
             public string ProductImageLink { get; set; }
 
+            public Price Price { get; set; }
 
         }
 }

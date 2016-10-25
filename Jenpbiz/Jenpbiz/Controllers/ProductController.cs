@@ -74,7 +74,6 @@ namespace Jenpbiz.Controllers
                 _context.Products.Add(new Product()
                 {
                     ProductTitle = randomTitles[productTitleIndex],
-                    ProductPrice = (uint)rnd.Next(1, 1000),
                     ProductLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + "/",
                     ProductImageLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + ".jpg",
                     ProductDescription = "I am a " + randomTitles[productTitleIndex]
