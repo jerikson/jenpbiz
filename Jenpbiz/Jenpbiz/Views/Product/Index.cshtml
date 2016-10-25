@@ -1,14 +1,20 @@
-﻿
+﻿@model List<Jenpbiz.Models.Product>
 @{
 }
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
 </head>
 <body>
-    <div> 
-    </div>
+<div class="container">
+    <ul>
+    @foreach (var p in Model)
+    {
+        <li>@p.ProductTitle</li>
+    }
+    </ul>
+
+</div>
 </body>
 </html>

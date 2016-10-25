@@ -14,10 +14,25 @@ namespace Jenpbiz.Controllers
         // GET: Product
         public ActionResult Index()
         {
+            ViewBag.Title = "Product";
             var count = _context.Products.Count();
 
-            ViewBag.Title = "Product";
-            return View();
+            Product p = new Product() 
+            {
+                ProductTitle = "Banana",
+                PruductDescription = "Yellow banana",
+                ProductPrice = 23,
+                ProductLink = "www.banana.com",
+                ProductImageLink = "www.banana/img/banana01.png"
+                
+            };
+
+            _context.Products.Add(p);
+            _context.SaveChanges();
+           
+
+
+            return View(_context.Products.ToList());
         }
     }
 }
