@@ -16,6 +16,36 @@ namespace Jenpbiz.Models
             public string ProductDescription { get; set; }
             public string ProductLink { get; set; }
             public string ProductImageLink { get; set; }
+            public ProductCategoryEnum ProductCategory { get; set; }
+            public ProductConditionEnum ProductCondition { get; set; }
+            public ProductAvailabilityEnum ProductAvailability { get; set; }
+
+
+        public enum ProductCategoryEnum
+        {
+            Electronics,
+            Apparel,
+            Books,
+            Tools,
+            Media,
+            Consumable,
+        };
+
+        public enum ProductConditionEnum
+        {
+            New,
+            Refurbished,
+            Used
+        };
+
+        public enum ProductAvailabilityEnum
+        {
+            In_stock,
+            Out_of_stock,
+            Pre_order
+        };
+
+
 
             public Price Price { get; set; }
 
