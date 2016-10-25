@@ -22,7 +22,7 @@ namespace Jenpbiz.Controllers
             Product p = new Product() 
             {
                 ProductTitle = "Banana",
-                PruductDescription = "Yellow banana",
+                ProductDescription = "Yellow banana",
                 ProductPrice = 23,
                 ProductLink = "www.banana.com",
                 ProductImageLink = "www.banana/img/banana01.png"
@@ -32,12 +32,25 @@ namespace Jenpbiz.Controllers
             _context.Products.Add(p);
             _context.SaveChanges();
 
-            randomProducts();
+            RandomProducts();
 
             return View(_context.Products.ToList());
         }
 
-        public void randomProducts()
+        public ActionResult GetProduct(int id)
+        {
+            Product clickedProduct = _context.Products.Find(id);
+
+            if (clickedProduct == null)
+            {
+                RedirectToAction("/Index", "Product");
+
+            }
+
+            return View(clickedProduct);
+        }
+
+        public void RandomProducts()
         {
 
             Random rnd = new Random();
