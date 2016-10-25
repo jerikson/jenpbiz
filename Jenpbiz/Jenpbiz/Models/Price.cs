@@ -11,5 +11,7 @@ namespace Jenpbiz.Models
         public double PriceValue { get; set; }
         public string PriceCurrency { get; set; }
 
+        public virtual Product Product { get; set; }
+
     }
 }

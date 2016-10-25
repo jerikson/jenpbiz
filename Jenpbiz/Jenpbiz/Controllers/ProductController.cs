@@ -66,21 +66,31 @@ namespace Jenpbiz.Controllers
         {
             Random rnd = new Random();
             string[] randomTitles = { "Apple", "Banana", "Iphone 7", "NIKE Sneakers", "Trumpet" };
+            string[] randomCurrencies = { "SEK", "USD", "GBP", "AUD" };
             int productTitleIndex = 0;
+            int productCurrencyIndex = 0;
 
 
             for (int i = 0; i < 3; i++)
             {
                 productTitleIndex = rnd.Next(0, randomTitles.Length - 1);
-                _context.Products.Add(new Product()
+                productCurrencyIndex = rnd.Next(0, randomCurrencies.Length - 1);
+
+                Product newProduct = new Product()
                 {
                     ProductTitle = randomTitles[productTitleIndex],
                     ProductLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + "/",
                     ProductImageLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + ".jpg",
-                    ProductDescription = "I am a " + randomTitles[productTitleIndex]
-                });
-                
+                    ProductDescription = "I am a " + randomTitles[productTitleIndex],
+
+                };
+
+                Price randomPrice = new Price() { PriceCurrency = randomCurrencies[productCurrencyIndex], PriceValue = rnd.Next(100, 1000), Product = newProduct };
+                newProduct.Price = randomPrice;
+
+                _context.Products.Add(newProduct);
             }
+                
 
             _context.SaveChanges();
             return;

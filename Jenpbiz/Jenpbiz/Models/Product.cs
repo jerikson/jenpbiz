@@ -17,7 +17,7 @@ namespace Jenpbiz.Models
             public string ProductLink { get; set; }
             public string ProductImageLink { get; set; }
 
-            public Price Price { get; set; }
+            public virtual Price Price { get; set; }
 
         }
 }
