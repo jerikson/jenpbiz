@@ -32,19 +32,20 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Currency</th>
+                <th>Stock</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var p in Model)
-            {
+            @foreach (var p in Model) {
                 <tr>
                         <td>@p.ProductId</td>
                         <td>@p.ProductTitle</td>
                         <td>@p.ProductDescription</td>
                         <td>@p.Price.PriceValue</td>
                     <td><span class="badge">@p.Price.PriceCurrency</span></td>
+                    <td>@p.ProductAvailability</td>
                     <td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
-                        <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
+                    <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
                 </tr>
             }
         </tbody>
