@@ -8,12 +8,17 @@
 </head>
 <body>
 <div class="container">
-    <ul>
-    @foreach (var p in Model)
-    {
-        <li>@p.ProductTitle</li>
-    }
-    </ul>
+    <br/>
+    <br />
+    <br />
+    <div class="list-group">
+        @foreach (var p in Model)
+        {
+
+            <a href="@p.ProductLink" class="list-group-item"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.PruductDescription</a>
+
+        }
+    </div>
 
 </div>
 </body>
