@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Data.Entity.Infrastructure.Annotations;
+using Newtonsoft.Json.Converters;
 
 
 namespace Jenpbiz.Models
@@ -19,7 +20,7 @@ namespace Jenpbiz.Models
             public string ProductGtin { get; set; }
             public string ProductMpn { get; set; }
             public string ProductBrand { get; set; }
-            public DateTime ProductAvailabilityDate { get; set; }
+            public DateTime? ProductAvailabilityDate { get; set; }
 
             public ProductCategoryEnum ProductCategory { get; set; }
             public ProductConditionEnum ProductCondition { get; set; }
@@ -52,7 +53,7 @@ namespace Jenpbiz.Models
 
 
 
-            public Price Price { get; set; }
+            public virtual Price Price { get; set; }
 
         }
 }
