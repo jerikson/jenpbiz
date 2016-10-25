@@ -16,12 +16,6 @@ namespace Jenpbiz.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
-            //modelBuilder.Entity<Game>()
-            //    .HasMany(g => g.users)
-            //    .WithMany(u => u.Games);
-
-
             modelBuilder.Entity<Product>()
                 .HasRequired(p => p.Price)
                 .WithRequiredDependent(p => p.Product);

@@ -34,8 +34,10 @@ namespace Jenpbiz.Controllers
 
       */
 
-            RandomProducts();
-
+            if (!_context.Products.Any())
+            { 
+                RandomProducts();
+            }
             return View(_context.Products.ToList());
         }
 

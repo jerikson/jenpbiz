@@ -1,4 +1,5 @@
-﻿@model List<Jenpbiz.Models.Product>
+﻿@using Jenpbiz.Models
+@model List<Jenpbiz.Models.Product>
 @{
 }
 <!DOCTYPE html>
@@ -9,18 +10,21 @@
 <body>
 <div class="container">
     <br/>
+    <h3>Products: @Model.Count.ToString()</h3>
     <br />
     <br />
     <div class="list-group">
+        
+        
         @foreach (var p in Model)
         {
             <div class="list-group-item">
-                <a href="~/Product/GetProduct/@p.ProductId"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.ProductDescription</a>
+                <a href="~/Product/GetProduct/@p.ProductId"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.ProductDescription @p.Price.PriceValue @p.Price.PriceCurrency</a>
                 <a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign pull-right"></span></a>
             </div>
-            
-       
-            
+
+
+
         }
     </div>
 
