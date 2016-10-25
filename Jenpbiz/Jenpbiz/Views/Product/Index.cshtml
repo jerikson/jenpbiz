@@ -8,12 +8,20 @@
 </head>
 <body>
 <div class="container">
-    <ul>
-    @foreach (var p in Model)
-    {
-        <li>@p.ProductTitle</li>
-    }
-    </ul>
+    <br/>
+    <br />
+    <br />
+    <div class="list-group">
+        @foreach (var p in Model)
+        {
+
+            <a href="~/Product/GetProduct/@p.ProductId" class="list-group-item"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.ProductDescription</a>
+            @*@Html.ActionLink(p.ProductTitle, "GetProduct", "Product",
+           new { id = p.ProductId },
+           new { @class = "list-group-item" })*@
+
+        }
+    </div>
 
 </div>
 </body>

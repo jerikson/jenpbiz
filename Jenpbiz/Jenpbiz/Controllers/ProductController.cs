@@ -18,7 +18,7 @@ namespace Jenpbiz.Controllers
         {
             ViewBag.Title = "Product";
             var count = _context.Products.Count();
-
+            /*
             Product p = new Product() 
             {
                 ProductTitle = "Banana",
@@ -28,11 +28,13 @@ namespace Jenpbiz.Controllers
                 ProductImageLink = "www.banana/img/banana01.png"
                 
             };
-
+            
             _context.Products.Add(p);
             _context.SaveChanges();
 
-            RandomProducts();
+      */
+
+            //RandomProducts();
 
             return View(_context.Products.ToList());
         }
