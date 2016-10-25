@@ -14,12 +14,13 @@
     <div class="list-group">
         @foreach (var p in Model)
         {
-
-            <a href="~/Product/GetProduct/@p.ProductId" class="list-group-item"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.ProductDescription</a>
-            @*@Html.ActionLink(p.ProductTitle, "GetProduct", "Product",
-           new { id = p.ProductId },
-           new { @class = "list-group-item" })*@
-
+            <div class="list-group-item">
+                <a href="~/Product/GetProduct/@p.ProductId"><span class="label label-default">@p.ProductId</span> @p.ProductTitle @p.ProductDescription</a>
+                <a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign pull-right"></span></a>
+            </div>
+            
+       
+            
         }
     </div>
 
