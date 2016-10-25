@@ -16,6 +16,11 @@ namespace Jenpbiz.Models
             public string ProductDescription { get; set; }
             public string ProductLink { get; set; }
             public string ProductImageLink { get; set; }
+            public string ProductGtin { get; set; }
+            public string ProductMpn { get; set; }
+            public string ProductBrand { get; set; }
+            public DateTime ProductAvailabilityDate { get; set; }
+
             public ProductCategoryEnum ProductCategory { get; set; }
             public ProductConditionEnum ProductCondition { get; set; }
             public ProductAvailabilityEnum ProductAvailability { get; set; }
