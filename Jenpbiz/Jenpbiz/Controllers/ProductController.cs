@@ -46,15 +46,14 @@ namespace Jenpbiz.Controllers
             if (clickedProduct == null)
             {
                 RedirectToAction("/Index", "Product");
-
             }
 
             return View(clickedProduct);
         }
 
+
         public void RandomProducts()
         {
-
             Random rnd = new Random();
             string[] randomTitles = { "Apple", "Banana", "Iphone 7", "NIKE Sneakers", "Trumpet" };
             int productTitleIndex = 0;
