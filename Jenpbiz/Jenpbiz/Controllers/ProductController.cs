@@ -41,20 +41,29 @@ namespace Jenpbiz.Controllers
 
         public ActionResult GetProduct(int id)
         {
-            Product clickedProduct = _context.Products.Find(id);
-
-            if (clickedProduct == null)
+            Product p = _context.Products.Find(id);
+            if (p == null)
             {
                 return RedirectToAction("/Index", "Product");
 
             }
 
-            return View(clickedProduct);
+            return View(p);
+        }
+
+        public ActionResult DeleteProduct(int id)
+        {
+            Product p = _context.Products.Find(id);
+            if (p != null)
+            {
+                _context.Products.Remove(p);
+                _context.SaveChanges();
+            }
+            return RedirectToAction("/Index", "Product");
         }
 
         public void RandomProducts()
         {
-
             Random rnd = new Random();
             string[] randomTitles = { "Apple", "Banana", "Iphone 7", "NIKE Sneakers", "Trumpet" };
             int productTitleIndex = 0;
@@ -66,7 +75,6 @@ namespace Jenpbiz.Controllers
                 _context.Products.Add(new Product()
                 {
                     ProductTitle = randomTitles[productTitleIndex],
-                    ProductPrice = rnd.Next(1, 1000),
                     ProductLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + "/",
                     ProductImageLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + ".jpg",
                     ProductDescription = "I am a " + randomTitles[productTitleIndex]
