@@ -44,20 +44,16 @@ namespace Jenpbiz.Controllers
         public ActionResult GetProduct(int id)
         {
             Product p = _context.Products.Find(id);
-            if (p == null)
-            {
+            if (p == null) {
                 return RedirectToAction("/Index", "Product");
-
             }
-
             return View(p);
         }
 
         public ActionResult DeleteProduct(int id)
         {
             Product p = _context.Products.Find(id);
-            if (p != null)
-            {
+            if (p != null) {
                 _context.Products.Remove(p);
                 _context.SaveChanges();
             }

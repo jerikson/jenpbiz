@@ -30,6 +30,7 @@
                 <th>#</th>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Category</th>
                 <th>Price</th>
                 <th>Currency</th>
                 <th>Stock</th>
@@ -41,9 +42,10 @@
                         <td>@p.ProductId</td>
                         <td>@p.ProductTitle</td>
                         <td>@p.ProductDescription</td>
+                        <td>@p.ProductCategory</td>
                         <td>@p.Price.PriceValue</td>
                     <td><span class="badge">@p.Price.PriceCurrency</span></td>
-                    <td>@p.ProductAvailability</td>
+                    <td>@p.ProductAvailability.ToString().ToLower()</td>
                     <td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
                     <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
                 </tr>

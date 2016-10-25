@@ -20,6 +20,10 @@ namespace Jenpbiz.Models
             public string ProductGtin { get; set; }
             public string ProductMpn { get; set; }
             public string ProductBrand { get; set; }
+            public string ProductColor { get; set; }
+            public string ProductMaterial { get; set; }
+            public string ProductSize { get; set; }
+            public string ProductPattern { get; set; }
             public DateTime? ProductAvailabilityDate { get; set; }
 
             public ProductCategoryEnum ProductCategory { get; set; }
