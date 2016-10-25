@@ -75,15 +75,19 @@ namespace Jenpbiz.Controllers
 
             for (int i = 0; i < 3; i++)
             {
-                productTitleIndex = rnd.Next(0, randomTitles.Length - 1);
-                productCurrencyIndex = rnd.Next(0, randomCurrencies.Length - 1);
+                productTitleIndex = rnd.Next(0, randomTitles.Length);
+                productCurrencyIndex = rnd.Next(0, randomCurrencies.Length);
 
                 Product newProduct = new Product()
                 {
                     ProductTitle = randomTitles[productTitleIndex],
-                    ProductLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + "/",
-                    ProductImageLink = "https://www.example.com/" + rnd.Next(50000, 200000) + "/" + randomTitles[productTitleIndex] + ".jpg",
+                    ProductLink = "https://www.example.com/" + rnd.Next(50000, 200001) + "/" + randomTitles[productTitleIndex] + "/",
+                    ProductImageLink = "https://www.example.com/" + rnd.Next(50000, 200001) + "/" + randomTitles[productTitleIndex] + ".jpg",
                     ProductDescription = "I am a " + randomTitles[productTitleIndex],
+                    ProductAvailability = (Product.ProductAvailabilityEnum)rnd.Next(0, 3),
+                    ProductCategory = (Product.ProductCategoryEnum)rnd.Next(0, 6),
+                    ProductCondition = (Product.ProductConditionEnum)rnd.Next(0, 3),
+                    ProductGtin = GtinGenerator("Europe", rnd)
 
                 };
 
@@ -96,6 +100,24 @@ namespace Jenpbiz.Controllers
 
             _context.SaveChanges();
             return;
+        }
+
+        public string GtinGenerator(string region, Random rnd)
+        {
+            //Generates a gtin for a continent
+            string gtin = "";
+
+            if (region == "Europe")
+            {
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(0, 10);
+
+            }
+
+            return gtin;
         }
     }
 }
