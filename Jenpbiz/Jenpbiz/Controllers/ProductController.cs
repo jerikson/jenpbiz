@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Jenpbiz.Models;
@@ -79,5 +81,23 @@ namespace Jenpbiz.Controllers
             _context.SaveChanges();
             return;
         }
+
+        
+        // 113298073
+        // AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8
+        public ActionResult GetMerchantProduct(string merchantId, string key)
+        {
+            WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/" + merchantId + "/products?includeInvalidInsertedItems=true&key=" + "{" + key + "}");
+            Stream dataStream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            // WebResponse response = request.GetResponse();
+            string response = reader.ReadToEnd();
+            
+            return Json(response, JsonRequestBehavior.AllowGet);
+
+        }
+
+
+
     }
 }
