@@ -18,22 +18,8 @@ namespace Jenpbiz.Controllers
         {
             ViewBag.Title = "Product";
             var count = _context.Products.Count();
-            /*
-            Product p = new Product() 
-            {
-                ProductTitle = "Banana",
-                ProductDescription = "Yellow banana",
-                ProductPrice = 23,
-                ProductLink = "www.banana.com",
-                ProductImageLink = "www.banana/img/banana01.png"
-                
-            };
-            
-            _context.Products.Add(p);
-            _context.SaveChanges();
 
-      */
-
+            // Add some placeholder products if there are none
             if (!_context.Products.Any())
             { 
                 RandomProducts();
