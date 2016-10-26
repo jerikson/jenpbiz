@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -85,13 +86,15 @@ namespace Jenpbiz.Controllers
         
         // 113298073
         // AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8
-        public ActionResult GetMerchantProduct(string merchantId, string key)
+        public ActionResult GetMerchantProduct()
         {
-            WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/" + merchantId + "/products?includeInvalidInsertedItems=true&key=" + "{" + key + "}");
-            Stream dataStream = request.GetResponse().GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            // WebResponse response = request.GetResponse();
-            string response = reader.ReadToEnd();
+            Debug.WriteLine("asd");
+            WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/113298073/products?includeInvalidInsertedItems=true&key={AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8}");
+            
+            //Stream dataStream = request.GetResponse().GetResponseStream();
+            //StreamReader reader = new StreamReader(dataStream);
+            WebResponse response = request.GetResponse();
+            //string response = reader.ReadToEnd();
             
             return Json(response, JsonRequestBehavior.AllowGet);
 

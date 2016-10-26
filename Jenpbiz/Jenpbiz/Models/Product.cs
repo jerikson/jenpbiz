@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Data.Entity.Infrastructure.Annotations;
+using Microsoft.Owin.Security.Google;
 using Newtonsoft.Json.Converters;
 
 
@@ -11,7 +12,6 @@ namespace Jenpbiz.Models
 {
     public class Product
     {
-            //[Key] / Fluet API? Code first? DataAnnotations
             public int ProductId { get; set; }
             public string ProductTitle{ get; set; }
             public string ProductDescription { get; set; }
@@ -30,6 +30,7 @@ namespace Jenpbiz.Models
             public ProductConditionEnum ProductCondition { get; set; }
             public ProductAvailabilityEnum ProductAvailability { get; set; }
 
+            public virtual Price Price { get; set; }
 
         public enum ProductCategoryEnum
         {
@@ -56,9 +57,6 @@ namespace Jenpbiz.Models
         };
 
 
-
-            public virtual Price Price { get; set; }
-
-        }
+    }
 }
 
