@@ -4,11 +4,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using Jenpbiz.Models;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
+using Google.Apis.ShoppingContent.v2;
 
 namespace Jenpbiz.Controllers
 {
@@ -89,18 +91,18 @@ namespace Jenpbiz.Controllers
         public ActionResult GetMerchantProduct()
         {
             Debug.WriteLine("asd");
+            
             WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/113298073/products?includeInvalidInsertedItems=true&key={AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8}");
             
             //Stream dataStream = request.GetResponse().GetResponseStream();
             //StreamReader reader = new StreamReader(dataStream);
             WebResponse response = request.GetResponse();
             //string response = reader.ReadToEnd();
-            
-            return Json(response, JsonRequestBehavior.AllowGet);
 
+            return Json(response);
+            
         }
 
-
-
+      
     }
 }
