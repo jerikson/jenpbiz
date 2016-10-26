@@ -75,7 +75,7 @@ namespace Jenpbiz.Controllers
             int productBrandIndex = 0;
 
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 5; i++)
             {
                 productTitleIndex = rnd.Next(0, randomTitles.Length);
                 productCurrencyIndex = rnd.Next(0, randomCurrencies.Length);
@@ -129,6 +129,14 @@ namespace Jenpbiz.Controllers
                 gtin += rnd.Next(100, 1000);
                 gtin += rnd.Next(100, 1000);
                 gtin += rnd.Next(0, 10);
+
+            }
+            else if (region == "North America")
+            {
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
+                gtin += rnd.Next(100, 1000);
 
             }
 
