@@ -41,7 +41,7 @@ namespace Jenpbiz.Controllers
             return View(_context.Products.ToList());
         }
 
-        public ActionResult GetProduct(int id)
+        public ActionResult GetProduct(int? id)
         {
             Product p = _context.Products.Find(id);
             if (p == null)
@@ -67,16 +67,19 @@ namespace Jenpbiz.Controllers
         public void RandomProducts()
         {
             Random rnd = new Random();
-            string[] randomTitles = { "Apple", "Banana", "Iphone 7", "NIKE Sneakers", "Trumpet" };
+            string[] randomTitles = { "Apple", "Banana", "Iphone 7", "Nike Sneakers", "Trumpet" };
             string[] randomCurrencies = { "SEK", "USD", "GBP", "AUD" };
+            string[] randomBrands = { "Microsoft", "Apple", "Nike", "Adidas", "Eldorado" };
             int productTitleIndex = 0;
             int productCurrencyIndex = 0;
+            int productBrandIndex = 0;
 
 
             for (int i = 0; i < 3; i++)
             {
                 productTitleIndex = rnd.Next(0, randomTitles.Length);
                 productCurrencyIndex = rnd.Next(0, randomCurrencies.Length);
+                productBrandIndex = rnd.Next(0, randomBrands.Length);
 
                 Product newProduct = new Product()
                 {
@@ -93,6 +96,18 @@ namespace Jenpbiz.Controllers
 
                 Price randomPrice = new Price() { PriceCurrency = randomCurrencies[productCurrencyIndex], PriceValue = rnd.Next(100, 1000), Product = newProduct };
                 newProduct.Price = randomPrice;
+
+                if(newProduct.ProductCategory != Product.ProductCategoryEnum.Books)
+                {
+                    newProduct.ProductBrand = randomBrands[productBrandIndex];
+
+                }
+
+                if (newProduct.ProductAvailability == Product.ProductAvailabilityEnum.Pre_order)
+                {
+                    newProduct.ProductAvailabilityDate = DateTime.Now.AddDays(3);
+
+                }
 
                 _context.Products.Add(newProduct);
             }
