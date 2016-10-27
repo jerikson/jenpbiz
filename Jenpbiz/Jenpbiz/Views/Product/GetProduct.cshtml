@@ -12,12 +12,26 @@
 </head>
 <body>
     <div class="container"> 
-        Id: @Model.ProductId <br />
-        Title: @Model.ProductTitle <br />
-        Description: @Model.ProductDescription <br />
-        Price: @Model.Price.PriceValue @Model.Price.PriceCurrency <br />
-        Page Link: @Model.ProductLink <br />
-        Image Link: @Model.ProductImageLink <br />
+        Id: @Model.ProductId<br />
+        Title: @Model.ProductTitle<br />
+        Description: @Model.ProductDescription<br />
+        Price: @Model.Price.PriceValue @Model.Price.PriceCurrency<br />
+        Page Link: @Model.ProductLink<br />
+        Image Link: @Model.ProductImageLink<br />
+        Availability: @Model.ProductAvailability<br />
+        @if(Model.ProductAvailability == Jenpbiz.Models.Product.ProductAvailabilityEnum.Pre_order)
+        {
+            @: Availability Date: @Model.ProductAvailabilityDate<br />
+        }
+        Category: @Model.ProductCategory<br />
+
+        @if (Model.ProductCategory != Jenpbiz.Models.Product.ProductCategoryEnum.Books)
+        {
+            @: Brand: @Model.ProductBrand<br />
+        }
+        Condition: @Model.ProductCondition<br />
+        Gtin: @Model.ProductGtin<br />
+
     </div>
 </body>
 </html>
