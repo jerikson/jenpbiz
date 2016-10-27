@@ -187,6 +187,7 @@
     <Compile Include="Controllers\GoogleApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\UIController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -234,6 +235,7 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\GetProduct.cshtml" />
     <Content Include="Views\GoogleApi\GetProduct.cshtml" />
+    <Content Include="Views\UI\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
