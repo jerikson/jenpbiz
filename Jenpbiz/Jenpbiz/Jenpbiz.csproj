@@ -45,6 +45,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Apis">
+<<<<<<< HEAD
       <HintPath>..\packages\Google.Apis.1.18.0\lib\net45\Google.Apis.dll</HintPath>
     </Reference>
     <Reference Include="Google.Apis.Auth">
@@ -193,6 +194,8 @@
     <Compile Include="Models\JenpbizContext.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\APIConsumer.cs" />
+    <Compile Include="Models\ShoppingContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -204,6 +207,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\APIs.js" />
+    <Content Include="Scripts\API.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />

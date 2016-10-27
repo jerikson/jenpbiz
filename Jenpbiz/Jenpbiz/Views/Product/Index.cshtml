@@ -12,47 +12,43 @@
     <br/>
     <h3>Products: @Model.Count.ToString()</h3>
     <br />
+    <p id="placeholder"></p>
     <br />
-    @*
-        <div class="table-striped list-group">
-            @foreach (var p in Model)
-            {
-                <div class="list-group-item">
-                    <a href="~/Product/GetProduct/@p.ProductId"><span class="label label-info">@p.ProductId</span> @p.ProductTitle @p.ProductDescription <span class="badge">@p.Price.PriceValue @p.Price.PriceCurrency</span></a>
-                    <a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a>
-                </div>
-            }
-        </div>
-*@
+    <br />
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Currency</th>
-                <th>Stock</th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Currency</th>
+            <th>Stock</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var p in Model) {
-                <tr>
-                        <td>@p.ProductId</td>
-                        <td>@p.ProductTitle</td>
-                        <td>@p.ProductDescription</td>
-                        <td>@p.Price.PriceValue</td>
-                    <td><span class="badge">@p.Price.PriceCurrency</span></td>
-                    <td>@p.ProductAvailability</td>
-                    <td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
-                    <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
-                </tr>
-            }
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.ProductId</td>
+                <td>@p.ProductTitle</td>
+                <td>@p.ProductDescription</td>
+                <td>@p.ProductCategory</td>
+                <td>@p.Price.PriceValue</td>
+                <td><span class="badge">@p.Price.PriceCurrency</span></td>
+                <td>@p.ProductAvailability.ToString().ToLower()</td>
+                <td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
+            </tr>
+        }
         </tbody>
     </table>
     
 
 
 </div>
-    </body>
-    </html>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/API.js"></script>
+</body>
+</html>
