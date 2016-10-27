@@ -34,7 +34,7 @@ namespace Jenpbiz.Controllers
                               ClientId = CLIENT_ID,
                               ClientSecret = CLIENT_SECRET
                           },
-                          new string[] { ShoppingContentService.Scope.Content },
+                          scopes,
                           "user",
                           CancellationToken.None).Result;
 
@@ -66,7 +66,7 @@ namespace Jenpbiz.Controllers
             return View(productsResponse.Resources.ToList());
         }
 
-        public ActionResult InsertProduct()
+        public ActionResult Api_InsertProduct()
         {
             return View();
         }
