@@ -233,6 +233,7 @@
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\GetProduct.cshtml" />
     <Content Include="Views\GoogleAPI\API_GetProducts.cshtml" />
+    <Content Include="Views\GoogleAPI\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

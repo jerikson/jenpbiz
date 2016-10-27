@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System;
 
 using Google.Apis.Auth;
 using Google.Apis.Auth.OAuth2;
@@ -24,11 +25,19 @@ namespace Jenpbiz.Controllers
 {
     public class GoogleAPIController : Controller
     {
+
+
         // GET: GoogleAPI
         public ActionResult Index()
         {
+
             return View();
         }
+
+        
+
+        
+
 
         public ActionResult API_GetProducts()
         {
@@ -38,9 +47,10 @@ namespace Jenpbiz.Controllers
             //var clientIdWeb = "896777409399-k6hpbpab88tbv6qn7233thc0nhkncu2g.apps.googleusercontent.com";
             //var clientSecretWeb = "VCpvtenKfMz40axOJIqBH_EC";
 
-            var clientId = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
-            var clientSecret = "vq_UOyNpiO2q6uTb-QKcCykt";
+            string clientId = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
+            string clientSecret = "vq_UOyNpiO2q6uTb-QKcCykt";
             ulong merchantId = 113298073;
+
 
             //GoogleWebAuthorizationBroker.Folder = "ShoppingContent.Sample";
 
@@ -54,7 +64,7 @@ namespace Jenpbiz.Controllers
                 "jenpbiz",
                 CancellationToken.None).Result;
 
-
+            
 
             // Utkommenterad för jag tror det bara behövs när man ska göra calls,
             // inte vid autentisering.
@@ -100,9 +110,17 @@ namespace Jenpbiz.Controllers
             //System.Console.WriteLine();
             Debug.WriteLine("");
 
-
+            
 
             return View(productsResponse.Resources.ToList());
+        }
+
+        public void API_InsertProduct()
+        {
+
+
+
+
         }
     }
 }
