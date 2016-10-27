@@ -12,5 +12,14 @@ namespace Jenpbiz.Models
             { }
 
             public DbSet<Product> Products { get; set; }
+            public DbSet<Price> Prices { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>()
+                .HasRequired(p => p.Price)
+                .WithRequiredDependent(p => p.Product);
+
         }
+    }
 }
