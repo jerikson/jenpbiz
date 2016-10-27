@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
+using System.Net.Http;
 
 namespace Jenpbiz.Controllers
 {
@@ -100,8 +101,20 @@ namespace Jenpbiz.Controllers
             //string response = reader.ReadToEnd();
 
             return Json(response);
-            
+        
+
+            //using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
+            //{
+            //    client.BaseAddress = new Uri("");
+            //    HttpResponseMessage response = client.GetAsync("").Result;
+            //    response.EnsureSuccessStatusCode();
+            //    string result = response.Content.ReadAsStringAsync().Result;
+            //    Console.WriteLine("Result: " + result);
+            //}
+
         }
+
+
 
       
     }

@@ -8,7 +8,6 @@ using Google.Apis.Services;
 
 namespace Jenpbiz.Models
 {
-
     internal class ShoppingContent
     {
         private static string CLIENT_ID = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
@@ -40,20 +39,17 @@ namespace Jenpbiz.Models
 
             if (MCA_MERCHANT_ID == 0)
             {
-                APIConsumer consumah = new APIConsumer(service);
+                ApiConsumer consumah = new ApiConsumer(service);
                 consumah.RunCalls(MERCHANT_ID);
             }
-
-            Debug.WriteLine("Press any key to continue...");
-            Console.ReadKey();
         }
     }
 
-    internal class APIConsumer
+    internal class ApiConsumer
     {
         private readonly ShoppingContentService _service;
 
-        public APIConsumer(ShoppingContentService service)
+        public ApiConsumer(ShoppingContentService service)
         {
             this._service = service;
         }
@@ -77,23 +73,10 @@ namespace Jenpbiz.Models
 
                 if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
                 {
-                    foreach (var product in productsResponse.Resources)
-                    {
-                        Console.WriteLine(
-                            "Product with ID \"{0}\" and title \"{1}\" was found.",
-                            product.Id,
-                            product.Title);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No accounts found.");
-                }
 
+                }
                 pageToken = productsResponse.NextPageToken;
             } while (pageToken != null);
-            Console.WriteLine();
-
             // Return the last page of accounts.
             return productsResponse;
         }
