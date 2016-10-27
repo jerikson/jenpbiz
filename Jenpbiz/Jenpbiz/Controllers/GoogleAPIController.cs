@@ -1,25 +1,12 @@
-﻿using Microsoft.Owin.Security.Google;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using System;
-
-using Google.Apis.Auth;
 using Google.Apis.Auth.OAuth2;
-using Google.Apis.Json;
-using Google.Apis.Http;
-using Google.Apis.Requests;
 using Google.Apis.Services;
-using Google.Apis.ShoppingContent;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
-using Google.Apis.Util;
-using Google.Apis.Util.Store;
-using Jenpbiz.Models;
+
 
 
 namespace Jenpbiz.Controllers
