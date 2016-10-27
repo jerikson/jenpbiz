@@ -19,69 +19,51 @@ using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using Google.Apis.Util;
 using Google.Apis.Util.Store;
+using Jenpbiz.Models;
 
 
 namespace Jenpbiz.Controllers
 {
-    public class GoogleAPIController : Controller
+    public class GoogleApiController : Controller
     {
-
+        private static string CLIENT_ID = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
+        private static string CLIENT_SECRET = "vq_UOyNpiO2q6uTb-QKcCykt";
+        private static ulong MERCHANT_ID = 113298073;
+        //private static ulong MCA_MERCHANT_ID = 0;
 
         // GET: GoogleAPI
         public ActionResult Index()
         {
-
             return View();
         }
 
-        
-
-        
-
-
-        public ActionResult API_GetProducts()
+        public ActionResult Api_GetProducts()
         {
-
             string[] scopes = new string[] { ShoppingContentService.Scope.Content };
 
-            //var clientIdWeb = "896777409399-k6hpbpab88tbv6qn7233thc0nhkncu2g.apps.googleusercontent.com";
-            //var clientSecretWeb = "VCpvtenKfMz40axOJIqBH_EC";
-
-            string clientId = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
-            string clientSecret = "vq_UOyNpiO2q6uTb-QKcCykt";
-            ulong merchantId = 113298073;
-
-
-            //GoogleWebAuthorizationBroker.Folder = "ShoppingContent.Sample";
-
             var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                new ClientSecrets
-                {
-                    ClientId = clientId,
-                    ClientSecret = clientSecret
-                },
-                scopes,
-                "jenpbiz",
-                CancellationToken.None).Result;
+                          new ClientSecrets
+                          {
+                              ClientId = CLIENT_ID,
+                              ClientSecret = CLIENT_SECRET
+                          },
+                          new string[] { ShoppingContentService.Scope.Content },
+                          "user",
+                          CancellationToken.None).Result;
 
-            
-
-            // Utkommenterad för jag tror det bara behövs när man ska göra calls,
-            // inte vid autentisering.
+            // Create the service.
             var service = new ShoppingContentService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
-                ApplicationName = "Jenpbiz"
-
+                ApplicationName = "jenpbiz",
             });
 
             string pageToken = null;
             long maxResults = 10;
             ProductsListResponse productsResponse = null;
-
             do
             {
-                ProductsResource.ListRequest accountRequest = service.Products.List(merchantId);
+                ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
                 accountRequest.MaxResults = maxResults;
                 accountRequest.PageToken = pageToken;
                 accountRequest.IncludeInvalidInsertedItems = true;
@@ -89,38 +71,20 @@ namespace Jenpbiz.Controllers
 
                 if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
                 {
-                    foreach (var product in productsResponse.Resources)
-                    {
-                        //System.Console.WriteLine(
-                        //    "Product with ID \"{0}\" and title \" {1}\" was found.",
-                        //    product.Id, product.Title);
-                        Debug.WriteLine("Product with ID \"{0}\" and title \" {1}\" was found.",
-                            product.Id, product.Title);
-                    }
-                }
-                else
-                {
-                    //System.Console.WriteLine("No accounts found.");
-                    Debug.WriteLine("No accounts found.");
-                }
 
+                }
                 pageToken = productsResponse.NextPageToken;
             }
             while (pageToken != null);
-            //System.Console.WriteLine();
-            Debug.WriteLine("");
-
-            
-
             return View(productsResponse.Resources.ToList());
         }
 
-        public void API_InsertProduct()
+        public ActionResult InsertProduct()
         {
-
-
-
-
+            return View();
         }
+
     }
+
+
 }
