@@ -26,24 +26,29 @@ namespace Jenpbiz.Controllers
         public ActionResult GetProduct()
         {
             ViewBag.Title = "Products";
-            string[] scopes = new string[] { ShoppingContentService.Scope.Content };
 
-            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                          new ClientSecrets
-                          {
-                              ClientId = CLIENT_ID,
-                              ClientSecret = CLIENT_SECRET
-                          },
-                          new string[] { ShoppingContentService.Scope.Content },
-                          "user",
-                          CancellationToken.None).Result;
+
+            //var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            //              new ClientSecrets
+            //              {
+            //                  ClientId = CLIENT_ID,
+            //                  ClientSecret = CLIENT_SECRET
+            //              },
+            //              scopes,
+            //              "user",
+            //              CancellationToken.None).Result;
+
 
             // Create the service.
-            var service = new ShoppingContentService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "jenpbiz",
-            });
+            //var service = new ShoppingContentService(new BaseClientService.Initializer()
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = "jenpbiz",
+            //});
+
+
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
 
             string pageToken = null;
             long maxResults = 10;
@@ -68,7 +73,67 @@ namespace Jenpbiz.Controllers
 
         public ActionResult InsertProduct()
         {
+
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            Product newProduct = new Product()
+            {
+                Title = "Title",
+                Description = "Description",
+                Link = "Link",
+                ImageLink = "ImageLink",
+                ContentLanguage = "SE",
+                TargetCountry = "SE",
+                Channel = "online",
+                Availability = "in stock",
+                Condition = "new",
+                GoogleProductCategory = "Media > Books",
+                Gtin = "1234567890123",
+                
+
+             
+
+
+            };
+
+            newProduct.Price = new Price()
+            {
+                Currency = "USD",
+                Value = "100"
+            };
+
+            service.Products.Insert(newProduct, MERCHANT_ID);
+
             return View();
+        }
+
+        public UserCredential Authenticate()
+        {
+            string[] scopes = new string[] { ShoppingContentService.Scope.Content };
+
+            var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                          new ClientSecrets
+                          {
+                              ClientId = CLIENT_ID,
+                              ClientSecret = CLIENT_SECRET
+                          },
+                          scopes,
+                          "user",
+                          CancellationToken.None).Result;
+
+            return credential;
+        }
+
+        public ShoppingContentService CreateService(UserCredential credential)
+        {
+            var service = new ShoppingContentService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "jenpbiz",
+            });
+
+            return service;
         }
 
     }
