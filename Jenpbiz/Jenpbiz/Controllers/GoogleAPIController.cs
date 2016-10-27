@@ -7,8 +7,6 @@ using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 
-
-
 namespace Jenpbiz.Controllers
 {
     public class GoogleApiController : Controller
@@ -17,6 +15,7 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "vq_UOyNpiO2q6uTb-QKcCykt";
         private static ulong MERCHANT_ID = 113298073;
         //private static ulong MCA_MERCHANT_ID = 0;
+        //private static readonly int MaxListPageSize = 50;
 
         // GET: GoogleAPI
         public ActionResult Index()
@@ -24,8 +23,9 @@ namespace Jenpbiz.Controllers
             return View();
         }
 
-        public ActionResult Api_GetProducts()
+        public ActionResult GetProduct()
         {
+            ViewBag.Title = "Products";
             string[] scopes = new string[] { ShoppingContentService.Scope.Content };
 
             var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(

@@ -1,18 +1,21 @@
-﻿@model List<Google.Apis.ShoppingContent.v2.Data.Product>
+﻿@using System.Text.RegularExpressions
+@model List<Google.Apis.ShoppingContent.v2.Data.Product>
 @{
-    
 }
-
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>API_GetProducts</title>
+    <title></title>
 </head>
 <body>
     <div class="container"> 
-
+        <br />
+        <h3>Products: @Model.Count.ToString()</h3>
+        <br />
+        <br />
+        <br />
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -28,14 +31,15 @@
                 @foreach (var p in Model)
                 {
                     <tr>
-                        <td>@p.Id</td>
+                        <!--Remove alphabetic characters-->
+                        <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
                         <td>@p.Title</td>
                         <td>@p.Description</td>
                         <td>@p.Price.Value</td>
                         <td><span class="badge">@p.Price.Currency</span></td>
                         <td>@p.Availability</td>
-                        @*<td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
-                        <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>*@
+                        <td><a href="~/Product/GetProduct"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                        <td><a href="~/Product/DeleteProduct"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
                     </tr>
                 }
             </tbody>
