@@ -1,61 +1,13 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
 
 namespace Jenpbiz.Models
 {
-    /*
-   internal class APIConsumer
-    {
-        private ShoppingContentService service;
-
-        public APIConsumer(ShoppingContentService service)
-        {
-            this.service = service;
-        }
-
-        public void RunCalls(ulong merchantId)
-        {
-            // Products
-            GetAllProducts(merchantId);
-        }
-
-        private ProductsListResponse GetAllProducts(ulong merchantId)
-        {
-            // Retrieve account list in pages and display data as we receive it.
-            string pageToken = null;
-            ProductsListResponse productsResponse = null;
-            do
-            {
-                ProductsResource.ListRequest accountRequest = service.Products.List(merchantId);
-                accountRequest.PageToken = pageToken;
-                productsResponse = accountRequest.Execute();
-
-                if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
-                {
-                    foreach (var product in productsResponse.Resources)
-                    {
-                        Console.WriteLine(
-                            "Product with ID \"{0}\" and title \"{1}\" was found.",
-                            product.Id,
-                            product.Title);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No accounts found.");
-                }
-
-                pageToken = productsResponse.NextPageToken;
-            } while (pageToken != null);
-            Console.WriteLine();
-
-            // Return the last page of accounts.
-            return productsResponse;
-        }
-    }
-
-
 
     internal class ShoppingContent
     {
@@ -96,7 +48,60 @@ namespace Jenpbiz.Models
             Console.ReadKey();
         }
     }
+
+    internal class APIConsumer
+    {
+        private readonly ShoppingContentService _service;
+
+        public APIConsumer(ShoppingContentService service)
+        {
+            this._service = service;
+        }
+
+        public void RunCalls(ulong merchantId)
+        {
+            // Products
+            GetAllProducts(merchantId);
+        }
+
+        private ProductsListResponse GetAllProducts(ulong merchantId)
+        {
+            // Retrieve account list in pages and display data as we receive it.
+            string pageToken = null;
+            ProductsListResponse productsResponse = null;
+            do
+            {
+                ProductsResource.ListRequest accountRequest = _service.Products.List(merchantId);
+                accountRequest.PageToken = pageToken;
+                productsResponse = accountRequest.Execute();
+
+                if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
+                {
+                    foreach (var product in productsResponse.Resources)
+                    {
+                        Console.WriteLine(
+                            "Product with ID \"{0}\" and title \"{1}\" was found.",
+                            product.Id,
+                            product.Title);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No accounts found.");
+                }
+
+                pageToken = productsResponse.NextPageToken;
+            } while (pageToken != null);
+            Console.WriteLine();
+
+            // Return the last page of accounts.
+            return productsResponse;
+        }
+    }
+
+
+
        
-     */
+     
 }
 
