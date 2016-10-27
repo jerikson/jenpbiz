@@ -1,0 +1,23 @@
+﻿@model Jenpbiz.Models.Product
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GetProduct</title>
+</head>
+<body>
+    <div class="container"> 
+        Id: @Model.ProductId <br />
+        Title: @Model.ProductTitle <br />
+        Description: @Model.ProductDescription <br />
+        Price: @Model.Price.PriceValue @Model.Price.PriceCurrency <br />
+        Page Link: @Model.ProductLink <br />
+        Image Link: @Model.ProductImageLink <br />
+    </div>
+</body>
+</html>
