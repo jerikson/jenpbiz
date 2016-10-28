@@ -30,25 +30,6 @@ namespace Jenpbiz.Controllers
             ViewBag.Title = "Products";
 
 
-            //var credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-            //              new ClientSecrets
-            //              {
-            //                  ClientId = CLIENT_ID,
-            //                  ClientSecret = CLIENT_SECRET
-            //              },
-            //              scopes,
-            //              "user",
-            //              CancellationToken.None).Result;
-
-
-            // Create the service.
-            //var service = new ShoppingContentService(new BaseClientService.Initializer()
-            //{
-            //    HttpClientInitializer = credential,
-            //    ApplicationName = "jenpbiz",
-            //});
-
-
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
@@ -129,12 +110,22 @@ namespace Jenpbiz.Controllers
             ShoppingContentService service = CreateService(credential);
             bool successfullyDeleted = false;
 
-
-            ProductsResource.GetRequest getProduct = service.Products.Get(MERCHANT_ID, productId);
-            Product foundProduct = getProduct.Execute();
-
+            //try
+            //{
+            //    ProductsResource.GetRequest getProduct = service.Products.Get(MERCHANT_ID, productId);
+            //    Product foundProduct = getProduct.Execute();
+            //}
+            //catch (Exception Ex)
+            //{
+            //    successfullyDeleted = false;
+            //    System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
+            //    System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+            //    System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+            //    System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            //}
             
 
+            
             try
             {
                 ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
@@ -145,7 +136,7 @@ namespace Jenpbiz.Controllers
             catch (Exception Ex)
             {
                 successfullyDeleted = false;
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @114");
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
                 System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
                 System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);

@@ -40,16 +40,18 @@
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
                 <td><a href="~/Product/GetProduct"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
-                <td><a href="~/GoogleApi/DeleteProduct/@Regex.Replace(p.Id, "[@:]", "-")"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct"*@ id="@p.Id"></span></a></td>
+                <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
+                @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
+                <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
             </tr>
         }
         </tbody>
     </table>
 
 
-        
 
-        
+
+
 
     <!-- Begin Google Insert Product Modal -->
     <div class="modal fade" id="modalCreateProduct" role="dialog">
@@ -77,8 +79,8 @@
                         <!--Product Description-->
                         <input type="text" name="" id="inputDescription" class="form-control formController" placeholder="Descripion"/>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter description for new product"></span>
-                    
-                    
+
+
                     </div>
 
                     <div class="modal-footer">
@@ -91,7 +93,7 @@
         </div>
     </div>
     <!-- End Google Insert Product Modal -->
-       
+
 
     <!-- Begin Google Delete Product Modal -->
     <div class="modal fade" id="modalDeleteProduct" role="dialog">

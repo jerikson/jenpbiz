@@ -6,7 +6,7 @@
         var productId = $(this).attr("id");
         alert(productId);
 
-        $("#modalDeleteProduct").modal("show");
+        //$("#modalDeleteProduct").modal("show");
 
         //DeleteProduct(productId);
     });
