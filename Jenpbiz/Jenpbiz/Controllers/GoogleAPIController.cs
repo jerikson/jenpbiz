@@ -123,6 +123,38 @@ namespace Jenpbiz.Controllers
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
 
+        public ActionResult DeleteProduct(string productId)
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+            bool successfullyDeleted = false;
+
+
+            ProductsResource.GetRequest getProduct = service.Products.Get(MERCHANT_ID, productId);
+            Product foundProduct = getProduct.Execute();
+
+            
+
+            try
+            {
+                ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
+                accountRequest.DryRun = true;
+                accountRequest.Execute();
+                successfullyDeleted = true;
+            }
+            catch (Exception Ex)
+            {
+                successfullyDeleted = false;
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @114");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+            //return Json(new { successfullyDeleted = successfullyDeleted }, "json", JsonRequestBehavior.DenyGet);
+        }
+
         public UserCredential Authenticate()
         {
             string[] scopes = new string[] { ShoppingContentService.Scope.Content };

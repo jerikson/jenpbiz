@@ -1,21 +1,30 @@
 ﻿$(document).ready(function () {
 
 
+    $(".deleteClick").on("click", function () {
 
+        var productId = $(this).attr("id");
+        alert(productId);
+
+        $("#modalDeleteProduct").modal("show");
+
+        //DeleteProduct(productId);
+    });
 
 
 });
 
-function GetProducts() {
+function DeleteProduct(productId) {
 
     $.ajax({
         method: 'GET',
-        url: 'GoogleAPI/API_GetProducts/',
-        //contentType: 'json',
+        url: 'GoogleApi/DeleteProduct/',
+        contentType: 'json',
         dataType: 'json',
-        //data: {},
+        data: { productId: productId },
         success: function (data) {
-            console.log("JQuery AJAX authorizer success function.");
+            var deleteResponse = data.successfullyDeleted;
+            console.log("Product successfully deleted!");
             console.log("raw data; " + data);
             console.log("JSON stringify data: " + JSON.stringify(data));
 
