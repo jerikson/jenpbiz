@@ -6,6 +6,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="http://blazeworx.com/flags.css" rel="stylesheet">
 </head>
 <body>
 <div class="container"> 
@@ -59,32 +60,57 @@
             <div class="modal-content">
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
                 <div class="modal-body">
-
-                    <!--Product Category-->
+                        
                     <div class="form-group">
-                        <select class="form-control formController" id="selectCategory">
-                            <option>Apparel</option>
-                            <option>Books</option>
-                            <option>Electronics</option>
-                            <option>Toys</option>
+                        <!--Product Category-->
+                        <select name="selectProductCategory" class="form-control formController input-sm" id="">
+                            <option value="" selected disabled>Category</option>
+                            <option>Apparel</option><option>Books</option><option>Electronics</option><option>Toys</option>
                         </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select category for new product"></span>
-                    </div>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
+                        <!--Product Availability-->
+                        <select name="selectProductAvailability" class="form-control formController input-sm" id="">
+                            <option value="" selected disabled>Availability</option>
+                            <option>In-Stock</option><option>Pre-order</option><option>Out-of-stock</option>
+                        </select>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
+
+                        <!--Product Condition-->
+                        <select name="selectProductCondition" class="form-control formController input-sm" id="">
+                            <option value="" selected disabled>Condition</option>
+                            <option>New</option><option>Used</option><option>Furbished</option>
+                        </select>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
+                    </div>
+                    
                     <div class="form-group input-group-sm ">
                         <!--Product Title-->
-                        <input type="text" name="" id="inputTitle" class="form-control formController" placeholder="Title"/>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter title for new product"></span>
-                        <br/>
-                        <!--Product Description-->
-                        <input type="text" name="" id="inputDescription" class="form-control formController" placeholder="Descripion"/>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter description for new product"></span>
+                        <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
 
+                        <!--Product Description-->
+
+                        <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
+
+                        <!--Product Link-->
+                        <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="https://example.com/category/item33" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a Url for new product"></span>
+
+                        <!--Product Image Link -->
+                        <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
+                        
+                        <!--Product Price -->
+                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
                     </div>
 
+
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-success">Save changes</button>
                     </div>
 
@@ -112,12 +138,11 @@
     <!-- End Google Delete Product Modal -->
 
 </div>
-
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script>
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            })
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 
     <script src="~/Scripts/APIs.js"></script>
