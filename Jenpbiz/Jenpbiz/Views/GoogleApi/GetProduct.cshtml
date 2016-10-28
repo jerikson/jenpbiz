@@ -6,6 +6,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
+    <link href="http://blazeworx.com/flags.css" rel="stylesheet">
 </head>
 <body>
 <div class="container"> 
@@ -72,14 +73,14 @@
                             <option value="" selected disabled>Availability</option>
                             <option>In-Stock</option><option>Pre-order</option><option>Out-of-stock</option>
                         </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
 
                         <!--Product Condition-->
                         <select class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Condition</option>
                             <option>New</option><option>Used</option><option>Furbished</option>
                         </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
 
                     </div>
                     
@@ -89,15 +90,15 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
 
                         <!--Product Description-->
-                        <textarea class="form-control formController" id="" placeholder="Description" rows="6" cols="25"></textarea>
+                        <textarea class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
 
                         <!--Product Link-->
-                        <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="Url" />
+                        <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="https://example.com/category/item33" />
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a Url for new product"></span>
 
                         <!--Product Image Link -->
-                        <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="Image-Url" />
+                        <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
                         
                         <!--Product Price -->
@@ -105,7 +106,10 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
                     </div>
-                    
+
+
+
+
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
@@ -119,12 +123,11 @@
     <!-- End Modal -->
        
 </div>
-
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script>
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip();
-            })
+        $(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
     </script>
 </body>
 </html>
