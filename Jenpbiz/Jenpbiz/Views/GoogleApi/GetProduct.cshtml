@@ -48,7 +48,6 @@
     </table>
 
 
-        
 
         
 
@@ -58,30 +57,28 @@
             <div class="modal-content">
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
                 <div class="modal-body">
-
                         
                     <div class="form-group">
                         <!--Product Category-->
-                        <select class="form-control formController input-sm" id="">
+                        <select name="selectProductCategory" class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Category</option>
                             <option>Apparel</option><option>Books</option><option>Electronics</option><option>Toys</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                         <!--Product Availability-->
-                        <select class="form-control formController input-sm" id="">
+                        <select name="selectProductAvailability" class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Availability</option>
                             <option>In-Stock</option><option>Pre-order</option><option>Out-of-stock</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
 
                         <!--Product Condition-->
-                        <select class="form-control formController input-sm" id="">
+                        <select name="selectProductCondition" class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Condition</option>
                             <option>New</option><option>Used</option><option>Furbished</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
-
                     </div>
                     
                     <div class="form-group input-group-sm ">
@@ -90,7 +87,7 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
 
                         <!--Product Description-->
-                        <textarea class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
+                        <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
 
                         <!--Product Link-->
@@ -106,9 +103,6 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
                     </div>
-
-
-
 
 
                     <div class="modal-footer">
