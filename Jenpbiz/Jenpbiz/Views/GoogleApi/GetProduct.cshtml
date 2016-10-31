@@ -85,13 +85,13 @@
                         </select>    
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
                         
-                        <!--Product Availability  Date-->
+                        <!--Product Availability Date-->
                         <div class="input-group" name="">
                             <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
                             <input type="text" name="" id="datepicker" class="form-control input-sm" placeholder="Availability date">
 
                         </div>
-                        
+
                         <!--Product Expiry Date-->
                         <div class="input-group" name="">
                             <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
@@ -163,6 +163,8 @@
                 $('#expirydateAddon').fadeIn();
                 $('#expirydatepicker').fadeIn();
             } else {
+                $('#datepicker').val("");
+                $('#expirydatepicker').val("");
                 $('#datepicker').fadeOut();
                 $('#dateAddon').fadeOut();
                 $('#expirydatepicker').fadeOut();
