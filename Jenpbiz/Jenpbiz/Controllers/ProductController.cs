@@ -52,6 +52,7 @@ namespace Jenpbiz.Controllers
             return RedirectToAction("/Index", "Product");
         }
 
+
         public void RandomProducts()
         {
             Random rnd = new Random();
