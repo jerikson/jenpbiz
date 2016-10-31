@@ -7,7 +7,7 @@ using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using System;
-using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace Jenpbiz.Controllers
 {
@@ -59,7 +59,18 @@ namespace Jenpbiz.Controllers
         {
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
-            
+
+            Debug.WriteLine("Title: " + Request["inputProductTitle"]);
+            Debug.WriteLine("Description: " + Request["inputProductDescription"]);
+            Debug.WriteLine("Link: " + Request["inputProductLink"]);
+            Debug.WriteLine("Image link: " + Request["InputProductImageLink"]);
+            Debug.WriteLine("Target Country: " + Request["selectProductTargetCountry"]);
+            Debug.WriteLine("Availability: " + Request["selectProductAvailability"]);
+            Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
+            Debug.WriteLine("Category: " + Request["selectProductCategory"]);
+            Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
+
+
             Product newProduct = new Product()
             {
                 OfferId = GetUniqueId(),
@@ -67,26 +78,27 @@ namespace Jenpbiz.Controllers
                 Description = Request["inputProductDescription"],
                 Link = Request["inputProductLink"],
                 ImageLink = Request["InputProductImageLink"],
-                //ContentLanguage = Request["inputProductTargetCountry"],
-                TargetCountry = Request["inputProductTargetCountry"],
+                ContentLanguage = Request["selectProductTargetCountry"].ToUpper(),
+                TargetCountry = Request["selectProductTargetCountry"].ToUpper(),
                 Channel = "online",
-                Availability = Request["inputProductAvailability"],
-                Condition = Request["inputProductCondition"],
-                GoogleProductCategory = Request["inputProductCategory"],
+                Availability = Request["selectProductAvailability"],
+                Condition = Request["selectProductCondition"],
+                GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"]
             };
 
             newProduct.Price = new Price()
             {
-                Currency = "USD",
+                Currency = "SEK",
                 Value = Request["inputProductPrice"]
             };
 
             try
             {
                 ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
-                accountRequest.DryRun = true;
+                //accountRequest.DryRun = true;
                 accountRequest.Execute();
+                Debug.WriteLine(newProduct.Title + newProduct.Description);
             }
             catch (Exception Ex)
             {
@@ -116,11 +128,9 @@ namespace Jenpbiz.Controllers
                 ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
                 //accountRequest.DryRun = true;
                 accountRequest.Execute();
-                successfullyDeleted = true;
             }
             catch (Exception Ex)
             {
-                successfullyDeleted = false;
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
                 System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
                 System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);

@@ -59,96 +59,97 @@
             <div class="modal-content">
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
                 <div class="modal-body">
+                    <form action="../../GoogleApi/InsertProduct" method="post">
+                        <div class="form-group">
+                            <!--Product Category-->
+                            <select name="selectProductCategory" class="form-control formController input-sm" id="">
+                                <option value="" selected disabled>Category</option>
+                                <option value="Apparel">Apparel</option>
+                                <option value="Books">Books</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Toys">Toys</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
-                    <div class="form-group">
-                        <!--Product Category-->
-                        <select name="selectProductCategory" class="form-control formController input-sm" id="">
-                            <option value="" selected disabled>Category</option>
-                            <option>Apparel</option>
-                            <option>Books</option>
-                            <option>Electronics</option>
-                            <option>Toys</option>
-                        </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
+                            <!--Product Availability-->
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
+                                <option value="" selected disabled>Availability</option>
+                                <option value="in stock">in stock</option>
+                                <option value="pre order">preorder</option>
+                                <option value="out of stock">out of stock</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
 
-                        <!--Product Availability-->
-                        <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
-                            <option value="" selected disabled>Availability</option>
-                            <option>In-Stock</option>
-                            <option>Pre-order</option>
-                            <option>Out-of-stock</option>
-                        </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
+                            <!--Product Condition-->
+                            <select name="selectProductCondition" class="form-control formController input-sm" id="">
+                                <option value="" selected disabled>Condition</option>
+                                <option value="new">New</option>
+                                <option value="used">Used</option>
+                                <option value="refurbished">Refurbished</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
 
-                        <!--Product Condition-->
-                        <select name="selectProductCondition" class="form-control formController input-sm" id="">
-                            <option value="" selected disabled>Condition</option>
-                            <option>New</option>
-                            <option>Used</option>
-                            <option>Refurbished</option>
-                        </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
+                            <!--Product Target Country-->
+                            <select name="selectProductTargetCountry" id="countries" class="form-control formController input-sm">
+                                <option value="" selected disabled>Country</option>
+                                <option value="se">Sweden</option>
+                                <option value="eng">England</option>
+                                <option value="au">Australia</option>
+                                <option value="us">USA</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
-                        <!--Product Target Country-->
-                        <select name="selectProductTargetCountry" id="countries" class="form-control formController input-sm">
-                            <option value="" selected disabled>Country</option>
-                            <option value="se">Sweden</option>
-                            <option value="eng">England</option>
-                            <option value="au">Australia</option>
-                            <option value="us">USA</option>
-                        </select>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
+                            <!--Product Availability Date-->
+                            <div class="input-group" name="">
+                                <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
+                                <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
 
-                        <!--Product Availability Date-->
-                        <div class="input-group" name="">
-                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
-                            <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
+                            </div>
+
+                            <!--Product Expiry Date-->
+                            <div class="input-group" name="">
+                                <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
+                                <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                            </div>
+
 
                         </div>
 
-                        <!--Product Expiry Date-->
-                        <div class="input-group" name="">
-                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
-                            <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                        <div class="form-group input-group-sm ">
+                            <!--Product Title-->
+                            <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" required="" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
+
+                            <!--Product Description-->
+                            <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
+
+                            <!--Product Link-->
+                            <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="https://example.com/category/item33" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a Url for new product"></span>
+
+                            <!--Product Image Link -->
+                            <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
+
+                            <!--Product Price -->
+                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+
+                            <!--Product Gtin -->
+                            <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
+
                         </div>
 
 
-                    </div>
-
-                    <div class="form-group input-group-sm ">
-                        <!--Product Title-->
-                        <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" required=""/>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
-
-                        <!--Product Description-->
-                        <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
-
-                        <!--Product Link-->
-                        <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="https://example.com/category/item33" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a Url for new product"></span>
-
-                        <!--Product Image Link -->
-                        <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
-
-                        <!--Product Price -->
-                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
-
-                        <!--Product Gtin -->
-                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
-
-
-                    </div>
-
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <a href="~/GoogleApi/InsertProduct"class="btn btn-success">Create New</a>
-                    </div>
-
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            @*<a href="~/GoogleApi/InsertProduct" class="btn btn-success">Create New</a>*@
+                            <input type="submit" class="btn btn-success" value="Create New" />
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
