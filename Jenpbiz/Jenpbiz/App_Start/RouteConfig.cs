@@ -18,6 +18,12 @@ namespace Jenpbiz
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            //routes.MapRoute(
+            //    name: "GoogleDeleteProduct",
+            //    url: "GoogleApi/DeleteProduct/{productId}",
+            //    defaults: new { controller = "GoogleApi", action = "DeleteProduct", id = UrlParameter.Optional }
+            //    );
         }
     }
 }

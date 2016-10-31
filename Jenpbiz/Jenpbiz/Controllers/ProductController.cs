@@ -20,7 +20,7 @@ namespace Jenpbiz.Controllers
         private readonly JenpbizContext _context = new JenpbizContext();
 
         // GET: Product
-        public async  Task<ActionResult> Index()
+        public ActionResult Index()
         {
             ViewBag.Title = "Product";
             var count = _context.Products.Count();
@@ -133,18 +133,18 @@ namespace Jenpbiz.Controllers
         
         // 113298073
         // AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8
-        public ActionResult GetMerchantProduct()
+        public void GetMerchantProduct()
         {
-            Debug.WriteLine("asd");
+            ////Debug.WriteLine("asd");
             
-            WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/113298073/products?includeInvalidInsertedItems=true&key={AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8}");
+            ////WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/113298073/products?includeInvalidInsertedItems=true&key={AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8}");
             
             //Stream dataStream = request.GetResponse().GetResponseStream();
             //StreamReader reader = new StreamReader(dataStream);
-            WebResponse response = request.GetResponse();
+            ////WebResponse response = request.GetResponse();
             //string response = reader.ReadToEnd();
 
-            return Json(response);
+            ////return Json(response);
         
 
             //using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
