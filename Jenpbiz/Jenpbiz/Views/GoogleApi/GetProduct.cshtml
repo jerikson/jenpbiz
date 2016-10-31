@@ -1,6 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @model List<Google.Apis.ShoppingContent.v2.Data.Product>
 @{
+    string clickedId = "";
 }
 <!DOCTYPE html>
 <html>
@@ -40,10 +41,11 @@
                 <td>@p.Price.Value</td>
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
-                <td><a href="~/Product/GetProduct"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
+
             </tr>
         }
         </tbody>
@@ -134,9 +136,10 @@
                     
 
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" id="deleteProductModalFooter">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    @*<button type="button" class="btn btn-danger">Delete</button>*@
+                    <a href="#" class="btn btn-danger" id="deleteProductLink">Delete</a>
                 </div>
             </div>
         </div>

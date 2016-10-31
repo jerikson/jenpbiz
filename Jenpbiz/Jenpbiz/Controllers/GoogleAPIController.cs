@@ -7,6 +7,7 @@ using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Jenpbiz.Controllers
 {
@@ -110,11 +111,16 @@ namespace Jenpbiz.Controllers
             ShoppingContentService service = CreateService(credential);
             bool successfullyDeleted = false;
 
-            
+            if (productId.Contains("_"))
+            {
+                productId = productId.Replace('_', ':');
+            }
+
+
             try
             {
                 ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
-                accountRequest.DryRun = true;
+                //accountRequest.DryRun = true;
                 accountRequest.Execute();
                 successfullyDeleted = true;
             }
