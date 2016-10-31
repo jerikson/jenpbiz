@@ -5,6 +5,10 @@
 }
 
 
+.inputGroupAddon{
+    width: 0%;
+    position: static;
+}
 
 body {
     padding-top: 50px;
