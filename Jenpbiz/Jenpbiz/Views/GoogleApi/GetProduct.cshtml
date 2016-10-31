@@ -65,7 +65,7 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                         <!--Product Availability-->
-                        <select name="selectProductAvailability" class="form-control formController input-sm" id="">
+                        <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
                             <option value="" selected disabled>Availability</option>
                             <option>In-Stock</option><option>Pre-order</option><option>Out-of-stock</option>
                         </select>
@@ -86,11 +86,17 @@
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
                         
                         <!--Product Availability  Date-->
-                        <div class="input-group ">
-                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id=""></span>
-                            <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
-                        </div>
+                        <div class="input-group" name="">
+                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
+                            <input type="text" name="" id="datepicker" class="form-control input-sm" placeholder="Availability date">
 
+                        </div>
+                        
+                        <!--Product Expiry Date-->
+                        <div class="input-group" name="">
+                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
+                            <input type="text" name="" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                        </div>
                         
 
                     </div>
@@ -142,9 +148,27 @@
 <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip();
+        $('#datepicker').fadeOut();
+        $('#dateAddon').fadeOut();
+        $('#expirydatepicker').fadeOut();
+        $('#expirydateAddon').fadeOut();
     });
-    $('#datepicker')
-        .datepicker();
+    $('#datepicker').datepicker();
+    $('#expirydatepicker').datepicker();
+
+    $("#selectProductAvailability").change(function () {
+            if ($('#selectProductAvailability').val() == 'Pre-order') {
+                $('#datepicker').fadeIn();
+                $('#dateAddon').fadeIn();
+                $('#expirydateAddon').fadeIn();
+                $('#expirydatepicker').fadeIn();
+            } else {
+                $('#datepicker').fadeOut();
+                $('#dateAddon').fadeOut();
+                $('#expirydatepicker').fadeOut();
+                $('#expirydateAddon').fadeOut();
+            }
+        });
 </script>
 
 </body>
