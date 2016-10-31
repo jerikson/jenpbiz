@@ -57,34 +57,29 @@ namespace Jenpbiz.Controllers
 
         public ActionResult InsertProduct()
         {
-
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
             
-
             Product newProduct = new Product()
             {
                 OfferId = GetUniqueId(),
-                Title = "Title",
-                Description = "Description",
-                Link = "Link",
-                ImageLink = "ImageLink",
-                ContentLanguage = "SE",
-                TargetCountry = "SE",
+                Title = Request["inputProductTitle"],
+                Description = Request["inputProductDescription"],
+                Link = Request["inputProductLink"],
+                ImageLink = Request["InputProductImageLink"],
+                //ContentLanguage = Request["inputProductTargetCountry"],
+                TargetCountry = Request["inputProductTargetCountry"],
                 Channel = "online",
-                Availability = "in stock",
-                Condition = "new",
-                GoogleProductCategory = "Media > Books",
-                Gtin = "1234567890123",
-                
-                
-
+                Availability = Request["inputProductAvailability"],
+                Condition = Request["inputProductCondition"],
+                GoogleProductCategory = Request["inputProductCategory"],
+                Gtin = Request["inputProductGtin"]
             };
 
             newProduct.Price = new Price()
             {
                 Currency = "USD",
-                Value = "100"
+                Value = Request["inputProductPrice"]
             };
 
             try

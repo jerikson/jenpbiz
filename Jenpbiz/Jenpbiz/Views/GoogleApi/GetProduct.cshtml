@@ -6,11 +6,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <link href="http://blazeworx.com/flags.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width"/>
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+
 </head>
 <body>
-<div class="container"> 
+<div class="container">
     <br />
     <div class="text-center">
         <h3>Products: @Model.Count.ToString()</h3>
@@ -52,47 +53,74 @@
     </table>
 
 
-
-
-
-
     <!-- Begin Google Insert Product Modal -->
     <div class="modal fade" id="modalCreateProduct" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
                 <div class="modal-body">
-                        
+
                     <div class="form-group">
                         <!--Product Category-->
                         <select name="selectProductCategory" class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Category</option>
-                            <option>Apparel</option><option>Books</option><option>Electronics</option><option>Toys</option>
+                            <option>Apparel</option>
+                            <option>Books</option>
+                            <option>Electronics</option>
+                            <option>Toys</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                         <!--Product Availability-->
-                        <select name="selectProductAvailability" class="form-control formController input-sm" id="">
+                        <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
                             <option value="" selected disabled>Availability</option>
-                            <option>In-Stock</option><option>Pre-order</option><option>Out-of-stock</option>
+                            <option>In-Stock</option>
+                            <option>Pre-order</option>
+                            <option>Out-of-stock</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
 
                         <!--Product Condition-->
                         <select name="selectProductCondition" class="form-control formController input-sm" id="">
                             <option value="" selected disabled>Condition</option>
-                            <option>New</option><option>Used</option><option>Furbished</option>
+                            <option>New</option>
+                            <option>Used</option>
+                            <option>Refurbished</option>
                         </select>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
+
+                        <!--Product Target Country-->
+                        <select name="selectProductTargetCountry" id="countries" class="form-control formController input-sm">
+                            <option value="" selected disabled>Country</option>
+                            <option value="se">Sweden</option>
+                            <option value="eng">England</option>
+                            <option value="au">Australia</option>
+                            <option value="us">USA</option>
+                        </select>
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
+
+                        <!--Product Availability Date-->
+                        <div class="input-group" name="">
+                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
+                            <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
+
+                        </div>
+
+                        <!--Product Expiry Date-->
+                        <div class="input-group" name="">
+                            <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
+                            <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                        </div>
+
+
                     </div>
-                    
+
                     <div class="form-group input-group-sm ">
                         <!--Product Title-->
-                        <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" />
+                        <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" required=""/>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
 
                         <!--Product Description-->
-
                         <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
 
@@ -103,17 +131,22 @@
                         <!--Product Image Link -->
                         <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
-                        
+
                         <!--Product Price -->
                         <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
                         <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+
+                        <!--Product Gtin -->
+                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
 
                     </div>
 
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success">Save changes</button>
+                        <a href="~/GoogleApi/InsertProduct"class="btn btn-success">Create New</a>
                     </div>
 
                 </div>
@@ -133,7 +166,7 @@
                     <div id="deleteProductModalContent">
 
                     </div>
-                    
+
 
                 </div>
                 <div class="modal-footer" id="deleteProductModalFooter">
@@ -145,15 +178,37 @@
         </div>
     </div>
     <!-- End Google Delete Product Modal -->
-
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script>
-        $(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+<script>
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#datepicker').fadeOut();
+        $('#dateAddon').fadeOut();
+        $('#expirydatepicker').fadeOut();
+        $('#expirydateAddon').fadeOut();
+    });
+    $('#datepicker').datepicker();
+    $('#expirydatepicker').datepicker();
 
+    $("#selectProductAvailability").change(function () {
+            if ($('#selectProductAvailability').val() == 'Pre-order') {
+                $('#datepicker').fadeIn();
+                $('#dateAddon').fadeIn();
+                $('#expirydateAddon').fadeIn();
+                $('#expirydatepicker').fadeIn();
+            } else {
+                $('#datepicker').val("");
+                $('#expirydatepicker').val("");
+                $('#datepicker').fadeOut();
+                $('#dateAddon').fadeOut();
+                $('#expirydatepicker').fadeOut();
+                $('#expirydateAddon').fadeOut();
+            }
+        });
+
+</script>
     <script src="~/Scripts/APIs.js"></script>
 </body>
 </html>
