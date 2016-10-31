@@ -109,7 +109,6 @@ namespace Jenpbiz.Controllers
         {
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
-            bool successfullyDeleted = false;
 
             if (productId.Contains("_"))
             {
