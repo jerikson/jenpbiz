@@ -34,10 +34,27 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
+            bool firstRun = true;
             string pageToken = null;
-            long maxResults = 10;
+            long maxResults = 250;
             ProductsListResponse productsResponse = null;
-            do
+            //do
+            //{
+            //    ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
+            //    accountRequest.MaxResults = maxResults;
+            //    accountRequest.PageToken = pageToken;
+            //    accountRequest.IncludeInvalidInsertedItems = true;
+            //    productsResponse = accountRequest.Execute();
+
+            //    if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
+            //    {
+
+            //    }
+            //    pageToken = productsResponse.NextPageToken;
+            //}
+            //while (pageToken != null);
+
+            while (pageToken != null || firstRun == true)
             {
                 ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
                 accountRequest.MaxResults = maxResults;
@@ -49,9 +66,11 @@ namespace Jenpbiz.Controllers
                 {
 
                 }
+                firstRun = false;
                 pageToken = productsResponse.NextPageToken;
             }
-            while (pageToken != null);
+            
+            
 
             return View(productsResponse.Resources.ToList());
         }
