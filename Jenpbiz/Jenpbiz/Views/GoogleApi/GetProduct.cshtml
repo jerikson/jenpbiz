@@ -20,7 +20,7 @@
     <br />
     <br />
     <br />
-    <table class="table table-hover">
+    <table class="table table-hover" id="productTable">
         <thead>
         <tr>
             <th>#</th>
@@ -42,6 +42,7 @@
                 <td>@p.Price.Value</td>
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
+                <td><img src="@p.ImageLink" alt="img" style="width: 160px; height: 160px;"></td>
                 <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
@@ -221,35 +222,42 @@
     <!-- End Google Delete Product Modal -->
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+    
 <script>
-    $(function() {
+    $(function () {
+
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
         $('#expirydatepicker').fadeOut();
         $('#expirydateAddon').fadeOut();
+        
     });
     $('#datepicker').datepicker();
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-            if ($('#selectProductAvailability').val() == 'pre order') {
-                $('#datepicker').fadeIn();
-                $('#dateAddon').fadeIn();
-                $('#expirydateAddon').fadeIn();
-                $('#expirydatepicker').fadeIn();
-            } else {
-                $('#datepicker').val("");
-                $('#expirydatepicker').val("");
-                $('#datepicker').fadeOut();
-                $('#dateAddon').fadeOut();
-                $('#expirydatepicker').fadeOut();
-                $('#expirydateAddon').fadeOut();
-            }
-        });
+        if ($('#selectProductAvailability').val() == 'pre order') {
+            $('#datepicker').fadeIn();
+            $('#dateAddon').fadeIn();
+            $('#expirydateAddon').fadeIn();
+            $('#expirydatepicker').fadeIn();
+        } else {
+            $('#datepicker').val("");
+            $('#expirydatepicker').val("");
+            $('#datepicker').fadeOut();
+            $('#dateAddon').fadeOut();
+            $('#expirydatepicker').fadeOut();
+            $('#expirydateAddon').fadeOut();
+        }
+    });
+
+
+
 
 </script>
+    
     <script src="~/Scripts/APIs.js"></script>
 </body>
 </html>
