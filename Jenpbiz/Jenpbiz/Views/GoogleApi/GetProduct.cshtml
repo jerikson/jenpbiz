@@ -20,7 +20,7 @@
     <br />
     <br />
     <br />
-    <table class="table table-hover">
+    <table class="table table-hover" id="productTable">
         <thead>
         <tr>
             <th>#</th>
@@ -42,6 +42,7 @@
                 <td>@p.Price.Value</td>
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
+                <td><img src="@p.ImageLink" alt="img" style="width: 160px; height: 160px;"></td>
                 <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
@@ -72,7 +73,7 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                             <!--Product Availability-->
-                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
                                 <option value="pre order">preorder</option>
@@ -100,14 +101,14 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
                             <!--Product Availability Date-->
-                            <div class="input-group" name="">
+                            <div class="input-group" style="width:280px" name="">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
 
                             </div>
 
                             <!--Product Expiry Date-->
-                            <div class="input-group" name="">
+                            <div class="input-group" style="width:280px" name="">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
                             </div>
@@ -175,12 +176,20 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
 
 
+
                             <!--Product Gtin -->
                             <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
 
+                        <!--Product Price -->
+                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
-                            </div>
+
+
+                    </div>
+
+
 
 
                             <div class="modal-footer">
@@ -222,32 +231,38 @@
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.js"></script>
     <script src="~/Scripts/APIs.js"></script>
+
 <script>
-    $(function() {
+    $(function () {
+
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
         $('#expirydatepicker').fadeOut();
         $('#expirydateAddon').fadeOut();
+        
     });
     $('#datepicker').datepicker();
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-            if ($('#selectProductAvailability').val() == 'Pre-order') {
-                $('#datepicker').fadeIn();
-                $('#dateAddon').fadeIn();
-                $('#expirydateAddon').fadeIn();
-                $('#expirydatepicker').fadeIn();
-            } else {
-                $('#datepicker').val("");
-                $('#expirydatepicker').val("");
-                $('#datepicker').fadeOut();
-                $('#dateAddon').fadeOut();
-                $('#expirydatepicker').fadeOut();
-                $('#expirydateAddon').fadeOut();
-            }
-        });
+        if ($('#selectProductAvailability').val() == 'pre order') {
+            $('#datepicker').fadeIn();
+            $('#dateAddon').fadeIn();
+            $('#expirydateAddon').fadeIn();
+            $('#expirydatepicker').fadeIn();
+        } else {
+            $('#datepicker').val("");
+            $('#expirydatepicker').val("");
+            $('#datepicker').fadeOut();
+            $('#dateAddon').fadeOut();
+            $('#expirydatepicker').fadeOut();
+            $('#expirydateAddon').fadeOut();
+        }
+    });
+
+
+
 
 </script>
     
