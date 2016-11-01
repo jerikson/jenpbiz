@@ -132,7 +132,7 @@ namespace Jenpbiz.Controllers
             //return Json(new { successfullyDeleted = successfullyDeleted }, "json", JsonRequestBehavior.DenyGet);
         }
 
-        public ActionResult getProductInfo(string productId)
+        public ActionResult GetProductInfo(string productId)
         {
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
