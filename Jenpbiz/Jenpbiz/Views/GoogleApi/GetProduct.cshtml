@@ -72,7 +72,7 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                             <!--Product Availability-->
-                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
                                 <option value="pre order">preorder</option>
@@ -100,14 +100,14 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
                             <!--Product Availability Date-->
-                            <div class="input-group" name="">
+                            <div class="input-group" style="width:280px" name="">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
 
                             </div>
 
                             <!--Product Expiry Date-->
-                            <div class="input-group" name="">
+                            <div class="input-group" style="width:280px" name="">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
                             </div>
@@ -166,37 +166,7 @@
                             </div>*@
 
 
-                            <div class="input-group input-group-sm input inputGroupAddon" style="width:300px; height:30px;">
-                                <input type="text" class="form-control" placeholder="Currency" style="padding: 0px; margin: 0px; width: 300px;">
-                                </div>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon" style="padding: 0px 0px; margin: 0px; max-height:30px;">
-                                    <span class="">
 
-                                        <select class="selectpicker pull-left" style="height:28px;">
-                                            <option>USD</option>
-                                            <option>SEK</option>
-                                            <option>GBP</option>
-                                            <option>AUD</option>
-                                        </select>
-
-                                    </span>
-                                </span>
-                            </div>
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
-
-
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-addon inputGroupAddon">
-                                    <input name="a" type="radio" aria-label="Radio button for following text input">
-                                    kr
-                                </span>
-                                <span class="input-group-addon inputGroupAddon">
-                                    <input name="a" type="radio" aria-label="Radio button for following text input">
-                                    $
-                                </span>
-                                <input type="text" class="form-control" aria-label="Text input with radio button">
-                            </div>
 
                             <!--Product Gtin -->
                             <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
@@ -211,7 +181,7 @@
                     </div>
 
 
-                        </div>
+         
 
 
                         <div class="modal-footer">
@@ -264,7 +234,7 @@
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-            if ($('#selectProductAvailability').val() == 'Pre-order') {
+            if ($('#selectProductAvailability').val() == 'pre order') {
                 $('#datepicker').fadeIn();
                 $('#dateAddon').fadeIn();
                 $('#expirydateAddon').fadeIn();
