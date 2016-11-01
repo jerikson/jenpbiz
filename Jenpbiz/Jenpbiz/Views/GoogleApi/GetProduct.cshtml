@@ -1,7 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @model List<Google.Apis.ShoppingContent.v2.Data.Product>
 @{
-    string clickedId = "";
+
 }
 <!DOCTYPE html>
 <html>
@@ -44,7 +44,7 @@
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
                 <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
-                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right editClick" data-toggle="modal" data-target="#modalEditProduct" id="@p.Id"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
@@ -224,6 +224,32 @@
         </div>
     </div>
     <!-- End Google Delete Product Modal -->
+
+
+    <!-- Begin Google Edit Product Modal -->
+    <div class="modal fade" id="modalEditProduct" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title" id="">Edit Product</h4></div>
+                <div class="modal-body">
+
+                    <div id="EditProductModalContent">
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer" id="deleteProductModalFooter">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-danger">Delete</button>*@
+                    <a href="#" class="btn btn-info" id="EditProductLink">Save Changes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Google Edit Product Modal -->
+
+
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.js"></script>

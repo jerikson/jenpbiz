@@ -171,6 +171,14 @@ namespace Jenpbiz.Controllers
             //return Json(new { successfullyDeleted = successfullyDeleted }, "json", JsonRequestBehavior.DenyGet);
         }
 
+        public ActionResult EditProduct(string productId)
+        {
+
+
+
+            return View();
+        }
+
         public ActionResult GetProductInfo(string productId)
         {
             UserCredential credential = Authenticate();
@@ -181,7 +189,7 @@ namespace Jenpbiz.Controllers
 
 
             return Json(new { clickedProduct = selectedProduct },
-                JsonRequestBehavior.DenyGet);
+                JsonRequestBehavior.AllowGet);
         }
 
         public UserCredential Authenticate()
