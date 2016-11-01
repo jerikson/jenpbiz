@@ -70,6 +70,7 @@ namespace Jenpbiz.Controllers
             Debug.WriteLine("Category: " + Request["selectProductCategory"]);
             Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
 
+            string targetCountry = Request["selectProductTargetCountry"].ToUpper();
 
             Product newProduct = new Product()
             {
@@ -78,14 +79,23 @@ namespace Jenpbiz.Controllers
                 Description = Request["inputProductDescription"],
                 Link = Request["inputProductLink"],
                 ImageLink = Request["InputProductImageLink"],
-                ContentLanguage = Request["selectProductTargetCountry"].ToUpper(),
-                TargetCountry = Request["selectProductTargetCountry"].ToUpper(),
+                //ContentLanguage = Request["selectProductTargetCountry"].ToUpper(),
+                TargetCountry = targetCountry,
                 Channel = "online",
                 Availability = Request["selectProductAvailability"],
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"]
             };
+
+            if (targetCountry == "SE")
+            {
+                newProduct.ContentLanguage = "sv";
+            }
+            else
+            {
+                newProduct.ContentLanguage = "en";
+            }
 
             newProduct.Price = new Price()
             {

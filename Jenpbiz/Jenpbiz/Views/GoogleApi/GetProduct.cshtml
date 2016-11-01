@@ -60,7 +60,7 @@
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
                 <div class="modal-body">
                     <form action="../../GoogleApi/InsertProduct" method="post">
-                        <div class="form-group">
+                        <div class="form-group" role="form">
                             <!--Product Category-->
                             <select name="selectProductCategory" class="form-control formController input-sm" id="">
                                 <option value="" selected disabled>Category</option>
@@ -92,10 +92,10 @@
                             <!--Product Target Country-->
                             <select name="selectProductTargetCountry" id="countries" class="form-control formController input-sm">
                                 <option value="" selected disabled>Country</option>
-                                <option value="se">Sweden</option>
-                                <option value="eng">England</option>
-                                <option value="au">Australia</option>
-                                <option value="us">USA</option>
+                                <option value="AU">Australia</option>
+                                <option value="GB">England</option>
+                                <option value="SE">Sweden</option>
+                                <option value="US">USA</option>
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
@@ -133,8 +133,70 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
 
                             <!--Product Price -->
-                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                            @*<div class="input-group input-group-sm">
+                                <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                                <span class="input-group-addon inputGroupAddon">
+                                    <select name="selectProductPriceCurrency" id="currency" class="form-control formController input-sm" style="width:150px;">
+                                        <option value="" selected disabled>Currency</option>
+                                        <option value="SEK">Swedish Krona</option>
+                                        <option value="GBP">British Pound</option>
+                                        <option value="USD">US Dollar</option>
+                                        <option value="AUD">Australian Dollar</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
+
+
+                            @*<div class="input-group input-group-sm input" style="width: 200px; height: 16px; margin: 100px auto;">
+                                <input type="text" class="form-control" placeholder="Currency" style="height: 18px; padding: 0; margin: 0;" />
+                                <span class="input-group-addon" style="height: 16px; padding: 0 0px; margin: 0;">
+                                    <span class="">
+
+                                        <select class="selectpicker" style="height:28px;">
+                                            <option>USD</option>
+                                            <option>SEK</option>
+                                            <option>GBP</option>
+                                            <option>AUD</option>
+                                        </select>
+
+                                    </span>
+
+                                </span>
+                            </div>*@
+
+
+                            <div class="input-group input-group-sm input inputGroupAddon" style="width:300px; height:30px;">
+                                <input type="text" class="form-control" placeholder="Currency" style="padding: 0px; margin: 0px; width: 300px;">
+                                </div>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon" style="padding: 0px 0px; margin: 0px; max-height:30px;">
+                                    <span class="">
+
+                                        <select class="selectpicker pull-left" style="height:28px;">
+                                            <option>USD</option>
+                                            <option>SEK</option>
+                                            <option>GBP</option>
+                                            <option>AUD</option>
+                                        </select>
+
+                                    </span>
+                                </span>
+                            </div>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+
+
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon inputGroupAddon">
+                                    <input name="a" type="radio" aria-label="Radio button for following text input">
+                                    kr
+                                </span>
+                                <span class="input-group-addon inputGroupAddon">
+                                    <input name="a" type="radio" aria-label="Radio button for following text input">
+                                    $
+                                </span>
+                                <input type="text" class="form-control" aria-label="Text input with radio button">
+                            </div>
 
                             <!--Product Gtin -->
                             <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
