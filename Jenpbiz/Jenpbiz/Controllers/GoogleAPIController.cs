@@ -52,6 +52,7 @@ namespace Jenpbiz.Controllers
                 pageToken = productsResponse.NextPageToken;
             }
             while (pageToken != null);
+
             return View(productsResponse.Resources.ToList());
         }
 

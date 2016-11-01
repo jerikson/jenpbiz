@@ -34,3 +34,14 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.myContainer{
+
+
+}
+
+.my-group .form-control{
+    width:2000px;
+    padding-left:0px !important;
+    padding-right:0px !important;
+}

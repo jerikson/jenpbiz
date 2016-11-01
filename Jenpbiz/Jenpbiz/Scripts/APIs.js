@@ -1,9 +1,9 @@
 ﻿$(document).ready(function () {
 
-
     $('.deleteClick').on('click', function () {
 
         var productId = $(this).attr('id');
+        alert("HELLO!?");
 
         //$("#modalDeleteProduct").modal("show");
 
@@ -47,6 +47,8 @@ function getProductInfo(productId) {
                 + 'Description: ' + returnedProduct.Description + '<br />'
                 + 'Price: ' + returnedProduct.Price.Value + ' ' + returnedProduct.Price.Currency + '<br />'
                 + 'Availability: ' + returnedProduct.Availability + '<br />'
+                + 'Target Country: ' + returnedProduct.TargetCountry + '<br />'
+                + 'Content Language: ' + returnedProduct.ContentLanguage + '<br />'
 
                 + '</h4>'
 
