@@ -94,34 +94,30 @@ namespace Jenpbiz.Controllers
                 Value = Request["inputProductPrice"]   
             };
 
-            if (targetCountry == "SE")
-            {
-                newProduct.ContentLanguage = "sv";
-            }
-            else
-            {
-                newProduct.ContentLanguage = "en";
+            switch (targetCountry) {
+                case "SE":
+                    newProduct.ContentLanguage = "sv";
+                    priceInfo.Currency = "SEK";
+                    break;
+
+                case "GB":
+                    newProduct.ContentLanguage = "en";
+                    priceInfo.Currency = "GBP";
+                    break;
+
+                case "AU":
+                    newProduct.ContentLanguage = "en";
+                    priceInfo.Currency = "AUD";
+                    break;
+
+                case "USA":
+                    newProduct.ContentLanguage = "en";
+                    priceInfo.Currency = "USD";
+                    break;
+                default:
+                    break;
             }
 
-            if (targetCountry == "GB")
-            {
-                priceInfo.Currency = "GBP";
-            }
-            else if (targetCountry == "AU")
-            {
-                priceInfo.Currency = "AUD";
-            }
-            else if (targetCountry == "SE")
-            {
-                priceInfo.Currency = "SEK";
-            }
-            else
-            {
-                priceInfo.Currency = "USD";
-            }
-
-
-            newProduct.Price = priceInfo;
 
             try
             {
