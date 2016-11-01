@@ -16,7 +16,7 @@
     <br/>
     <div class="text-center">
         <h3>Products: @Model.Count.ToString()</h3>
-        <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+        <a href="/GoogleApi/InsertProduct"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
     <br />
@@ -27,6 +27,7 @@
             <th>#</th>
             <th>Title</th>
             <th>Description</th>
+            <th>Category</th>
             <th>Price</th>
             <th>Currency</th>
             <th>Stock</th>
@@ -40,6 +41,7 @@
                 <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
                 <td>@p.Title</td>
                 <td>@p.Description</td>
+                <td>@p.GoogleProductCategory</td>
                 <td>@p.Price.Value</td>
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
@@ -135,14 +137,6 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
 
                             <!--Product Price -->
-                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
-
-
-
-
-
-
                             @*<div class="input-group input-group-sm">
                                 <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
                                 <span class="input-group-addon inputGroupAddon">
@@ -173,20 +167,25 @@
                                     </span>
 
                                 </span>
-                            </div>
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
+                            </div>*@
 
 
 
-                            <!--Product Gtin -->
-                            <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
+                        <!--Product Gtin -->
+                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
+                        <!--Product Price -->
+                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
 
 
                     </div>
 
 
+         
 
 
                         <div class="modal-footer">
@@ -252,9 +251,8 @@
 
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/bootstrap-datepicker.js"></script>
-    <script src="~/Scripts/APIs.js"></script>
-
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+    
 <script>
     $(function () {
 
@@ -287,5 +285,6 @@
 
 </script>
     
+    <script src="~/Scripts/APIs.js"></script>
 </body>
 </html>
