@@ -89,6 +89,11 @@ namespace Jenpbiz.Controllers
                 Gtin = Request["inputProductGtin"]
             };
 
+            Price priceInfo = new Price()
+            {
+                Value = Request["inputProductPrice"]   
+            };
+
             if (targetCountry == "SE")
             {
                 newProduct.ContentLanguage = "sv";
@@ -98,11 +103,25 @@ namespace Jenpbiz.Controllers
                 newProduct.ContentLanguage = "en";
             }
 
-            newProduct.Price = new Price()
+            if (targetCountry == "GB")
             {
-                Currency = "SEK",
-                Value = Request["inputProductPrice"]
-            };
+                priceInfo.Currency = "GBP";
+            }
+            else if (targetCountry == "AU")
+            {
+                priceInfo.Currency = "AUD";
+            }
+            else if (targetCountry == "SE")
+            {
+                priceInfo.Currency = "SEK";
+            }
+            else
+            {
+                priceInfo.Currency = "USD";
+            }
+
+
+            newProduct.Price = priceInfo;
 
             try
             {

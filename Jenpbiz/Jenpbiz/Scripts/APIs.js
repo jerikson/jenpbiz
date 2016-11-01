@@ -3,7 +3,6 @@
     $('.deleteClick').on('click', function () {
 
         var productId = $(this).attr('id');
-        alert("HELLO!?");
 
         //$("#modalDeleteProduct").modal("show");
 
