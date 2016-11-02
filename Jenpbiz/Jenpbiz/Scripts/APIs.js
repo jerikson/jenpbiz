@@ -49,22 +49,39 @@ function getProductInfoForEdit(productId) {
             var editLink = '../../GoogleApi/EditProduct/?productId=' + s;
             $('#editProductLink').attr('href', editLink);
 
-            container.html(
-                '<h3> ID: ' + returnedProduct.Id + '</h3>'
+            $('#editModalDisplayId').html("ID: " + returnedProduct.Id);
 
-                + '<h4>'
 
-                + 'Title: ' + returnedProduct.Title + '<br />'
-                + 'Description: ' + returnedProduct.Description + '<br />'
-                + 'Price: ' + returnedProduct.Price.Value + ' ' + returnedProduct.Price.Currency + '<br />'
-                + 'Availability: ' + returnedProduct.Availability + '<br />'
-                + 'Target Country: ' + returnedProduct.TargetCountry + '<br />'
-                + 'Content Language: ' + returnedProduct.ContentLanguage + '<br />'
+            container.html(container.html()
 
-                + '</h4>'
+                //+ 'Title: ' + returnedProduct.Title + '<br />'
+                //+ 'Description: ' + returnedProduct.Description + '<br />'
+                //+ 'Price: ' + returnedProduct.Price.Value + ' ' + returnedProduct.Price.Currency + '<br />'
+                //+ 'Availability: ' + returnedProduct.Availability + '<br />'
+                //+ 'Target Country: ' + returnedProduct.TargetCountry + '<br />'
+                //+ 'Content Language: ' + returnedProduct.ContentLanguage + '<br />'
+
+                + '<center><img src="' + returnedProduct.ImageLink + '" alt="Missing Product Picture" class="img-responsive" style="width:150px; height:100px;" /></center>'
+
+                + '<h3>ID: ' + returnedProduct.Id + '</h3>'
+
+                + '<input type="text" name="inputProductTitle" id="inputProductTitle" class="form-control formController" placeholder="Title" />'
+                + '<textarea name="inputProductDescription" id="inputProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea>'
+                + '<input type="text" name="inputProductLink" id="inputProductLink" class="form-control formController" placeholder="https://example.com/category/item33" />'
+                + '<input type="text" name="inputProductImageLink" id="inputProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" />'
+                + '<input type="text" name="inputProductPrice" id="inputProductPrice" class="form-control formController" placeholder="Price" />'
+                + '<input type="text" name="inputProductGtin" id="inputProductGtin" class="form-control formController" placeholder="gtin" />'
 
 
                 );
+
+            $('#inputProductTitle').val(returnedProduct.Title);
+            $('#inputProductDescription').val(returnedProduct.Description);
+            $('#inputProductLink').val(returnedProduct.Link);
+            $('#inputProductImageLink').val(returnedProduct.ImageLink);
+            $('#inputProductPrice').val(returnedProduct.Price.Value);
+            $('#inputProductGtin').val(returnedProduct.Gtin);
+
 
             if (returnedProduct.ExpirationDate != null) {
                 container.html(container.html()
