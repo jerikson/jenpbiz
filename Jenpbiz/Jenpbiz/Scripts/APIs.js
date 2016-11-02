@@ -147,6 +147,14 @@ function getProductInfoForDelete(productId) {
 
             }
 
+            for (var i = 0; i < returnedProduct.length; i++)
+            {
+                container.html(container.html()
+                    + '<h4> Warning ' + i + ': ' + returnedProduct.ExpirationDate + '</h4><br />'
+                    );
+
+            }
+
             container.children().css(({
                 'margin-top' : '10px'
             }));
