@@ -65,11 +65,22 @@ function getProductInfoForEdit(productId) {
 
                 + '<h3>ID: ' + returnedProduct.Id + '</h3>'
 
+                + '<label for="inputProductTitle"><span class="text-danger">* </span>Title</label><br />'
                 + '<input type="text" name="inputProductTitle" id="inputProductTitle" class="form-control formController" placeholder="Title" />'
+
+                + '<label for="inputProductDescription"><span class="text-danger">* </span>Description</label><br />'
                 + '<textarea name="inputProductDescription" id="inputProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea>'
+
+                + '<label for="inputProductLink"><span class="text-danger">* </span>Link</label><br />'
                 + '<input type="text" name="inputProductLink" id="inputProductLink" class="form-control formController" placeholder="https://example.com/category/item33" />'
+
+                + '<label for="inputProductImageLink"><span class="text-danger">* </span>Image Link</label><br />'
                 + '<input type="text" name="inputProductImageLink" id="inputProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" />'
+
+                + '<label for="inputProductPrice"><span class="text-danger">* </span>Price</label><br />'
                 + '<input type="text" name="inputProductPrice" id="inputProductPrice" class="form-control formController" placeholder="Price" />'
+
+
                 + '<input type="text" name="inputProductGtin" id="inputProductGtin" class="form-control formController" placeholder="gtin" />'
 
 
