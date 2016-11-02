@@ -172,20 +172,20 @@
 
 
 
-                        <!--Product Gtin -->
-                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+                            <!--Product Gtin -->
+                            <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
 
-                        <!--Product Price -->
-                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
-
-
-
-                    </div>
+                            <!--Product Price -->
+                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
 
-         
+
+                        </div>
+
+
+                        
 
 
                         <div class="modal-footer">
@@ -232,13 +232,13 @@
                 <div class="modal-header"><h4 class="modal-title" id="">Edit Product</h4></div>
                 <div class="modal-body">
 
-                    <div id="EditProductModalContent">
+                    <div id="editProductModalContent">
 
                     </div>
 
 
                 </div>
-                <div class="modal-footer" id="deleteProductModalFooter">
+                <div class="modal-footer" id="editProductModalFooter">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     @*<button type="button" class="btn btn-danger">Delete</button>*@
                     <a href="#" class="btn btn-info" id="EditProductLink">Save Changes</a>
@@ -251,8 +251,9 @@
 
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/bootstrap-datepicker.js"></script>
-    
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/APIs.js"></script>
+
 <script>
     $(function () {
 
@@ -285,6 +286,6 @@
 
 </script>
     
-    <script src="~/Scripts/APIs.js"></script>
+
 </body>
 </html>

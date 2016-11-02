@@ -47,7 +47,7 @@ function getProductInfoForEdit(productId) {
 
             var s = returnedProduct.Id.replace(/\:/g, '_');
             var editLink = '../../GoogleApi/EditProduct/?productId=' + s;
-            $('#deleteProductLink').attr('href', editLink);
+            $('#editProductLink').attr('href', editLink);
 
             container.html(
                 '<h3> ID: ' + returnedProduct.Id + '</h3>'
@@ -146,6 +146,7 @@ function getProductInfoForDelete(productId) {
                     );
 
             }
+
 
             container.children().css(({
                 'margin-top' : '10px'
