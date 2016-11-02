@@ -1,33 +1,87 @@
 ﻿$(document).ready(function () {
 
+    $('.deleteClick').on('click', function () {
+
+        var productId = $(this).attr('id');
+
+        //$("#modalDeleteProduct").modal("show");
+
+        // Empties the modal so as to not show duplicate or out of date content.
+        $('#deleteProductModalContent').html('');
 
 
+        // Calls the getProduct function.
+        getProductInfo(productId);
+
+    });
 
 
 });
 
-function GetProducts() {
+
+
+function getProductInfo(productId) {
 
     $.ajax({
-        method: 'GET',
-        url: 'GoogleAPI/API_GetProducts/',
-        //contentType: 'json',
+        method: 'POST',
+        url: '/GoogleApi/getProductInfo/',
         dataType: 'json',
-        //data: {},
+        data: {productId : productId},
         success: function (data) {
-            console.log("JQuery AJAX authorizer success function.");
-            console.log("raw data; " + data);
-            console.log("JSON stringify data: " + JSON.stringify(data));
+            var returnedProduct = data.clickedProduct;
+
+            var container = $('#deleteProductModalContent');
+            container.css('text-align', 'center');
+
+            var s = returnedProduct.Id.replace(/\:/g, '_');
+            var deleteLink = '../../GoogleApi/DeleteProduct/?productId=' + s;
+            $('#deleteProductLink').attr('href', deleteLink);
+
+            container.html(
+                '<h3> ID: ' + returnedProduct.Id + '</h3>'
+
+                + '<h4>'
+
+                + 'Title: ' + returnedProduct.Title + '<br />'
+                + 'Description: ' + returnedProduct.Description + '<br />'
+                + 'Price: ' + returnedProduct.Price.Value + ' ' + returnedProduct.Price.Currency + '<br />'
+                + 'Availability: ' + returnedProduct.Availability + '<br />'
+                + 'Target Country: ' + returnedProduct.TargetCountry + '<br />'
+                + 'Content Language: ' + returnedProduct.ContentLanguage + '<br />'
+
+                + '</h4>'
+
+
+                );
+
+            if (returnedProduct.ExpirationDate != null)
+            {
+                container.html(container.html()
+                    + '<h4> Expiration date: ' + returnedProduct.ExpirationDate + '</h4><br />'
+                    );
+
+            }
+
+            if (returnedProduct.Availability == 'preorder')
+            {
+                container.html(container.html()
+                    + '<h4>' + returnedProduct.AvailabilityDate + '</h4><br />'
+                    );
+
+            }
+
+            container.children().css(({
+                'margin-top' : '10px'
+            }));
 
         },
         error: function (jqXHR, statusText, errorThrown) {
-            console.log('Ett fel inträffade: ' + statusText);
-            console.log("jqXHR: " + jqXHR);
-            console.log("jqXHR JSON Stringified: " + JSON.stringify(jqXHR));
-            console.log("statusText: " + statusText);
-            console.log("errorThrown: " + errorThrown);
-
+            console.log('An error occurred.');
+            console.log('Status Text: ' + statusText);
+            console.log('Error Thrown: ' + errorThrown);
+            console.log('jqXHR: ' + jqXHR);
+            console.log('jqXHR stringified: ' + JSON.stringify(jqXHR));
         }
     });
 
-}
+};

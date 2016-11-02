@@ -1,0 +1,264 @@
+﻿@using System.Text.RegularExpressions
+@model List<Google.Apis.ShoppingContent.v2.Data.Product>
+@{
+    string clickedId = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+
+</head>
+<body>
+<div class="container">
+    <br />
+    <br/>
+    <div class="text-center">
+        <h3>Products: @Model.Count.ToString()</h3>
+        <a href="/GoogleApi/InsertProduct"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+    </div>
+    <br />
+    <br />
+    <br />
+    <table class="table table-hover" id="productTable">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Currency</th>
+            <th>Stock</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <!--Remove alphabetic characters from google id-->
+                <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
+                <td>@p.Title</td>
+                <td>@p.Description</td>
+                <td>@p.GoogleProductCategory</td>
+                <td>@p.Price.Value</td>
+                <td><span class="badge">@p.Price.Currency</span></td>
+                <td>@p.Availability</td>
+                <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
+                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
+                @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
+                <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+
+
+    <!-- Begin Google Insert Product Modal -->
+    <div class="modal fade" id="modalCreateProduct" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
+                <div class="modal-body">
+                    <form action="../../GoogleApi/InsertProduct" method="post">
+                        <div class="form-group" role="form">
+                            <!--Product Category-->
+                            <select name="selectProductCategory" class="form-control formController input-sm" id="">
+                                <option value="" selected disabled>Category</option>
+                                <option value="Apparel">Apparel</option>
+                                <option value="Books">Books</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Toys">Toys</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
+
+                            <!--Product Availability-->
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
+                                <option value="" selected disabled>Availability</option>
+                                <option value="in stock">in stock</option>
+                                <option value="pre order">preorder</option>
+                                <option value="out of stock">out of stock</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
+
+                            <!--Product Condition-->
+                            <select name="selectProductCondition" class="form-control formController input-sm" id="">
+                                <option value="" selected disabled>Condition</option>
+                                <option value="new">New</option>
+                                <option value="used">Used</option>
+                                <option value="refurbished">Refurbished</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select condition for new product"></span>
+
+                            <!--Product Target Country-->
+                            <select name="selectProductTargetCountry" id="countries" class="form-control formController input-sm">
+                                <option value="" selected disabled>Country</option>
+                                <option value="AU">Australia</option>
+                                <option value="GB">England</option>
+                                <option value="SE">Sweden</option>
+                                <option value="US">USA</option>
+                            </select>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
+
+                            <!--Product Availability Date-->
+                            <div class="input-group" style="width:280px" name="">
+                                <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
+                                <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
+
+                            </div>
+
+                            <!--Product Expiry Date-->
+                            <div class="input-group" style="width:280px" name="">
+                                <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
+                                <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                            </div>
+
+
+                        </div>
+
+                        <div class="form-group input-group-sm ">
+                            <!--Product Title-->
+                            <input type="text" name="inputProductTitle" id="" class="form-control formController" placeholder="Title" required="" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a title for new product"></span>
+
+                            <!--Product Description-->
+                            <textarea name="inputProductDescription" class="form-control formController" id="" placeholder="Description" rows="1" cols="1"></textarea>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a description for new product"></span>
+
+                            <!--Product Link-->
+                            <input type="text" name="inputProductLink" id="" class="form-control formController" placeholder="https://example.com/category/item33" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a Url for new product"></span>
+
+                            <!--Product Image Link -->
+                            <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
+
+                            <!--Product Price -->
+                            @*<div class="input-group input-group-sm">
+                                <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                                <span class="input-group-addon inputGroupAddon">
+                                    <select name="selectProductPriceCurrency" id="currency" class="form-control formController input-sm" style="width:150px;">
+                                        <option value="" selected disabled>Currency</option>
+                                        <option value="SEK">Swedish Krona</option>
+                                        <option value="GBP">British Pound</option>
+                                        <option value="USD">US Dollar</option>
+                                        <option value="AUD">Australian Dollar</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
+
+
+                            @*<div class="input-group input-group-sm input" style="width: 200px; height: 16px; margin: 100px auto;">
+                                <input type="text" class="form-control" placeholder="Currency" style="height: 18px; padding: 0; margin: 0;" />
+                                <span class="input-group-addon" style="height: 16px; padding: 0 0px; margin: 0;">
+                                    <span class="">
+
+                                        <select class="selectpicker" style="height:28px;">
+                                            <option>USD</option>
+                                            <option>SEK</option>
+                                            <option>GBP</option>
+                                            <option>AUD</option>
+                                        </select>
+
+                                    </span>
+
+                                </span>
+                            </div>*@
+
+
+
+
+                        <!--Product Gtin -->
+                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
+                        <!--Product Price -->
+                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+
+
+
+                    </div>
+
+
+         
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                            @*<a href="~/GoogleApi/InsertProduct" class="btn btn-success">Create New</a>*@
+                            <input type="submit" class="btn btn-success" value="Create New" id="createProductLink"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Google Insert Product Modal -->
+
+
+    <!-- Begin Google Delete Product Modal -->
+    <div class="modal fade" id="modalDeleteProduct" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title" id="">Delete Product</h4></div>
+                <div class="modal-body">
+
+                    <div id="deleteProductModalContent">
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer" id="deleteProductModalFooter">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    @*<button type="button" class="btn btn-danger">Delete</button>*@
+                    <a href="#" class="btn btn-danger" id="deleteProductLink">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Google Delete Product Modal -->
+</div>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/bootstrap-datepicker.js"></script>
+    
+<script>
+    $(function () {
+
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#datepicker').fadeOut();
+        $('#dateAddon').fadeOut();
+        $('#expirydatepicker').fadeOut();
+        $('#expirydateAddon').fadeOut();
+        
+    });
+    $('#datepicker').datepicker();
+    $('#expirydatepicker').datepicker();
+
+    $("#selectProductAvailability").change(function () {
+        if ($('#selectProductAvailability').val() == 'pre order') {
+            $('#datepicker').fadeIn();
+            $('#dateAddon').fadeIn();
+            $('#expirydateAddon').fadeIn();
+            $('#expirydatepicker').fadeIn();
+        } else {
+            $('#datepicker').val("");
+            $('#expirydatepicker').val("");
+            $('#datepicker').fadeOut();
+            $('#dateAddon').fadeOut();
+            $('#expirydatepicker').fadeOut();
+            $('#expirydateAddon').fadeOut();
+        }
+    });
+
+
+</script>
+    
+    <script src="~/Scripts/APIs.js"></script>
+</body>
+</html>
