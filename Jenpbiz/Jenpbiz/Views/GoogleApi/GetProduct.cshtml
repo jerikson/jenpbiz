@@ -66,7 +66,7 @@
                     <form action="../../GoogleApi/InsertProduct" method="post">
                         <div class="form-group" role="form">
                             <!--Product Category-->
-                            <select name="selectProductCategory" class="form-control formController input-sm" id="">
+                            <select name="selectProductCategory" class="form-control formController input-sm" id="selectProductCategory">
                                 <option value="" selected disabled>Category</option>
                                 <option value="Apparel">Apparel</option>
                                 <option value="Books">Books</option>
@@ -76,7 +76,7 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                             <!--Product Availability-->
-                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
                                 <option value="pre order">preorder</option>
@@ -103,17 +103,41 @@
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
-                            <!--Product Availability Date-->
-                            <div class="input-group" style="width:280px" name="">
+                            <!--Product Availability Date if product is pre-order -->
+                            <div class="input-group" style="width:280px">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
-
                             </div>
 
-                            <!--Product Expiry Date-->
-                            <div class="input-group" style="width:280px" name="">
+                            <!--Product Expiry Date -->
+                            <div class="input-group" style="width:280px">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                            </div>
+                            
+                            <!--Product Pattern if product is apparel-->
+                            <div class="checkRadioContainer" id="selectProductPattern">
+                                <label>
+                                    N/A
+                                    <input value="patternNA"type="radio" name="radioGroup"/>
+                                    <p class=""></p>
+                                </label>
+                                <label>
+                                    dot
+                                    <input value="patternDot"type="radio" name="radioGroup"/>
+                                    <p class="arraydot"></p>
+                                </label>
+                                <label>
+                                    <input value="patternVertical" type="radio" name="radioGroup"/>
+                                    stripe
+                                    <p class="vertistripe"></p>
+                                </label>
+                                <label>
+                                    square
+                                    <input value="patternStripe" type="radio" name="radioGroup"/>
+                                    <p class="stripegrid"></p>
+
+                                </label>
                             </div>
 
 
@@ -230,6 +254,7 @@
 <script>
     $(function () {
 
+        $('#selectProductPattern').hide();
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
@@ -237,6 +262,7 @@
         $('#expirydateAddon').fadeOut();
         
     });
+
     $('#datepicker').datepicker();
     $('#expirydatepicker').datepicker();
 
@@ -255,6 +281,21 @@
             $('#expirydateAddon').fadeOut();
         }
     });
+
+        $("#selectProductCategory").change(function () {
+            if ($('#selectProductCategory').val() == 'Apparel') {
+
+                $('#selectProductPattern').fadeIn();
+            } else {
+                $('#selectProductPattern').hide();
+            }
+        });
+
+
+
+
+
+
 
 
 </script>
