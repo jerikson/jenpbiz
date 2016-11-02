@@ -35,7 +35,7 @@ namespace Jenpbiz.Controllers
             ShoppingContentService service = CreateService(credential);
 
             string pageToken = null;
-            long maxResults = 10;
+            const long maxResults = 250;
             ProductsListResponse productsResponse = null;
             do
             {
@@ -52,7 +52,6 @@ namespace Jenpbiz.Controllers
                 pageToken = productsResponse.NextPageToken;
             }
             while (pageToken != null);
-
             return View(productsResponse.Resources.ToList());
         }
 
@@ -94,7 +93,8 @@ namespace Jenpbiz.Controllers
                 Value = Request["inputProductPrice"]   
             };
 
-            switch (targetCountry) {
+            switch (targetCountry)
+            {
                 case "SE":
                     newProduct.ContentLanguage = "sv";
                     priceInfo.Currency = "SEK";
@@ -118,6 +118,7 @@ namespace Jenpbiz.Controllers
                     break;
             }
 
+            newProduct.Price = priceInfo;
 
             try
             {
