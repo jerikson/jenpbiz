@@ -88,8 +88,12 @@ namespace Jenpbiz.Controllers
             Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
             Debug.WriteLine("Category: " + Request["selectProductCategory"]);
             Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
+            Debug.WriteLine("Availability Date: " + Request["selectProductAvailabilityDate"]);
+            Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
 
             string targetCountry = Request["selectProductTargetCountry"].ToUpper();
+            string availabilityDate = Request["selectProductAvailabilityDate"];
+            string expirationDate = Request["selectProductAvailabilityExpiryDate"];
 
             Product newProduct = new Product()
             {
@@ -104,8 +108,12 @@ namespace Jenpbiz.Controllers
                 Availability = Request["selectProductAvailability"],
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
-                Gtin = Request["inputProductGtin"]
+                Gtin = Request["inputProductGtin"],
+
+                AvailabilityDate = Request["selectProductAvailabilityDate"],
+                ExpirationDate = Request["selectProductAvailabilityExpiryDate"]
             };
+
 
             Price priceInfo = new Price()
             {
@@ -132,7 +140,10 @@ namespace Jenpbiz.Controllers
                     newProduct.ContentLanguage = "en";
                     priceInfo.Currency = "USD";
                     break;
+
                 default:
+                    newProduct.ContentLanguage = "en";
+                    priceInfo.Currency = "USD";
                     break;
             }
 

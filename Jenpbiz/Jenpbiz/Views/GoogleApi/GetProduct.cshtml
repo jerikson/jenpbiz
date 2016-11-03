@@ -16,7 +16,7 @@
     <br/>
     <div class="text-center">
         <h3>Products: @Model.Count.ToString()</h3>
-        <a href="/GoogleApi/InsertProduct"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
     <br />
@@ -79,7 +79,7 @@
                             <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
-                                <option value="pre order">preorder</option>
+                                <option value="preorder">preorder</option>
                                 <option value="out of stock">out of stock</option>
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
@@ -135,42 +135,6 @@
                             <!--Product Image Link -->
                             <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
-
-                            <!--Product Price -->
-                            @*<div class="input-group input-group-sm">
-                                <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                                <span class="input-group-addon inputGroupAddon">
-                                    <select name="selectProductPriceCurrency" id="currency" class="form-control formController input-sm" style="width:150px;">
-                                        <option value="" selected disabled>Currency</option>
-                                        <option value="SEK">Swedish Krona</option>
-                                        <option value="GBP">British Pound</option>
-                                        <option value="USD">US Dollar</option>
-                                        <option value="AUD">Australian Dollar</option>
-                                    </select>
-                                </span>
-                            </div>
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
-
-
-                            @*<div class="input-group input-group-sm input" style="width: 200px; height: 16px; margin: 100px auto;">
-                                <input type="text" class="form-control" placeholder="Currency" style="height: 18px; padding: 0; margin: 0;" />
-                                <span class="input-group-addon" style="height: 16px; padding: 0 0px; margin: 0;">
-                                    <span class="">
-
-                                        <select class="selectpicker" style="height:28px;">
-                                            <option>USD</option>
-                                            <option>SEK</option>
-                                            <option>GBP</option>
-                                            <option>AUD</option>
-                                        </select>
-
-                                    </span>
-
-                                </span>
-                            </div>*@
-
-
-
 
                             <!--Product Gtin -->
                             <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
@@ -268,7 +232,7 @@
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-        if ($('#selectProductAvailability').val() == 'pre order') {
+        if ($('#selectProductAvailability').val() == 'preorder') {
             $('#datepicker').fadeIn();
             $('#dateAddon').fadeIn();
             $('#expirydateAddon').fadeIn();

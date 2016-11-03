@@ -65,26 +65,85 @@ function getProductInfoForEdit(productId) {
 
                 + '<h3>ID: ' + returnedProduct.Id + '</h3>'
 
-                + '<label for="inputProductTitle"><span class="text-danger">* </span>Title</label><br />'
-                + '<input type="text" name="inputProductTitle" id="inputProductTitle" class="form-control formController" placeholder="Title" />'
 
-                + '<label for="inputProductDescription"><span class="text-danger">* </span>Description</label><br />'
-                + '<textarea name="inputProductDescription" id="inputProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea>'
+                
 
-                + '<label for="inputProductLink"><span class="text-danger">* </span>Link</label><br />'
-                + '<input type="text" name="inputProductLink" id="inputProductLink" class="form-control formController" placeholder="https://example.com/category/item33" />'
+                + '<form action="../../GoogleApi/InsertProduct" method="post">'
 
-                + '<label for="inputProductImageLink"><span class="text-danger">* </span>Image Link</label><br />'
-                + '<input type="text" name="inputProductImageLink" id="inputProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" />'
+                //Select lists inputs
+                + '<div class="form-group" role="form">'
+      
+                    + '<select name="selectProductCategory" class="form-control formController input-sm" id="selectProductCategory">'
+                        + '<option value="" disabled>Category</option>'
+                        + '<option value="Apparel">Apparel</option>'
+                        + '<option value="Books">Books</option>'
+                        + '<option value="Electronics">Electronics</option>'
+                        + '<option value="Toys">Toys</option>'
+                    + '</select>'
 
-                + '<label for="inputProductPrice"><span class="text-danger">* </span>Price</label><br />'
-                + '<input type="text" name="inputProductPrice" id="inputProductPrice" class="form-control formController" placeholder="Price" />'
+                    + '<select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">'
+                        + '<option value="" disabled>Availability</option>'
+                        + '<option value="in stock">in stock</option>'
+                        + '<option value="preorder">preorder</option>'
+                        + '<option value="out of stock">out of stock</option>'
+                    + '</select>'
+
+                    + '<select name="selectProductCondition" class="form-control formController input-sm" id="selectProductCondition">'
+                        + '<option value="" disabled>Condition</option>'
+                        + '<option value="new">New</option>'
+                        + '<option value="used">Used</option>'
+                        + '<option value="refurbished">Refurbished</option>'
+                    + '</select>'
+
+                    + '<select name="selectProductTargetCountry" id="selectProductTargetCountry" class="form-control formController input-sm">'
+                        + '<option value="" disabled>Country</option>'
+                        + '<option value="AU">Australia</option>'
+                        + '<option value="GB">England</option>'
+                        + '<option value="SE">Sweden</option>'
+                        + '<option value="US">USA</option>'
+                    + '</select>'
+
+                    + '<div class="input-group" style="width:280px" name="">'
+                        + '<span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>'
+                        + '<input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">'
+                    + '</div>'
+
+                    + '<div class="input-group" style="width:280px" name="">'
+                        + '<span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>'
+                        + '<input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">'
+                    + '</div>'
 
 
-                + '<input type="text" name="inputProductGtin" id="inputProductGtin" class="form-control formController" placeholder="gtin" />'
+                + '</div>'
 
+
+                
+                // Inputs
+                + '<div class="form-group input-group-sm ">'
+
+                    + '<label for="inputProductTitle"><span class="text-danger">* </span>Title</label><br />'
+                    + '<input type="text" name="inputProductTitle" id="inputProductTitle" class="form-control formController" placeholder="Title" />'
+
+                    + '<label for="inputProductDescription"><span class="text-danger">* </span>Description</label><br />'
+                    + '<textarea name="inputProductDescription" id="inputProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea>'
+
+                    + '<label for="inputProductLink"><span class="text-danger">* </span>Link</label><br />'
+                    + '<input type="text" name="inputProductLink" id="inputProductLink" class="form-control formController" placeholder="https://example.com/category/item33" />'
+
+                    + '<label for="inputProductImageLink"><span class="text-danger">* </span>Image Link</label><br />'
+                    + '<input type="text" name="inputProductImageLink" id="inputProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" />'
+
+                    + '<label for="inputProductPrice"><span class="text-danger">* </span>Price</label><br />'
+                    + '<input type="text" name="inputProductPrice" id="inputProductPrice" class="form-control formController" placeholder="Price" />'
+
+                    + '<label for="inputProductGtin"><span class="text-danger">* </span>Gtin</label><br />'
+                    + '<input type="text" name="inputProductGtin" id="inputProductGtin" class="form-control formController" placeholder="gtin" />'
+
+                + '</div>'
 
                 );
+
+            //Tilldelning av värden för inputs of selects lists
 
             $('#inputProductTitle').val(returnedProduct.Title);
             $('#inputProductDescription').val(returnedProduct.Description);
@@ -93,18 +152,19 @@ function getProductInfoForEdit(productId) {
             $('#inputProductPrice').val(returnedProduct.Price.Value);
             $('#inputProductGtin').val(returnedProduct.Gtin);
 
+            $('#selectProductCategory option[value=' + returnedProduct.GoogleProductCategory + ']').attr('selected', 'selected');
+            $('#selectProductAvailability option[value=' + returnedProduct.Availability + ']').attr('selected', 'selected');
+            $('#selectProductCondition option[value=' + returnedProduct.Condition + ']').attr('selected', 'selected');
+            $('#selectProductTargetCountry option[value=' + returnedProduct.TargetCountry + ']').attr('selected', 'selected');
+
 
             if (returnedProduct.ExpirationDate != null) {
-                container.html(container.html()
-                    + '<h4> Expiration date: ' + returnedProduct.ExpirationDate + '</h4><br />'
-                    );
+                $('selectProductAvailabilityExpiryDate').val(returnedProduct.ExpirationDate);
 
             }
 
             if (returnedProduct.Availability == 'preorder') {
-                container.html(container.html()
-                    + '<h4>' + returnedProduct.AvailabilityDate + '</h4><br />'
-                    );
+                $('selectProductAvailabilityDate').val(returnedProduct.AvailabilityDate)
 
             }
 
