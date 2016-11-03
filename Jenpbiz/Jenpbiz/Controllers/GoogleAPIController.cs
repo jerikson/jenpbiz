@@ -30,6 +30,7 @@ namespace Jenpbiz.Controllers
         {
             ViewBag.Title = "Products";
 
+            //DeleteProduct("online:sv:SE:14781753601");
 
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
@@ -92,8 +93,17 @@ namespace Jenpbiz.Controllers
             Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
 
             string targetCountry = Request["selectProductTargetCountry"].ToUpper();
-            string availabilityDate = Request["selectProductAvailabilityDate"];
-            string expirationDate = Request["selectProductAvailabilityExpiryDate"];
+            string availabilityDateStr = Request["selectProductAvailabilityDate"];
+            string expirationDateStr = Request["selectProductAvailabilityExpiryDate"];
+
+
+            DateTime availabilityDate, expirationDate;
+
+            availabilityDate = DateTime.Parse(availabilityDateStr);
+            expirationDate = DateTime.Parse(expirationDateStr);
+
+            Debug.WriteLine("Availability Date: " + availabilityDate.ToString());
+            Debug.WriteLine("Expiration Date: " + expirationDate.ToString());
 
             Product newProduct = new Product()
             {
@@ -110,14 +120,13 @@ namespace Jenpbiz.Controllers
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"],
 
-                AvailabilityDate = Request["selectProductAvailabilityDate"],
-                ExpirationDate = Request["selectProductAvailabilityExpiryDate"]
+                AvailabilityDate = availabilityDate.ToString(),
+                ExpirationDate = expirationDate.ToString()
             };
-
 
             Price priceInfo = new Price()
             {
-                Value = Request["inputProductPrice"]   
+                Value = Request["inputProductPrice"]
             };
 
             switch (targetCountry) {
@@ -147,6 +156,7 @@ namespace Jenpbiz.Controllers
                     break;
             }
 
+            newProduct.Price = priceInfo;
 
             try
             {
@@ -157,7 +167,7 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception Ex)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @114");
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
                 System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
                 System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
@@ -199,7 +209,10 @@ namespace Jenpbiz.Controllers
         public ActionResult EditProduct(string productId)
         {
 
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
 
+            ProductsResource accountRequest = service.Products.c
 
             return View();
         }
