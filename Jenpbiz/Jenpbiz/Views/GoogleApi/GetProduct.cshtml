@@ -224,8 +224,8 @@
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
-        $('#expirydatepicker').fadeOut();
-        $('#expirydateAddon').fadeOut();
+        //$('#expirydatepicker').fadeOut();
+        //$('#expirydateAddon').fadeOut();
         
     });
     $('#datepicker').datepicker();
@@ -235,15 +235,15 @@
         if ($('#selectProductAvailability').val() == 'preorder') {
             $('#datepicker').fadeIn();
             $('#dateAddon').fadeIn();
-            $('#expirydateAddon').fadeIn();
-            $('#expirydatepicker').fadeIn();
+            //$('#expirydateAddon').fadeIn();
+            //$('#expirydatepicker').fadeIn();
         } else {
             $('#datepicker').val("");
             $('#expirydatepicker').val("");
             $('#datepicker').fadeOut();
             $('#dateAddon').fadeOut();
-            $('#expirydatepicker').fadeOut();
-            $('#expirydateAddon').fadeOut();
+            //$('#expirydatepicker').fadeOut();
+            //$('#expirydateAddon').fadeOut();
         }
     });
 
