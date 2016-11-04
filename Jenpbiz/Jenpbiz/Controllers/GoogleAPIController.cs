@@ -231,21 +231,22 @@ namespace Jenpbiz.Controllers
             string price = Request["editProductPrice"];
             string gtin = Request["EditProductGtin"];
 
-            DateTime availabilityDate = DateTime.Parse(availabilityDateStr);
-            DateTime expirationDate = DateTime.Parse(expirationDateStr);
+
+            DateTime availabilityDate = DateTime.Now);
+            DateTime expirationDate = DateTime.Now.AddDays(7);
+            DateTime.TryParse(availabilityDateStr, out availabilityDate);
+            DateTime.TryParse(expirationDateStr, out expirationDate);
 
             availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
             expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
 
 
             Product updateProduct = new Product();
-            Debug.WriteLine("Old ETag: " + updateProduct.ETag);
 
             try
             {
                 ProductsResource.GetRequest updateProductRequest = service.Products.Get(MERCHANT_ID, id);
                 updateProduct = updateProductRequest.Execute();
-                Debug.WriteLine("New ETag: " + updateProduct.ETag);
             }
             catch (Exception Ex)
             {
@@ -256,6 +257,7 @@ namespace Jenpbiz.Controllers
             }
 
 
+            updateProduct.ETag = null;
             updateProduct.GoogleProductCategory = category;
             updateProduct.Availability = availability;
             updateProduct.Condition = condition;

@@ -25,13 +25,12 @@
         // Calls the getProduct function.
         getProductInfoForEdit(productId);
 
-
     });
 
     $('#EditProductLink').on('click', function () {
 
         $('#editProductForm').submit();
-
+        
     });
 
 
@@ -51,9 +50,9 @@ function getProductInfoForEdit(productId) {
             var container = $('#editProductModalContent');
             container.css('text-align', 'center');
 
-            var s = returnedProduct.Id.replace(/\:/g, '_');
-            var editLink = '../../GoogleApi/EditProduct/?productId=' + s;
-            $('#editProductLink').attr('href', editLink);
+            //var s = returnedProduct.Id.replace(/\:/g, '_');
+            //var editLink = '../../GoogleApi/EditProduct/';
+            //$('#editProductLink').attr('href', editLink);
 
             $('#editModalDisplayId').html("ID: " + returnedProduct.Id);
 
@@ -117,7 +116,7 @@ function getProductInfoForEdit(productId) {
 
                         + '<div class="input-group" style="width:280px" name="">'
                             + '<span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="editExpirydateAddon"></span>'
-                            + '<input type="text" name="editSelectProductAvailabilityExpiryDate" id="editExpirydatepicker" class="form-control input-sm formController" placeholder="Expiration date">'
+                            + '<input type="text" name="editSelectProductAvailabilityExpiryDate" id="editExpiryDatepicker" class="form-control input-sm formController" placeholder="Expiration date">'
                         + '</div></center>'
 
 
@@ -167,16 +166,19 @@ function getProductInfoForEdit(productId) {
             $('#editSelectProductCondition option[value=' + returnedProduct.Condition + ']').attr('selected', 'selected');
             $('#editSelectProductTargetCountry option[value=' + returnedProduct.TargetCountry + ']').attr('selected', 'selected');
 
+            $('#editExpiryDatepicker').datepicker();
+            $('#editDatepicker').datepicker();
 
-            if (returnedProduct.ExpirationDate != null) {
-                $('#editDatepicker').val(returnedProduct.ExpirationDate);
+            //if (returnedProduct.ExpirationDate != null) {
+            //    $('#editExpiryDatepicker').datepicker('setDate', returnedProduct.ExpirationDate);
+                
+            //}
+            
+            //if (returnedProduct.Availability == 'preorder') {
+            //    $('#editDatepicker').datepicker('setDate', Date(2016, 08,26));
 
-            }
+            //}
 
-            if (returnedProduct.Availability == 'preorder') {
-                $('#editExpirydatepicker').val(returnedProduct.AvailabilityDate);
-
-            }
 
             container.children().css(({
                 'margin-top': '10px'
