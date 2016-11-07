@@ -106,8 +106,12 @@ namespace Jenpbiz.Controllers
             expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
 
 
-            Debug.WriteLine("ISO Availability Date: " + availabilityDate);
-            Debug.WriteLine("ISO Expiration Date: " + expirationDate);
+            Debug.WriteLine("Availability Date: " + availabilityDate.ToString());
+            Debug.WriteLine("Expiration Date: " + availabilityDate.ToString());
+            Debug.WriteLine("Availability Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+            Debug.WriteLine("Expiration Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+            Debug.WriteLine("ISO Availability Date: " + availabilityDateStr);
+            Debug.WriteLine("ISO Expiration Date: " + expirationDateStr);
 
             Product newProduct = new Product()
             {
@@ -124,8 +128,8 @@ namespace Jenpbiz.Controllers
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"],
 
-                AvailabilityDate = availabilityDate.ToString(),
-                ExpirationDate = expirationDate.ToString()
+                AvailabilityDate = availabilityDateStr,
+                ExpirationDate = expirationDateStr
             };
 
             Price priceInfo = new Price()
@@ -232,14 +236,30 @@ namespace Jenpbiz.Controllers
             string gtin = Request["EditProductGtin"];
 
 
-            DateTime availabilityDate = DateTime.Now);
+            DateTime availabilityDate = DateTime.Now;
             DateTime expirationDate = DateTime.Now.AddDays(7);
             DateTime.TryParse(availabilityDateStr, out availabilityDate);
             DateTime.TryParse(expirationDateStr, out expirationDate);
 
-            availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(availabilityDateStr))
+            {
+                availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                availabilityDateStr = null;
+            }
 
+            if (!string.IsNullOrWhiteSpace(expirationDateStr))
+            {
+                expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                expirationDateStr = null;
+            }
+
+            
 
             Product updateProduct = new Product();
 
@@ -300,6 +320,13 @@ namespace Jenpbiz.Controllers
                     updateProduct.Price.Currency = "USD";
                     break;
             }
+
+            List<ProductShipping> shippingList = new List<ProductShipping>()
+            {
+                new ProductShipping { Country = "SE", Price = new Price { Value = "50", Currency = "SEK"  }}
+            };
+
+            updateProduct.Shipping = shippingList;
 
             try
             {
