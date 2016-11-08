@@ -99,10 +99,28 @@ namespace Jenpbiz.Controllers
             string expirationDateStr = Request["selectProductAvailabilityExpiryDate"];
 
 
-            DateTime availabilityDate, expirationDate;
+            DateTime availabilityDate = DateTime.Now;
+            DateTime expirationDate = DateTime.Now.AddDays(7);
+            DateTime.TryParse(availabilityDateStr, out availabilityDate);
+            DateTime.TryParse(expirationDateStr, out expirationDate);
 
-            availabilityDate = DateTime.Parse(availabilityDateStr);
-            expirationDate = DateTime.Parse(expirationDateStr);
+            if (!string.IsNullOrWhiteSpace(availabilityDateStr))
+            {
+                availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                availabilityDateStr = null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(expirationDateStr))
+            {
+                expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                expirationDateStr = null;
+            }
 
             availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
             expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
