@@ -41,21 +41,6 @@ namespace Jenpbiz.Controllers
             const long maxResults = 250;
 
             ProductsListResponse productsResponse = null;
-            //do
-            //{
-            //    ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
-            //    accountRequest.MaxResults = maxResults;
-            //    accountRequest.PageToken = pageToken;
-            //    accountRequest.IncludeInvalidInsertedItems = true;
-            //    productsResponse = accountRequest.Execute();
-
-            //    if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
-            //    {
-
-            //    }
-            //    pageToken = productsResponse.NextPageToken;
-            //}
-            //while (pageToken != null);
 
             while (pageToken != null || firstRun == true)
             {

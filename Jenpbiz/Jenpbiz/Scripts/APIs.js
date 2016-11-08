@@ -168,7 +168,8 @@ function getProductInfoForEdit(productId) {
             $('#editProductGtin').val(returnedProduct.Gtin);
 
             $('#editSelectProductCategory option[value=' + returnedProduct.GoogleProductCategory + ']').attr('selected', 'selected');
-            $('#editSelectProductAvailability option[value=' + returnedProduct.Availability + ']').attr('selected', 'selected');
+            $('#editSelectProductAvailability option[value="' + returnedProduct.Availability + '"]').attr('selected', 'selected');
+
             $('#editSelectProductCondition option[value=' + returnedProduct.Condition + ']').attr('selected', 'selected');
             $('#editSelectProductTargetCountry option[value=' + returnedProduct.TargetCountry + ']').attr('selected', 'selected');
             //$('#editExpiryDatepicker').datepicker();
