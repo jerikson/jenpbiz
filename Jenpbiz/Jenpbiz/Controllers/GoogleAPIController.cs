@@ -30,14 +30,34 @@ namespace Jenpbiz.Controllers
         {
             ViewBag.Title = "Products";
 
+            //DeleteProduct("online:sv:SE:14781753601");
 
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
+            bool firstRun = true;
             string pageToken = null;
+
             const long maxResults = 250;
+
             ProductsListResponse productsResponse = null;
-            do
+            //do
+            //{
+            //    ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
+            //    accountRequest.MaxResults = maxResults;
+            //    accountRequest.PageToken = pageToken;
+            //    accountRequest.IncludeInvalidInsertedItems = true;
+            //    productsResponse = accountRequest.Execute();
+
+            //    if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
+            //    {
+
+            //    }
+            //    pageToken = productsResponse.NextPageToken;
+            //}
+            //while (pageToken != null);
+
+            while (pageToken != null || firstRun == true)
             {
                 ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
                 accountRequest.MaxResults = maxResults;
@@ -49,8 +69,10 @@ namespace Jenpbiz.Controllers
                 {
 
                 }
+                firstRun = false;
                 pageToken = productsResponse.NextPageToken;
             }
+
             while (pageToken != null);
             return View(productsResponse.Resources.ToList());
         }
@@ -69,8 +91,29 @@ namespace Jenpbiz.Controllers
             Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
             Debug.WriteLine("Category: " + Request["selectProductCategory"]);
             Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
+            Debug.WriteLine("Availability Date: " + Request["selectProductAvailabilityDate"]);
+            Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
 
             string targetCountry = Request["selectProductTargetCountry"].ToUpper();
+            string availabilityDateStr = Request["selectProductAvailabilityDate"];
+            string expirationDateStr = Request["selectProductAvailabilityExpiryDate"];
+
+
+            DateTime availabilityDate, expirationDate;
+
+            availabilityDate = DateTime.Parse(availabilityDateStr);
+            expirationDate = DateTime.Parse(expirationDateStr);
+
+            availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+
+
+            Debug.WriteLine("Availability Date: " + availabilityDate.ToString());
+            Debug.WriteLine("Expiration Date: " + availabilityDate.ToString());
+            Debug.WriteLine("Availability Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+            Debug.WriteLine("Expiration Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
+            Debug.WriteLine("ISO Availability Date: " + availabilityDateStr);
+            Debug.WriteLine("ISO Expiration Date: " + expirationDateStr);
 
             Product newProduct = new Product()
             {
@@ -85,12 +128,15 @@ namespace Jenpbiz.Controllers
                 Availability = Request["selectProductAvailability"],
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
-                Gtin = Request["inputProductGtin"]
+                Gtin = Request["inputProductGtin"],
+
+                AvailabilityDate = availabilityDateStr,
+                ExpirationDate = expirationDateStr
             };
 
             Price priceInfo = new Price()
             {
-                Value = Request["inputProductPrice"]   
+                Value = Request["inputProductPrice"]
             };
 
             switch (targetCountry)
@@ -114,7 +160,10 @@ namespace Jenpbiz.Controllers
                     newProduct.ContentLanguage = "en";
                     priceInfo.Currency = "USD";
                     break;
+
                 default:
+                    newProduct.ContentLanguage = "en";
+                    priceInfo.Currency = "USD";
                     break;
             }
 
@@ -129,7 +178,7 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception Ex)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @114");
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
                 System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
                 System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
@@ -168,6 +217,138 @@ namespace Jenpbiz.Controllers
             //return Json(new { successfullyDeleted = successfullyDeleted }, "json", JsonRequestBehavior.DenyGet);
         }
 
+        public ActionResult EditProduct()
+        {
+
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            string category = Request["editSelectProductCategory"];
+            string availability = Request["editSelectProductAvailability"];
+            string condition = Request["editSelectProductCondition"];
+            string targetCountry = Request["editSelectProductTargetCountry"];
+            string availabilityDateStr = Request["editSelectProductAvailabilityDate"];
+            string expirationDateStr = Request["editSelectProductAvailabilityExpiryDate"];
+
+            string id = Request["editProductId"];
+            string title = Request["editProductTitle"];
+            string description = Request["editProductDescription"];
+            string link = Request["editProductLink"];
+            string imageLink = Request["editProductImageLink"];
+            string price = Request["editProductPrice"];
+            string gtin = Request["EditProductGtin"];
+
+
+            DateTime availabilityDate = DateTime.Now;
+            DateTime expirationDate = DateTime.Now.AddDays(7);
+            DateTime.TryParse(availabilityDateStr, out availabilityDate);
+            DateTime.TryParse(expirationDateStr, out expirationDate);
+
+            if (!string.IsNullOrWhiteSpace(availabilityDateStr))
+            {
+                availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                availabilityDateStr = null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(expirationDateStr))
+            {
+                expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                expirationDateStr = null;
+            }
+
+            
+
+            Product updateProduct = new Product();
+
+            try
+            {
+                ProductsResource.GetRequest updateProductRequest = service.Products.Get(MERCHANT_ID, id);
+                updateProduct = updateProductRequest.Execute();
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+
+            updateProduct.ETag = null;
+            updateProduct.GoogleProductCategory = category;
+            updateProduct.Availability = availability;
+            updateProduct.Condition = condition;
+            updateProduct.TargetCountry = targetCountry;
+            updateProduct.AvailabilityDate = availabilityDateStr;
+            updateProduct.ExpirationDate = expirationDateStr;
+
+            updateProduct.Title = title;
+            updateProduct.Description = description;
+            updateProduct.Link = link;
+            updateProduct.ImageLink = imageLink;
+            updateProduct.Price.Value = price;
+            updateProduct.Gtin = gtin;
+
+
+            switch (targetCountry)
+            {
+                case "SE":
+                    updateProduct.ContentLanguage = "sv";
+                    updateProduct.Price.Currency = "SEK";
+                    break;
+
+                case "GB":
+                    updateProduct.ContentLanguage = "en";
+                    updateProduct.Price.Currency = "GBP";
+                    break;
+
+                case "AU":
+                    updateProduct.ContentLanguage = "en";
+                    updateProduct.Price.Currency = "AUD";
+                    break;
+
+                case "USA":
+                    updateProduct.ContentLanguage = "en";
+                    updateProduct.Price.Currency = "USD";
+                    break;
+
+                default:
+                    updateProduct.ContentLanguage = "en";
+                    updateProduct.Price.Currency = "USD";
+                    break;
+            }
+
+            List<ProductShipping> shippingList = new List<ProductShipping>()
+            {
+                new ProductShipping { Country = "SE", Price = new Price { Value = "50", Currency = "SEK"  }}
+            };
+
+            updateProduct.Shipping = shippingList;
+
+            try
+            {
+                ProductsResource.InsertRequest accountRequest = service.Products.Insert(updateProduct, MERCHANT_ID);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+        }
+
         public ActionResult GetProductInfo(string productId)
         {
             UserCredential credential = Authenticate();
@@ -178,7 +359,7 @@ namespace Jenpbiz.Controllers
 
 
             return Json(new { clickedProduct = selectedProduct },
-                JsonRequestBehavior.DenyGet);
+                JsonRequestBehavior.AllowGet);
         }
 
         public UserCredential Authenticate()

@@ -1,7 +1,7 @@
 ﻿@using System.Text.RegularExpressions
 @model List<Google.Apis.ShoppingContent.v2.Data.Product>
 @{
-    string clickedId = "";
+
 }
 <!DOCTYPE html>
 <html>
@@ -16,7 +16,7 @@
     <br/>
     <div class="text-center">
         <h3>Products: @Model.Count.ToString()</h3>
-        <a href="/GoogleApi/InsertProduct"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+        <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
     <br />
@@ -46,7 +46,7 @@
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
                 <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
-                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right editClick" data-toggle="modal" data-target="#modalEditProduct" id="@p.Id"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
@@ -79,7 +79,7 @@
                             <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
-                                <option value="pre order">preorder</option>
+                                <option value="preorder">preorder</option>
                                 <option value="out of stock">out of stock</option>
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
@@ -160,56 +160,20 @@
                             <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
 
+                            <!--Product Gtin -->
+                            <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
                             <!--Product Price -->
-                            @*<div class="input-group input-group-sm">
-                                <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                                <span class="input-group-addon inputGroupAddon">
-                                    <select name="selectProductPriceCurrency" id="currency" class="form-control formController input-sm" style="width:150px;">
-                                        <option value="" selected disabled>Currency</option>
-                                        <option value="SEK">Swedish Krona</option>
-                                        <option value="GBP">British Pound</option>
-                                        <option value="USD">US Dollar</option>
-                                        <option value="AUD">Australian Dollar</option>
-                                    </select>
-                                </span>
-                            </div>
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
-
-
-                            @*<div class="input-group input-group-sm input" style="width: 200px; height: 16px; margin: 100px auto;">
-                                <input type="text" class="form-control" placeholder="Currency" style="height: 18px; padding: 0; margin: 0;" />
-                                <span class="input-group-addon" style="height: 16px; padding: 0 0px; margin: 0;">
-                                    <span class="">
-
-                                        <select class="selectpicker" style="height:28px;">
-                                            <option>USD</option>
-                                            <option>SEK</option>
-                                            <option>GBP</option>
-                                            <option>AUD</option>
-                                        </select>
-
-                                    </span>
-
-                                </span>
-                            </div>*@
+                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
 
 
-
-                        <!--Product Gtin -->
-                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
-
-                        <!--Product Price -->
-                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+                        </div>
 
 
-
-                    </div>
-
-
-         
+                        
 
 
                         <div class="modal-footer">
@@ -247,10 +211,37 @@
         </div>
     </div>
     <!-- End Google Delete Product Modal -->
+
+
+    <!-- Begin Google Edit Product Modal -->
+    <div class="modal fade" id="modalEditProduct" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title" id="">Edit Product</h4></div>
+                <div class="modal-body">
+
+                    <div id="editProductModalContent">
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer" id="editProductModalFooter">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-danger">Delete</button>*@
+                    <button type="button" class="btn btn-info" id="EditProductLink">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Google Edit Product Modal -->
+
+
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/bootstrap-datepicker.js"></script>
-    
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/APIs.js"></script>
+
 <script>
     $(function () {
 
@@ -258,8 +249,8 @@
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
-        $('#expirydatepicker').fadeOut();
-        $('#expirydateAddon').fadeOut();
+        //$('#expirydatepicker').fadeOut();
+        //$('#expirydateAddon').fadeOut();
         
     });
 
@@ -267,18 +258,18 @@
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-        if ($('#selectProductAvailability').val() == 'pre order') {
+        if ($('#selectProductAvailability').val() == 'preorder') {
             $('#datepicker').fadeIn();
             $('#dateAddon').fadeIn();
-            $('#expirydateAddon').fadeIn();
-            $('#expirydatepicker').fadeIn();
+            //$('#expirydateAddon').fadeIn();
+            //$('#expirydatepicker').fadeIn();
         } else {
             $('#datepicker').val("");
             $('#expirydatepicker').val("");
             $('#datepicker').fadeOut();
             $('#dateAddon').fadeOut();
-            $('#expirydatepicker').fadeOut();
-            $('#expirydateAddon').fadeOut();
+            //$('#expirydatepicker').fadeOut();
+            //$('#expirydateAddon').fadeOut();
         }
     });
 
@@ -300,6 +291,6 @@
 
 </script>
     
-    <script src="~/Scripts/APIs.js"></script>
+
 </body>
 </html>
