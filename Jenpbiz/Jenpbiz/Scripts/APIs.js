@@ -128,30 +128,32 @@ function getProductInfoForEdit(productId) {
                     + '<div class="form-group input-group-sm ">'
 
                         + '<label for="editProductTitle"><span class="text-danger">* </span>Title</label><br />'
-                        + '<input type="text" name="editProductTitle" id="editProductTitle" class="form-control formController" placeholder="Title" />'
+                        + '<input type="text" name="editProductTitle" id="editProductTitle" class="form-control formController" placeholder="Title" /><br />'
 
                         + '<label for="editProductDescription"><span class="text-danger">* </span>Description</label><br />'
-                        + '<textarea name="editProductDescription" id="editProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea>'
+                        + '<textarea name="editProductDescription" id="editProductDescription" class="form-control formController" placeholder="Description" rows="1" cols="1"></textarea><br />'
 
                         + '<label for="editProductLink"><span class="text-danger">* </span>Link</label><br />'
-                        + '<input type="text" name="editProductLink" id="editProductLink" class="form-control formController" placeholder="https://example.com/category/item33" />'
+                        + '<input type="text" name="editProductLink" id="editProductLink" class="form-control formController" placeholder="https://example.com/category/item33" /><br />'
 
                         + '<label for="editProductImageLink"><span class="text-danger">* </span>Image Link</label><br />'
-                        + '<input type="text" name="editProductImageLink" id="editProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" />'
+                        + '<input type="text" name="editProductImageLink" id="editProductImageLink" class="form-control formController" placeholder="https://example.com/img/image33.png" /><br />'
 
                         + '<label for="editProductPrice"><span class="text-danger">* </span>Price</label><br />'
-                        + '<input type="text" name="editProductPrice" id="editProductPrice" class="form-control formController" placeholder="Price" />'
+                        + '<input type="text" name="editProductPrice" id="editProductPrice" class="form-control formController" placeholder="Price" /><br />'
 
                         + '<label for="editProductGtin"><span class="text-danger">* </span>Gtin</label><br />'
-                        + '<input type="text" name="editProductGtin" id="editProductGtin" class="form-control formController" placeholder="gtin" />'
+                        + '<input type="text" name="editProductGtin" id="editProductGtin" class="form-control formController" placeholder="gtin" /><br />'
 
                     + '</div>'
                     
 
                 + '</form>'
 
-                + '<p>availability date: ' + returnedProduct.AvailabilityDate + '</p>'
-                + '<p>expiration date: ' + returnedProduct.ExpirationDate + '</p>'
+                + '<p>Category: ' + returnedProduct.GoogleProductCategory + '</p>'
+                + '<p>Availability: ' + returnedProduct.Availability + '</p>'
+                + '<p>Condition: ' + returnedProduct.Condition + '</p>'
+                + '<p>Target Country: ' + returnedProduct.TargetCountry + '</p>'
 
                 );
 
