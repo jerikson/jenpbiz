@@ -31,7 +31,6 @@
             <th>Price</th>
             <th>Currency</th>
             <th>Stock</th>
-            <th>s</th>
         </tr>
         </thead>
         <tbody>
@@ -53,25 +52,18 @@
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct"></span></a></td>
             </tr>
-            <!--Accordion-->
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 1
-                </td>
+            <!--Accordion info / success-->
+            <tr class="active accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="text-info"><span class="glyphicon glyphicon-info-sign"></span> INFO</td>
             </tr>
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 2
-                </td>
+             <!--Accordion warning -->
+            <tr class="warning accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="text-warning"><span class="glyphicon glyphicon-warning-sign"></span> WARNING</td>
             </tr>
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 3
-                </td>
+            <!--Accordion error -->
+            <tr class="danger accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="text-danger"><span class="glyphicon glyphicon-ban-circle"></span> ERROR</td>
             </tr>
-
-
-
         }
         </tbody>
     </table>

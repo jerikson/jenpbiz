@@ -66,11 +66,11 @@ namespace Jenpbiz.Controllers
                 pageToken = productsResponse.NextPageToken;
             }
 
-            Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
-            {
-                Products = productsResponse,
-                ProductsStatuses = productStatusesResponseList
-            };
+            //Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
+            //{
+            //    Products = productsResponse,
+            //    ProductsStatuses = productStatusesResponseList
+            //};
 
             while (pageToken != null);
             return View(productsResponse.Resources.ToList());
