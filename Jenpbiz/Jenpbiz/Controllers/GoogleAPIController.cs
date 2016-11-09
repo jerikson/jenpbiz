@@ -68,12 +68,24 @@ namespace Jenpbiz.Controllers
 
             Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
             {
-                Products = productsResponse,
-                ProductsStatuses = productStatusesResponseList
+                Products = productsResponse.Resources.ToList(),
+                ProductsStatuses = productStatusesResponseList.Resources.ToList()
             };
 
-            while (pageToken != null);
-            return View(productsResponse.Resources.ToList());
+            foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
+            {
+                Debug.WriteLine("Status ProductId: " + status.ProductId);
+                Debug.WriteLine("Status Product Title: " + status.Title);
+                Debug.WriteLine("Status Product Link: " + status.Link);
+                
+                for (int i = 0; i < status.DataQualityIssues.Count; i++)
+                {
+                    Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
+                }
+            }
+
+            return View(fullProductInfo);
+            // OLD: return View(productsResponse.Resources.ToList());
         }
 
         public ActionResult InsertProduct()

@@ -1,5 +1,6 @@
 ﻿@using System.Text.RegularExpressions
-@model List<Google.Apis.ShoppingContent.v2.Data.Product>
+@*@model List<Google.Apis.ShoppingContent.v2.Data.Product>*@
+@model Jenpbiz.Models.GoogleLists
 @{
 
 }
@@ -15,7 +16,7 @@
     <br />
     <br/>
     <div class="text-center">
-        <h3>Products: @Model.Count.ToString()</h3>
+        <h3>Products: @Model.Products.Count.ToString()</h3>
         <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
@@ -35,7 +36,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var p in Model)
+        @foreach (var p in Model.Products)
         {
             string accordionId = Regex.Replace(p.Id, "[:.]", "_");
             <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
@@ -54,21 +55,76 @@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct"></span></a></td>
             </tr>
             <!--Accordion-->
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 1
-                </td>
-            </tr>
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 2
-                </td>
-            </tr>
-            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
-                <td colspan="6" class="">
-                    TEEEEST 3
-                </td>
-            </tr>
+            foreach (var status in Model.ProductsStatuses)
+            {
+                if (status.ProductId == p.Id)
+                {
+                    for (int i = 0; i < status.DataQualityIssues.Count; i++)
+                    {
+
+                        if (status.DataQualityIssues[i].Severity == "critical")
+                        {
+                            <tr class="danger accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+
+                                <td colspan="2" class="">
+                                    @status.DataQualityIssues[i].Severity
+                                </td>
+                                <td colspan="6" class="">
+                                    @status.DataQualityIssues[i].Detail
+                                </td>
+
+                            </tr>
+
+                        }
+                        else if (status.DataQualityIssues[i].Severity == "error")
+                        {
+                            <tr class="danger accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+
+                                <td colspan="2" class="">
+                                    @status.DataQualityIssues[i].Severity
+                                </td>
+                                <td colspan="6" class="">
+                                    @status.DataQualityIssues[i].Detail
+                                </td>
+
+                            </tr>
+
+                        }
+                        else if (status.DataQualityIssues[i].Severity == "suggestion")
+                        {
+                            <tr class="warning accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+
+                                <td colspan="2" class="">
+                                    @status.DataQualityIssues[i].Severity
+                                </td>
+                                <td colspan="6" class="">
+                                    @status.DataQualityIssues[i].Detail
+                                </td>
+
+                            </tr>
+
+                        }
+                        else
+                        {
+                            <tr class="active accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+
+                                <td colspan="2" class="">
+                                    @status.DataQualityIssues[i].Severity
+                                </td>
+                                <td colspan="6" class="">
+                                    @status.DataQualityIssues[i].Detail
+                                </td>
+
+                            </tr>
+
+                        }
+
+                    }
+
+                }
+
+            }
+
 
 
 

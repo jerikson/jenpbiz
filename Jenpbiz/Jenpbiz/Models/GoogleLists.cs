@@ -12,8 +12,9 @@ namespace Jenpbiz.Models
 
         }
 
-        public Google.Apis.ShoppingContent.v2.Data.ProductsListResponse Products { get; set; }
-        public Google.Apis.ShoppingContent.v2.Data.ProductstatusesListResponse ProductsStatuses { get; set; }
+        public List<Google.Apis.ShoppingContent.v2.Data.Product> Products { get; set; }
+        public List<Google.Apis.ShoppingContent.v2.Data.ProductStatus> ProductsStatuses { get; set; }
+
 
 
     }
