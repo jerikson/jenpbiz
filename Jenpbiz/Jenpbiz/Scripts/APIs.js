@@ -40,9 +40,8 @@
 });
 
 
-function accordionFunction()
-{
-    
+function accordionFunction() {
+
     //$("tr:not(.accordion-toggle)").hide();
 
     $("tr.accordion-toggle").click(function () {
@@ -51,7 +50,7 @@ function accordionFunction()
     });
 
 
-}
+};
 
 
 function getProductInfoForEdit(productId) {
