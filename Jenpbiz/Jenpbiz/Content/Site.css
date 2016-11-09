@@ -1,4 +1,6 @@
-﻿
+﻿.hiddenRow {
+    padding: 0 !important;
+}
   .arraydot {
     border-radius: 50%;
     width: 80px;
