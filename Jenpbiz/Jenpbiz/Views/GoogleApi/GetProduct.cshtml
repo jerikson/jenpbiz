@@ -77,7 +77,7 @@
                         }
                         else if (status.DataQualityIssues[i].Severity == "error")
                         {
-                            <tr class="danger accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                            <tr class="warning accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
 
                                 <td colspan="2" class="">
                                     @status.DataQualityIssues[i].Severity
@@ -91,7 +91,7 @@
                         }
                         else if (status.DataQualityIssues[i].Severity == "suggestion")
                         {
-                            <tr class="warning accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                            <tr class="info accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
 
                                 <td colspan="2" class="">
                                     @status.DataQualityIssues[i].Severity

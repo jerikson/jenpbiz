@@ -3,6 +3,9 @@
     background-color: #bce8f1;
 }
 
+.table tr.info td {
+    background-color: #bce8f1;
+}
 
 .hiddenRow {
     padding: 0 !important;
