@@ -66,7 +66,7 @@
                             <tr class="danger accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
 
                                 <td colspan="2" class="">
-                                    @status.DataQualityIssues[i].Severity
+                                    <span class="text-danger glyphicon glyphicon-ban-circle"> </span>
                                 </td>
                                 <td colspan="6" class="">
                                     @status.DataQualityIssues[i].Detail
@@ -80,7 +80,7 @@
                             <tr class="warning accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
 
                                 <td colspan="2" class="">
-                                    @status.DataQualityIssues[i].Severity
+                                    <span class="text-warning glyphicon glyphicon-warning-sign"> </span>
                                 </td>
                                 <td colspan="6" class="">
                                     @status.DataQualityIssues[i].Detail
@@ -94,7 +94,7 @@
                             <tr class="info accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
 
                                 <td colspan="2" class="">
-                                    @status.DataQualityIssues[i].Severity
+                                    <span class="text-info glyphicon glyphicon-info-sign"> </span>
                                 </td>
                                 <td colspan="6" class="">
                                     @status.DataQualityIssues[i].Detail
