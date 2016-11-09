@@ -1,7 +1,8 @@
 ﻿@using System.Text.RegularExpressions
-@model List<Google.Apis.ShoppingContent.v2.Data.Product>
+@*@model List<Google.Apis.ShoppingContent.v2.Data.Product>*@
+@model Jenpbiz.Models.GoogleLists
 @{
-    string clickedId = "";
+
 }
 <!DOCTYPE html>
 <html>
@@ -15,8 +16,8 @@
     <br />
     <br/>
     <div class="text-center">
-        <h3>Products: @Model.Count.ToString()</h3>
-        <a href="/GoogleApi/InsertProduct"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+        <h3>Products: @Model.Products.Count.ToString()</h3>
+        <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
     <br />
@@ -34,9 +35,10 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var p in Model)
+        @foreach (var p in Model.Products)
         {
-            <tr>
+            string accordionId = Regex.Replace(p.Id, "[:.]", "_");
+            <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
                 <!--Remove alphabetic characters from google id-->
                 <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
                 <td>@p.Title</td>
@@ -46,19 +48,97 @@
                 <td><span class="badge">@p.Price.Currency</span></td>
                 <td>@p.Availability</td>
                 <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
-                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
+                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right editClick" data-toggle="modal" data-target="#modalEditProduct" id="@p.Id"></span></a></td>
                 <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
                 @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
-
             </tr>
+            <!--Accordion-->
+            foreach (var status in Model.ProductsStatuses)
+            {
+                if (status.ProductId == p.Id)
+                {
+                    if (status.DataQualityIssues != null)
+                    {
+                        foreach (var error in status.DataQualityIssues.ToList())
+                        {
+                            if (!string.IsNullOrWhiteSpace(error.Detail))
+                            {
+                                if (error.Severity == "critical")
+                                {
+                                    <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                        <td colspan="2" class="">
+                                            <span class="text-danger glyphicon glyphicon-ban-circle"></span>
+                                        </td>
+                                        <td colspan="6" class="">
+                                            @error.Detail
+                                        </td>
+
+                                    </tr>
+
+                                }
+                                else if (error.Severity == "error")
+                                {
+                                    <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                        <td colspan="2" class="">
+                                            <span class="text-warning glyphicon glyphicon-warning-sign"></span>
+                                        </td>
+                                        <td colspan="6" class="">
+                                            @error.Detail
+                                        </td>
+
+                                    </tr>
+
+                                }
+                                else if (error.Severity == "suggestion")
+                                {
+                                    <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                        <td colspan="2" class="">
+                                            <span class="text-info glyphicon glyphicon-info-sign"></span>
+                                        </td>
+                                        <td colspan="6" class="">
+                                            @error.Detail
+                                        </td>
+
+                                    </tr>
+
+                                }
+                                else
+                                {
+                                    <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                        <td colspan="2" class="">
+                                            @error.Severity
+                                        </td>
+                                        <td colspan="6" class="">
+                                            @error.Detail
+                                        </td>
+
+                                    </tr>
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+
         }
         </tbody>
     </table>
 
 
     <!-- Begin Google Insert Product Modal -->
-    <div class="modal fade" id="modalCreateProduct" role="dialog">
+    <div class="modal fade" id="modalCreateProduct" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header"><h4 class="modal-title" id="">Create new product</h4></div>
@@ -66,7 +146,7 @@
                     <form action="../../GoogleApi/InsertProduct" method="post">
                         <div class="form-group" role="form">
                             <!--Product Category-->
-                            <select name="selectProductCategory" class="form-control formController input-sm" id="">
+                            <select name="selectProductCategory" class="form-control formController input-sm" id="selectProductCategory">
                                 <option value="" selected disabled>Category</option>
                                 <option value="Apparel">Apparel</option>
                                 <option value="Books">Books</option>
@@ -76,10 +156,10 @@
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select a category for new product"></span>
 
                             <!--Product Availability-->
-                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability"">
+                            <select name="selectProductAvailability" class="form-control formController input-sm" id="selectProductAvailability">
                                 <option value="" selected disabled>Availability</option>
                                 <option value="in stock">in stock</option>
-                                <option value="pre order">preorder</option>
+                                <option value="preorder">preorder</option>§
                                 <option value="out of stock">out of stock</option>
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select availability for new product"></span>
@@ -103,17 +183,41 @@
                             </select>
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Select target country for new product"></span>
 
-                            <!--Product Availability Date-->
-                            <div class="input-group" style="width:280px" name="">
+                            <!--Product Availability Date if product is pre-order -->
+                            <div class="input-group" style="width:280px">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="dateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityDate" id="datepicker" class="form-control input-sm" placeholder="Availability date">
-
                             </div>
 
-                            <!--Product Expiry Date-->
-                            <div class="input-group" style="width:280px" name="">
+                            <!--Product Expiry Date -->
+                            <div class="input-group" style="width:280px">
                                 <span class="input-group-addon inputGroupAddon glyphicon glyphicon-calendar" id="expirydateAddon"></span>
                                 <input type="text" name="selectProductAvailabilityExpiryDate" id="expirydatepicker" class="form-control input-sm" placeholder="Expiration date">
+                            </div>
+                            
+                            <!--Product Pattern if product is apparel-->
+                            <div class="checkRadioContainer" id="selectProductPattern">
+                                <label>
+                                    N/A
+                                    <input value="patternNA"type="radio" name="radioGroup"/>
+                                    <p class=""></p>
+                                </label>
+                                <label>
+                                    dot
+                                    <input value="patternDot"type="radio" name="radioGroup"/>
+                                    <p class="arraydot"></p>
+                                </label>
+                                <label>
+                                    <input value="patternVertical" type="radio" name="radioGroup"/>
+                                    stripe
+                                    <p class="vertistripe"></p>
+                                </label>
+                                <label>
+                                    square
+                                    <input value="patternStripegit a" type="radio" name="radioGroup"/>
+                                    <p class="stripegrid"></p>
+
+                                </label>
                             </div>
 
 
@@ -136,56 +240,20 @@
                             <input type="text" name="inputProductImageLink" id="" class="form-control formController" placeholder="https://example.com/img/image33.png" />
                             <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter an Image-Url for new product"></span>
 
+                            <!--Product Gtin -->
+                            <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
+
                             <!--Product Price -->
-                            @*<div class="input-group input-group-sm">
-                                <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                                <span class="input-group-addon inputGroupAddon">
-                                    <select name="selectProductPriceCurrency" id="currency" class="form-control formController input-sm" style="width:150px;">
-                                        <option value="" selected disabled>Currency</option>
-                                        <option value="SEK">Swedish Krona</option>
-                                        <option value="GBP">British Pound</option>
-                                        <option value="USD">US Dollar</option>
-                                        <option value="AUD">Australian Dollar</option>
-                                    </select>
-                                </span>
-                            </div>
-                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>*@
-
-
-                            @*<div class="input-group input-group-sm input" style="width: 200px; height: 16px; margin: 100px auto;">
-                                <input type="text" class="form-control" placeholder="Currency" style="height: 18px; padding: 0; margin: 0;" />
-                                <span class="input-group-addon" style="height: 16px; padding: 0 0px; margin: 0;">
-                                    <span class="">
-
-                                        <select class="selectpicker" style="height:28px;">
-                                            <option>USD</option>
-                                            <option>SEK</option>
-                                            <option>GBP</option>
-                                            <option>AUD</option>
-                                        </select>
-
-                                    </span>
-
-                                </span>
-                            </div>*@
+                            <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
+                            <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
 
 
 
-
-                        <!--Product Gtin -->
-                        <input type="text" name="inputProductGtin" id="" class="form-control formController" placeholder="gtin" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter ''global trade item number' for new product"></span>
-
-                        <!--Product Price -->
-                        <input type="text" name="inputProductPrice" id="" class="form-control formController" placeholder="Price" />
-                        <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="right" title="Enter a price for new product"></span>
+                        </div>
 
 
-
-                    </div>
-
-
-         
+                        
 
 
                         <div class="modal-footer">
@@ -223,42 +291,86 @@
         </div>
     </div>
     <!-- End Google Delete Product Modal -->
+
+
+    <!-- Begin Google Edit Product Modal -->
+    <div class="modal fade" id="modalEditProduct" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title" id="">Edit Product</h4></div>
+                <div class="modal-body">
+
+                    <div id="editProductModalContent">
+
+                    </div>
+
+
+                </div>
+                <div class="modal-footer" id="editProductModalFooter">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    @*<button type="button" class="btn btn-danger">Delete</button>*@
+                    <button type="button" class="btn btn-info" id="EditProductLink">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Google Edit Product Modal -->
+
+
 </div>
     <script src="~/Scripts/jquery-1.10.2.js"></script>
-<script src="~/Scripts/bootstrap-datepicker.js"></script>
-    
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/APIs.js"></script>
+
 <script>
     $(function () {
 
+        $('#selectProductPattern').hide();
         $('[data-toggle="tooltip"]').tooltip();
         $('#datepicker').fadeOut();
         $('#dateAddon').fadeOut();
-        $('#expirydatepicker').fadeOut();
-        $('#expirydateAddon').fadeOut();
+        //$('#expirydatepicker').fadeOut();
+        //$('#expirydateAddon').fadeOut();
         
     });
+
     $('#datepicker').datepicker();
     $('#expirydatepicker').datepicker();
 
     $("#selectProductAvailability").change(function () {
-        if ($('#selectProductAvailability').val() == 'pre order') {
+        if ($('#selectProductAvailability').val() == 'preorder') {
             $('#datepicker').fadeIn();
             $('#dateAddon').fadeIn();
-            $('#expirydateAddon').fadeIn();
-            $('#expirydatepicker').fadeIn();
+            //$('#expirydateAddon').fadeIn();
+            //$('#expirydatepicker').fadeIn();
         } else {
             $('#datepicker').val("");
             $('#expirydatepicker').val("");
             $('#datepicker').fadeOut();
             $('#dateAddon').fadeOut();
-            $('#expirydatepicker').fadeOut();
-            $('#expirydateAddon').fadeOut();
+            //$('#expirydatepicker').fadeOut();
+            //$('#expirydateAddon').fadeOut();
         }
     });
+
+        $("#selectProductCategory").change(function () {
+            if ($('#selectProductCategory').val() == 'Apparel') {
+
+                $('#selectProductPattern').fadeIn();
+            } else {
+                $('#selectProductPattern').hide();
+            }
+        });
+
+
+
+
+
+
 
 
 </script>
     
-    <script src="~/Scripts/APIs.js"></script>
+
 </body>
 </html>
