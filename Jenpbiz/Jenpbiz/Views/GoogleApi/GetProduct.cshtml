@@ -37,7 +37,8 @@
         <tbody>
         @foreach (var p in Model)
         {
-            <tr data-toggle="collapse" data-target="#@p.Id" class="accordion-toggle">
+            string accordionId = Regex.Replace(p.Id, "[:.]", "_");
+            <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
                 <!--Remove alphabetic characters from google id-->
                 <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
                 <td>@p.Title</td>
@@ -53,11 +54,24 @@
                 <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct"></span></a></td>
             </tr>
             <!--Accordion-->
-            <tr>
-                <td colspan="6" class="hiddenRow">
-                    <div id="@p.Id" class="accordian-body collapse">Demo2</div>
+            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="">
+                    TEEEEST 1
                 </td>
             </tr>
+            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="">
+                    TEEEEST 2
+                </td>
+            </tr>
+            <tr class="accordion-togglee-@accordionId @accordionId" id="@accordionId" style="display:none;">
+                <td colspan="6" class="">
+                    TEEEEST 3
+                </td>
+            </tr>
+
+
+
         }
         </tbody>
     </table>

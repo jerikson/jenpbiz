@@ -67,17 +67,17 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
-            Debug.WriteLine("Title: " + Request["inputProductTitle"]);
-            Debug.WriteLine("Description: " + Request["inputProductDescription"]);
-            Debug.WriteLine("Link: " + Request["inputProductLink"]);
-            Debug.WriteLine("Image link: " + Request["InputProductImageLink"]);
-            Debug.WriteLine("Target Country: " + Request["selectProductTargetCountry"]);
-            Debug.WriteLine("Availability: " + Request["selectProductAvailability"]);
-            Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
-            Debug.WriteLine("Category: " + Request["selectProductCategory"]);
-            Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
-            Debug.WriteLine("Availability Date: " + Request["selectProductAvailabilityDate"]);
-            Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
+            //Debug.WriteLine("Title: " + Request["inputProductTitle"]);
+            //Debug.WriteLine("Description: " + Request["inputProductDescription"]);
+            //Debug.WriteLine("Link: " + Request["inputProductLink"]);
+            //Debug.WriteLine("Image link: " + Request["InputProductImageLink"]);
+            //Debug.WriteLine("Target Country: " + Request["selectProductTargetCountry"]);
+            //Debug.WriteLine("Availability: " + Request["selectProductAvailability"]);
+            //Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
+            //Debug.WriteLine("Category: " + Request["selectProductCategory"]);
+            //Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
+            //Debug.WriteLine("Availability Date: " + Request["selectProductAvailabilityDate"]);
+            //Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
 
             string targetCountry = Request["selectProductTargetCountry"].ToUpper();
             string availabilityDateStr = Request["selectProductAvailabilityDate"];
@@ -132,7 +132,7 @@ namespace Jenpbiz.Controllers
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"],
-
+                
                 AvailabilityDate = availabilityDateStr,
                 ExpirationDate = expirationDateStr
             };

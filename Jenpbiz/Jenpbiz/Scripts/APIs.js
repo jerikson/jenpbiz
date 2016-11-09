@@ -1,5 +1,8 @@
 ﻿$(document).ready(function () {
 
+
+    accordionFunction();
+
     $('.deleteClick').on('click', function () {
 
         var productId = $(this).attr('id');
@@ -35,6 +38,20 @@
 
 
 });
+
+
+function accordionFunction()
+{
+    
+    //$("tr:not(.accordion-toggle)").hide();
+
+    $("tr.accordion-toggle").click(function () {
+        var id = $(this).attr('id');
+        $(this).nextAll("tr.accordion-togglee-" + id).fadeToggle(500);
+    });
+
+
+}
 
 
 function getProductInfoForEdit(productId) {
