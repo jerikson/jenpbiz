@@ -41,6 +41,7 @@ namespace Jenpbiz.Controllers
             const long maxResults = 250;
 
             ProductsListResponse productsResponse = null;
+            ProductstatusesListResponse productStatusesResponseList = null;
 
             while (pageToken != null || firstRun == true)
             {
@@ -50,6 +51,13 @@ namespace Jenpbiz.Controllers
                 accountRequest.IncludeInvalidInsertedItems = true;
                 productsResponse = accountRequest.Execute();
 
+                ProductstatusesResource.ListRequest statusesRequest = service.Productstatuses.List(MERCHANT_ID);
+                statusesRequest.MaxResults = maxResults;
+                statusesRequest.PageToken = pageToken;
+                statusesRequest.IncludeInvalidInsertedItems = true;
+                productStatusesResponseList = statusesRequest.Execute();
+                
+
                 if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
                 {
 
@@ -57,6 +65,12 @@ namespace Jenpbiz.Controllers
                 firstRun = false;
                 pageToken = productsResponse.NextPageToken;
             }
+
+            Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
+            {
+                Products = productsResponse,
+                ProductsStatuses = productStatusesResponseList
+            };
 
             while (pageToken != null);
             return View(productsResponse.Resources.ToList());
