@@ -84,6 +84,8 @@ namespace Jenpbiz.Controllers
                 }
             }
 
+            
+
             return View(fullProductInfo);
             // OLD: return View(productsResponse.Resources.ToList());
         }
@@ -378,6 +380,56 @@ namespace Jenpbiz.Controllers
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
 
+        public ActionResult CreatePartTrapProduct()
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            Product newProduct = new Product()
+            {
+                OfferId = GetUniqueId(),
+                Title = "PartTrap One",
+                Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. ",
+                Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991",
+                ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png",
+                ContentLanguage = "sv",
+                TargetCountry = "SE",
+                Channel = "online",
+                Availability = "in stock",
+                Condition = "new",
+                GoogleProductCategory = "5300",
+                IdentifierExists = false,
+                Brand = "PartTrap",
+                OnlineOnly = true,
+                Price = new Price
+                {
+                    Value = "500000",
+                    Currency = "SEK"
+                }   
+                
+            };
+
+
+            try
+            {
+                ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+                Debug.WriteLine(newProduct.Title + newProduct.Description);
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @CreatePartTrapProduct()");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+
+        }
+
         public ActionResult GetProductInfo(string productId)
         {
             UserCredential credential = Authenticate();
@@ -431,3 +483,4 @@ namespace Jenpbiz.Controllers
 
 
 }
+
