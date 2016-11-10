@@ -82,6 +82,7 @@ namespace Jenpbiz.Controllers
                 {
                     for (int i = 0; i < status.DataQualityIssues.Count; i++)
                     {
+                        Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
                         Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
                     }
                 }
@@ -388,52 +389,54 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
-            //Product newProduct = new Product()
-            //{
-            //    OfferId = GetUniqueId(),
-            //    Title = "PartTrap One",
-            //    Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. ",
-            //    Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991",
-            //    ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png",
-            //    ContentLanguage = "sv",
-            //    TargetCountry = "SE",
-            //    Channel = "online",
-            //    Availability = "in stock",
-            //    Condition = "new",
-            //    GoogleProductCategory = "5300",
-            //    IdentifierExists = false,
-            //    Brand = "PartTrap",
-            //    OnlineOnly = true,
-            //    Price = new Price
-            //    {
-            //        Value = "500000",
-            //        Currency = "SEK"
-            //    }   
-
-            //};
-
             Product newProduct = new Product()
             {
                 OfferId = GetUniqueId(),
-                Title = "PartTrap skjorta",
-                Description = "En fin, vit t-shirt med PartTrap skriven på den.",
-                Link = "http://imgur.com/a/ZRGaP",
-                ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
+                Title = "PartTrap One",
+                Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. ",
+                Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991",
+                ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png",
                 ContentLanguage = "sv",
                 TargetCountry = "SE",
                 Channel = "online",
                 Availability = "in stock",
                 Condition = "new",
-                GoogleProductCategory = "1604",
+                GoogleProductCategory = "5300",
                 IdentifierExists = false,
                 Brand = "PartTrap",
                 OnlineOnly = true,
                 Price = new Price
                 {
-                    Value = "5000",
+                    Value = "500000",
                     Currency = "SEK"
-                }
+                },
+                ProductType = "Software > Computer Software > Business & Productivity Software"
+
             };
+
+            //Product newProduct = new Product()
+            //{
+            //    OfferId = GetUniqueId(),
+            //    Title = "PartTrap skjorta",
+            //    Description = "En fin, vit t-shirt med PartTrap skriven på den.",
+            //    Link = "http://imgur.com/a/ZRGaP",
+            //    ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
+            //    ContentLanguage = "sv",
+            //    TargetCountry = "SE",
+            //    Channel = "online",
+            //    Availability = "in stock",
+            //    Condition = "new",
+            //    GoogleProductCategory = "1604",
+            //    IdentifierExists = false,
+            //    Brand = "PartTrap",
+            //    OnlineOnly = true,
+            //    Price = new Price
+            //    {
+            //        Value = "5000",
+            //        Currency = "SEK"
+            //    },
+
+            //};
 
 
             try
