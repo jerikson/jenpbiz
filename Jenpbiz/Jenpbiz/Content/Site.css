@@ -1,4 +1,8 @@
-﻿
+﻿small {
+  font-size: 75%;
+}
+
+
 .table tbody tr.info td {
     background-color: #bce8f1;
 }
