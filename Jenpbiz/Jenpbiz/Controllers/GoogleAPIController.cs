@@ -13,12 +13,13 @@ namespace Jenpbiz.Controllers
 {
     public class GoogleApiController : Controller
     {
-        private static string CLIENT_ID = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
-        private static string CLIENT_SECRET = "vq_UOyNpiO2q6uTb-QKcCykt";
-        private static ulong MERCHANT_ID = 113298073;
+        private static string CLIENT_ID = "134786682471-b2nh5tpgcq06r9nqpanmnpi027t3aunh.apps.googleusercontent.com";
+        //private static string CLIENT_SECRET_OLD = "vq_UOyNpiO2q6uTb-QKcCykt";
+        private static string CLIENT_SECRET = "nZiPHZYfF_LDpxqijfToD_oe";
+        private static ulong MERCHANT_ID = 113731084;
+
         private static int unique_id_increment = 0;
         //private static ulong MCA_MERCHANT_ID = 0;
-        //private static readonly int MaxListPageSize = 50;
 
         // GET: GoogleAPI
         public ActionResult Index()
@@ -66,31 +67,36 @@ namespace Jenpbiz.Controllers
                 pageToken = productsResponse.NextPageToken;
             }
 
-            Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
+            if (productsResponse.Resources != null && productStatusesResponseList.Resources != null)
             {
-                Products = productsResponse.Resources.ToList(),
-                ProductsStatuses = productStatusesResponseList.Resources.ToList()
-            };
-
-            foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
-            {
-                Debug.WriteLine("Status ProductId: " + status.ProductId);
-                Debug.WriteLine("Status Product Title: " + status.Title);
-                Debug.WriteLine("Status Product Link: " + status.Link);
-                if (status.DataQualityIssues != null)
+                Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
                 {
-                    for (int i = 0; i < status.DataQualityIssues.Count; i++)
-                    {
-                        Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
-                        Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
-                    }
-                }
-                
+                    Products = productsResponse.Resources.ToList(),
+                    ProductsStatuses = productStatusesResponseList.Resources.ToList()
+                };
+                return View(fullProductInfo);
             }
 
-            
 
-            return View(fullProductInfo);
+            //foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
+            //{
+            //    Debug.WriteLine("Status ProductId: " + status.ProductId);
+            //    Debug.WriteLine("Status Product Title: " + status.Title);
+            //    Debug.WriteLine("Status Product Link: " + status.Link);
+            //    if (status.DataQualityIssues != null)
+            //    {
+            //        for (int i = 0; i < status.DataQualityIssues.Count; i++)
+            //        {
+            //            Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
+            //            Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
+            //        }
+            //    }
+
+            //}
+
+
+
+            return View();
             // OLD: return View(productsResponse.Resources.ToList());
         }
 
@@ -164,6 +170,7 @@ namespace Jenpbiz.Controllers
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"],
+                IdentifierExists = false,
                 
                 AvailabilityDate = availabilityDateStr,
                 ExpirationDate = expirationDateStr
