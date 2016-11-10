@@ -77,6 +77,7 @@ namespace Jenpbiz.Controllers
                 Debug.WriteLine("Status ProductId: " + status.ProductId);
                 Debug.WriteLine("Status Product Title: " + status.Title);
                 Debug.WriteLine("Status Product Link: " + status.Link);
+              
                 
                 for (int i = 0; i < status.DataQualityIssues.Count; i++)
                 {
@@ -207,12 +208,12 @@ namespace Jenpbiz.Controllers
                 accountRequest.Execute();
                 Debug.WriteLine(newProduct.Title + newProduct.Description);
             }
-            catch (Exception Ex)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
             }
             
 
@@ -236,12 +237,12 @@ namespace Jenpbiz.Controllers
                 //accountRequest.DryRun = true;
                 accountRequest.Execute();
             }
-            catch (Exception Ex)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
             return RedirectToAction("/GetProduct", "GoogleApi");
@@ -302,12 +303,12 @@ namespace Jenpbiz.Controllers
                 ProductsResource.GetRequest updateProductRequest = service.Products.Get(MERCHANT_ID, id);
                 updateProduct = updateProductRequest.Execute();
             }
-            catch (Exception Ex)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
 
@@ -368,12 +369,12 @@ namespace Jenpbiz.Controllers
                 //accountRequest.DryRun = true;
                 accountRequest.Execute();
             }
-            catch (Exception Ex)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
 
@@ -417,12 +418,12 @@ namespace Jenpbiz.Controllers
                 accountRequest.Execute();
                 Debug.WriteLine(newProduct.Title + newProduct.Description);
             }
-            catch (Exception Ex)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @CreatePartTrapProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
 
