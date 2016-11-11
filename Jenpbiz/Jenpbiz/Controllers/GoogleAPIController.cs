@@ -8,6 +8,9 @@ using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using System;
 using System.Diagnostics;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Jenpbiz.Controllers
 {
@@ -464,6 +467,65 @@ namespace Jenpbiz.Controllers
 
             return RedirectToAction("/GetProduct", "GoogleApi");
 
+        }
+
+        public ActionResult DeletePartTrapProduct(string productId)
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            if (productId.Contains("_"))
+            {
+                productId = productId.Replace('_', ':');
+            }
+
+
+            try
+            {
+                ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+        }
+
+        public void JSONStuff()
+        {
+
+            WebClient client = new WebClient();
+
+            Stream data = client.OpenRead("http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4");
+            StreamReader reader = new StreamReader(data);
+            string result = reader.ReadToEnd();
+            data.Close();
+            reader.Close();
+
+            string[] products = System.Text.RegularExpressions.Regex.Split(result, "{\"StockCode\":");
+
+            foreach (string p in products)
+            {
+                Debug.WriteLine(p + "\n\n\n");
+            }
+
+            Debug.WriteLine(products.Count());
+
+            object test = JsonConvert.DeserializeObject(result);
+
+            Debug.WriteLine("obj test: " + test);
+            Debug.WriteLine("obj test tostring: " + test.ToString());
+
+            //Debug.WriteLine("RAW: " + result);
+            //Debug.WriteLine("\n\n\n\n\n");
+            //Debug.WriteLine("---------------END OF THE LINE---------------");
+                
         }
 
         public ActionResult GetProductInfo(string productId)
