@@ -8,29 +8,57 @@ using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using System;
 using System.Diagnostics;
+using Jenpbiz.Models;
+using System.IO;
+using System.Net;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Jenpbiz.Controllers
 {
     public class GoogleApiController : Controller
     {
         private static string CLIENT_ID = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
-        private static string CLIENT_SECRET = "vq_UOyNpiO2q6uTb-QKcCykt";
+        private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
-        private static int unique_id_increment = 0;
-        //private static ulong MCA_MERCHANT_ID = 0;
-        //private static readonly int MaxListPageSize = 50;
+        private int unique_id_increment = 0;
+        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=";
+        internal string StockId = "GOOGLE&relationId=4";
+
+
+
 
         // GET: GoogleAPI
         public ActionResult Index()
         {
-            return View();
+            List<Model.Product> productList = GetProduct2(Url, StockId);
+            ViewBag.Stockcode = StockId;
+            return View(productList);
         }
+
+
+        public List<Model.Product> GetProduct2(string url, string stockId)
+        {
+            List<Model.Product> productList = new List<Model.Product>();
+            WebRequest request = WebRequest.Create(url + stockId);
+            Stream dataStream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string response = reader.ReadToEnd();
+            JArray jsonObj = (JArray)JsonConvert.DeserializeObject(response);
+
+            for (var i = 0; i < jsonObj.Count; i++)
+            {
+                Model.Product a = (Model.Product)JsonConvert.DeserializeObject(jsonObj[i].ToString(), typeof(Model.Product));
+                productList.Add(a);
+            }
+            return productList;
+        }
+        
+
 
         public ActionResult GetProduct()
         {
             ViewBag.Title = "Products";
-
-            //DeleteProduct("online:sv:SE:14781753601");
 
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
@@ -51,13 +79,6 @@ namespace Jenpbiz.Controllers
                 accountRequest.IncludeInvalidInsertedItems = true;
                 productsResponse = accountRequest.Execute();
 
-                ProductstatusesResource.ListRequest statusesRequest = service.Productstatuses.List(MERCHANT_ID);
-                statusesRequest.MaxResults = maxResults;
-                statusesRequest.PageToken = pageToken;
-                statusesRequest.IncludeInvalidInsertedItems = true;
-                productStatusesResponseList = statusesRequest.Execute();
-                
-
                 if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
                 {
 
@@ -66,50 +87,22 @@ namespace Jenpbiz.Controllers
                 pageToken = productsResponse.NextPageToken;
             }
 
-            Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
+            if (productsResponse.Resources != null)
             {
-                Products = productsResponse.Resources.ToList(),
-                ProductsStatuses = productStatusesResponseList.Resources.ToList()
-            };
-
-            foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
-            {
-                Debug.WriteLine("Status ProductId: " + status.ProductId);
-                Debug.WriteLine("Status Product Title: " + status.Title);
-                Debug.WriteLine("Status Product Link: " + status.Link);
-           
-                if (status.DataQualityIssues != null)
+                Models.GoogleLists fullProductInfo = new Models.GoogleLists()
                 {
-                    for (int i = 0; i < status.DataQualityIssues.Count; i++)
-                    {
-                        Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
-                        Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
-                    }
-                }
+                    Products = productsResponse.Resources.ToList(),
+                    ProductsStatuses = productStatusesResponseList.Resources.ToList()
+                };
+                return View(fullProductInfo);
             }
-
-            
-
-            return View(fullProductInfo);
-            // OLD: return View(productsResponse.Resources.ToList());
+            return View();
         }
 
         public ActionResult InsertProduct()
         {
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
-
-            //Debug.WriteLine("Title: " + Request["inputProductTitle"]);
-            //Debug.WriteLine("Description: " + Request["inputProductDescription"]);
-            //Debug.WriteLine("Link: " + Request["inputProductLink"]);
-            //Debug.WriteLine("Image link: " + Request["InputProductImageLink"]);
-            //Debug.WriteLine("Target Country: " + Request["selectProductTargetCountry"]);
-            //Debug.WriteLine("Availability: " + Request["selectProductAvailability"]);
-            //Debug.WriteLine("Condition: " + Request["selectProductCondition"]);
-            //Debug.WriteLine("Category: " + Request["selectProductCategory"]);
-            //Debug.WriteLine("Gtin: " + Request["inputProductGtin"]);
-            //Debug.WriteLine("Availability Date: " + Request["selectProductAvailabilityDate"]);
-            //Debug.WriteLine("Expiration Date: " + Request["selectProductAvailabilityExpiryDate"]);
 
             string targetCountry = Request["selectProductTargetCountry"].ToUpper();
             string availabilityDateStr = Request["selectProductAvailabilityDate"];
@@ -142,15 +135,7 @@ namespace Jenpbiz.Controllers
             availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
             expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
 
-
-            Debug.WriteLine("Availability Date: " + availabilityDate.ToString());
-            Debug.WriteLine("Expiration Date: " + availabilityDate.ToString());
-            Debug.WriteLine("Availability Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
-            Debug.WriteLine("Expiration Date ToString(s): " + availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
-            Debug.WriteLine("ISO Availability Date: " + availabilityDateStr);
-            Debug.WriteLine("ISO Expiration Date: " + expirationDateStr);
-
-            Product newProduct = new Product()
+            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
             {
                 OfferId = GetUniqueId(),
                 Title = Request["inputProductTitle"],
@@ -169,7 +154,7 @@ namespace Jenpbiz.Controllers
                 ExpirationDate = expirationDateStr
             };
 
-            Price priceInfo = new Price()
+            Google.Apis.ShoppingContent.v2.Data.Price priceInfo = new Google.Apis.ShoppingContent.v2.Data.Price()
             {
                 Value = Request["inputProductPrice"]
             };
@@ -213,10 +198,10 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
+                Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
             }
             
 
@@ -242,10 +227,10 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
+                Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
             return RedirectToAction("/GetProduct", "GoogleApi");
@@ -299,7 +284,7 @@ namespace Jenpbiz.Controllers
 
             
 
-            Product updateProduct = new Product();
+            Google.Apis.ShoppingContent.v2.Data.Product updateProduct = new Google.Apis.ShoppingContent.v2.Data.Product();
 
             try
             {
@@ -308,27 +293,26 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
-                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
+                Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
+                updateProduct.ETag = null;
+                updateProduct.GoogleProductCategory = category;
+                updateProduct.Availability = availability;
+                updateProduct.Condition = condition;
+                updateProduct.TargetCountry = targetCountry;
+                updateProduct.AvailabilityDate = availabilityDateStr;
+                updateProduct.ExpirationDate = expirationDateStr;
 
-            updateProduct.ETag = null;
-            updateProduct.GoogleProductCategory = category;
-            updateProduct.Availability = availability;
-            updateProduct.Condition = condition;
-            updateProduct.TargetCountry = targetCountry;
-            updateProduct.AvailabilityDate = availabilityDateStr;
-            updateProduct.ExpirationDate = expirationDateStr;
-
-            updateProduct.Title = title;
-            updateProduct.Description = description;
-            updateProduct.Link = link;
-            updateProduct.ImageLink = imageLink;
-            updateProduct.Price.Value = price;
-            updateProduct.Gtin = gtin;
+                updateProduct.Title = title;
+                updateProduct.Description = description;
+                updateProduct.Link = link;
+                updateProduct.ImageLink = imageLink;
+                updateProduct.Price.Value = price;
+                updateProduct.Gtin = gtin;
 
 
             switch (targetCountry)
@@ -361,7 +345,7 @@ namespace Jenpbiz.Controllers
 
             List<ProductShipping> shippingList = new List<ProductShipping>()
             {
-                new ProductShipping { Country = "SE", Price = new Price { Value = "50", Currency = "SEK"  }}
+                new ProductShipping { Country = "SE", Price = new Google.Apis.ShoppingContent.v2.Data.Price { Value = "50", Currency = "SEK"  }}
             };
 
             updateProduct.Shipping = shippingList;
@@ -374,10 +358,10 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
-                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
+                Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
             }
 
 
@@ -389,7 +373,7 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
-            Product newProduct = new Product()
+            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
             {
                 OfferId = GetUniqueId(),
                 Title = "PartTrap One",
@@ -405,7 +389,7 @@ namespace Jenpbiz.Controllers
                 IdentifierExists = false,
                 Brand = "PartTrap",
                 OnlineOnly = true,
-                Price = new Price
+                Price = new Google.Apis.ShoppingContent.v2.Data.Price
                 {
                     Value = "500000",
                     Currency = "SEK"
@@ -413,30 +397,6 @@ namespace Jenpbiz.Controllers
                 ProductType = "Software > Computer Software > Business & Productivity Software"
 
             };
-
-            //Product newProduct = new Product()
-            //{
-            //    OfferId = GetUniqueId(),
-            //    Title = "PartTrap skjorta",
-            //    Description = "En fin, vit t-shirt med PartTrap skriven på den.",
-            //    Link = "http://imgur.com/a/ZRGaP",
-            //    ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
-            //    ContentLanguage = "sv",
-            //    TargetCountry = "SE",
-            //    Channel = "online",
-            //    Availability = "in stock",
-            //    Condition = "new",
-            //    GoogleProductCategory = "1604",
-            //    IdentifierExists = false,
-            //    Brand = "PartTrap",
-            //    OnlineOnly = true,
-            //    Price = new Price
-            //    {
-            //        Value = "5000",
-            //        Currency = "SEK"
-            //    },
-
-            //};
 
 
             try
@@ -465,7 +425,7 @@ namespace Jenpbiz.Controllers
             ShoppingContentService service = CreateService(credential);
 
             ProductsResource.GetRequest accountRequest = service.Products.Get(MERCHANT_ID, productId);
-            Product selectedProduct = accountRequest.Execute();
+            Google.Apis.ShoppingContent.v2.Data.Product selectedProduct = accountRequest.Execute();
 
 
             return Json(new { clickedProduct = selectedProduct },
@@ -513,3 +473,45 @@ namespace Jenpbiz.Controllers
 
 }
 
+
+//Product newProduct = new Product()
+//{
+//    OfferId = GetUniqueId(),
+//    Title = "PartTrap skjorta",
+//    Description = "En fin, vit t-shirt med PartTrap skriven på den.",
+//    Link = "http://imgur.com/a/ZRGaP",
+//    ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
+//    ContentLanguage = "sv",
+//    TargetCountry = "SE",
+//    Channel = "online",
+//    Availability = "in stock",
+//    Condition = "new",
+//    GoogleProductCategory = "1604",
+//    IdentifierExists = false,
+//    Brand = "PartTrap",
+//    OnlineOnly = true,
+//    Price = new Price
+//    {
+//        Value = "5000",
+//        Currency = "SEK"
+//    },
+
+//};
+
+    
+    
+ //foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
+//{
+//    Debug.WriteLine("Status ProductId: " + status.ProductId);
+//    Debug.WriteLine("Status Product Title: " + status.Title);
+//    Debug.WriteLine("Status Product Link: " + status.Link);
+
+//    if (status.DataQualityIssues != null)
+//    {
+//        for (int i = 0; i < status.DataQualityIssues.Count; i++)
+//        {
+//            Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
+//            Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
+//        }
+//    }
+//}

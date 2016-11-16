@@ -22,7 +22,7 @@
             <th>Title</th>
             <th>Description</th>
             <th>Category</th>
-            <th>Price</th>q
+            <th>Price</th>
             <th>Currency</th>
             <th>Stock</th>
         </tr>
@@ -40,6 +40,7 @@
                 <td>@p.ProductAvailability.ToString().ToLower()</td>
                 <td><a href="~/Product/GetProduct/@p.ProductId"><span class="glyphicon glyphicon-eye-open pull-right"></span></a></td>
                 <td><a href="~/Product/DeleteProduct/@p.ProductId"><span class="glyphicon glyphicon-remove-sign text-danger pull-right"></span></a></td>
+                
             </tr>
         }
         </tbody>

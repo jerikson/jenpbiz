@@ -18,7 +18,7 @@
     <br />
     <br/>
     <div class="text-center">
-        <h3>Products: @Model.Products.Count.ToString()</h3>
+             <h3>Products:@Model.Products.Count.ToString()</h3>
         <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
     </div>
     <br />
@@ -37,104 +37,104 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var p in Model.Products)
-        {
-            string accordionId = Regex.Replace(p.Id, "[:.]", "_");
-            <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
-                <!--Remove alphabetic characters from google id-->
-                <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
-                <td>@p.Title</td>
-                <td>@p.Description</td>
-                <td>@p.GoogleProductCategory</td>
-                <td>@p.Price.Value</td>
-                <td><span class="badge">@p.Price.Currency</span></td>
-                <td>@p.Availability</td>
-                <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
-                <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right editClick" data-toggle="modal" data-target="#modalEditProduct" id="@p.Id"></span></a></td>
-                <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
-                @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
-                <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
-            </tr>
-            <!--Accordion-->
-            foreach (var status in Model.ProductsStatuses)
+            @foreach (var p in Model.Products)
             {
-                if (status.ProductId == p.Id)
+                string accordionId = Regex.Replace(p.Id, "[:.]", "_");
+                <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
+                    <!--Remove alphabetic characters from google id-->
+                    <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
+                    <td>@p.Title</td>
+                    <td>@p.Description</td>
+                    <td>@p.GoogleProductCategory</td>
+                    <td>@p.Price.Value</td>
+                    <td><span class="badge">@p.Price.Currency</span></td>
+                    <td>@p.Availability</td>
+                    <td><img src="@p.ImageLink" alt="img" style="width: 90px; height: 90px;"></td>
+                    <td><a href="#"><span class="glyphicon glyphicon-eye-open pull-right editClick" data-toggle="modal" data-target="#modalEditProduct" id="@p.Id"></span></a></td>
+                    <!-- Fungerande <a> länk som länkar direkt till controllern. Bra att ha ifall modalen inte funkar. -->
+                    @*<td><a href="@Url.Action("DeleteProduct", "GoogleApi", new { productId = p.Id })"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" @*data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>*@
+                    <td><a href="#"><span class="glyphicon glyphicon-remove text-danger pull-right deleteClick" data-toggle="modal" data-target="#modalDeleteProduct" id="@p.Id"></span></a></td>
+                </tr>
+                <!--Accordion-->
+                foreach (var status in Model.ProductsStatuses)
                 {
-                    if (status.DataQualityIssues != null)
+                    if (status.ProductId == p.Id)
                     {
-                        foreach (var error in status.DataQualityIssues.ToList())
+                        if (status.DataQualityIssues != null)
                         {
-                            if (!string.IsNullOrWhiteSpace(error.Detail))
+                            foreach (var error in status.DataQualityIssues.ToList())
                             {
-                                if (error.Severity == "critical")
+                                if (!string.IsNullOrWhiteSpace(error.Detail))
                                 {
-                                    <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                    if (error.Severity == "critical")
+                                    {
+                                        <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
-                                        <td colspan="2" class="">
-                                            <span class="text-danger glyphicon glyphicon-ban-circle"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
-                                        </td>
-                                        <td colspan="6" class="">
-                                            @error.Detail
-                                        </td>
+                                            <td colspan="2" class="">
+                                                <span class="text-danger glyphicon glyphicon-ban-circle"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+                                            </td>
+                                            <td colspan="6" class="">
+                                                @error.Detail
+                                            </td>
 
-                                    </tr>
+                                        </tr>
 
-                                }
-                                else if (error.Severity == "error")
-                                {
-                                    <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                    }
+                                    else if (error.Severity == "error")
+                                    {
+                                        <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
-                                        <td colspan="2" class="">
-                                            <span class="text-warning glyphicon glyphicon-warning-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
-                                        </td>
-                                        <td colspan="6" class="">
-                                            @error.Detail
-                                        </td>
+                                            <td colspan="2" class="">
+                                                <span class="text-warning glyphicon glyphicon-warning-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+                                            </td>
+                                            <td colspan="6" class="">
+                                                @error.Detail
+                                            </td>
 
-                                    </tr>
+                                        </tr>
 
-                                }
-                                else if (error.Severity == "suggestion")
-                                {
-                                    <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display:none;"> 
+                                    }
+                                    else if (error.Severity == "suggestion")
+                                    {
+                                        <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
-                                        <td colspan="2" class="">
-                                            <span class="text-info glyphicon glyphicon-info-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
-                                        </td>
-                                        <td colspan="6" class="">
-                                            @error.Detail
-                                        </td>
+                                            <td colspan="2" class="">
+                                                <span class="text-info glyphicon glyphicon-info-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+                                            </td>
+                                            <td colspan="6" class="">
+                                                @error.Detail
+                                            </td>
 
-                                    </tr>
+                                        </tr>
 
-                                }
-                                else
-                                {
-                                    <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                    }
+                                    else
+                                    {
+                                        <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
-                                        <td colspan="2" class="">
-                                            @error.Severity
-                                        </td>
-                                        <td colspan="6" class="">
-                                            @error.Detail
-                                        </td>
+                                            <td colspan="2" class="">
+                                                @error.Severity
+                                            </td>
+                                            <td colspan="6" class="">
+                                                @error.Detail
+                                            </td>
 
-                                    </tr>
+                                        </tr>
+
+                                    }
 
                                 }
 
                             }
 
                         }
-                        
-                    }
 
+
+                    }
 
                 }
 
             }
-
-        }
         </tbody>
     </table>
 
