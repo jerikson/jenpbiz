@@ -11,15 +11,16 @@ using System.Diagnostics;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Jenpbiz.Controllers
 {
     public class GoogleApiController : Controller
     {
-        private static string CLIENT_ID = "134786682471-b2nh5tpgcq06r9nqpanmnpi027t3aunh.apps.googleusercontent.com";
+        private static string CLIENT_ID = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
         //private static string CLIENT_SECRET_OLD = "vq_UOyNpiO2q6uTb-QKcCykt";
-        private static string CLIENT_SECRET = "nZiPHZYfF_LDpxqijfToD_oe";
-        private static ulong MERCHANT_ID = 113731084;
+        private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
+        private static ulong MERCHANT_ID = 113298073;
 
         private static int unique_id_increment = 0;
         //private static ulong MCA_MERCHANT_ID = 0;
@@ -77,6 +78,7 @@ namespace Jenpbiz.Controllers
                     Products = productsResponse.Resources.ToList(),
                     ProductsStatuses = productStatusesResponseList.Resources.ToList()
                 };
+                //DeletePartTrapProduct("online:sv:SE:14787867492");
                 return View(fullProductInfo);
             }
 
@@ -420,7 +422,7 @@ namespace Jenpbiz.Controllers
                     Value = "500000",
                     Currency = "SEK"
                 },
-                ProductType = "Software > Computer Software > Business & Productivity Software"
+                ProductType = "Software > Computer Software > Business & Productivity Software",
 
             };
 
@@ -488,7 +490,7 @@ namespace Jenpbiz.Controllers
             }
             catch (Exception Ex)
             {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeletePartTrapProduct()");
                 System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
                 System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
                 System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
@@ -575,6 +577,81 @@ namespace Jenpbiz.Controllers
             String unixTimestamp =
                 ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
             return unixTimestamp + unique_id_increment.ToString();
+        }
+
+
+        // ----------------------------------------------------------------------------------
+
+
+        public JArray GetProductsFromJSON(string url)
+        {
+            List<JToken> productList = new List<JToken>();
+            WebRequest request = WebRequest.Create(url);
+            Stream dataStream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            string response = reader.ReadToEnd();
+            JArray jsonObj = (JArray)JsonConvert.DeserializeObject(response);
+
+            return jsonObj;
+        }
+
+
+        public void InsertProductFromJSON(string url)
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            JArray productsToInsert = GetProductsFromJSON(url);
+            List<Product> googleProducts = new List<Product>();
+
+            //OfferId = GetUniqueId()
+            //Title = "PartTrap One"
+            //Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. "
+            //Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991"
+            //ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png"
+            //ContentLanguage = "sv"
+            //TargetCountry = "SE"
+            //Channel = "online"
+            //Availability = "in stock"
+            //Condition = "new"
+            //GoogleProductCategory = "5300"
+            //IdentifierExists = false
+            //Brand = "PartTrap"
+            //OnlineOnly = true
+            //Price = new Price
+            //{
+            //    Value = "500000"
+            //    Currency = "SEK"
+            //}
+            //ProductType = "Software > Computer Software > Business & Productivity Software"
+
+            foreach (var product in productsToInsert)
+            {
+                Product newProduct = new Product()
+                {
+                    OfferId = product["ProductID"].ToString(),
+                    Title = product["SOMETHING HERE"].ToString()
+                };
+
+                googleProducts.Add(newProduct);
+            }
+
+            try
+            {
+                ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+                Debug.WriteLine(newProduct.Title + newProduct.Description);
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
         }
 
     }
