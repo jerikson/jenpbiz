@@ -14,6 +14,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
+
 namespace Jenpbiz.Controllers
 {
     public class GoogleApiController : Controller
@@ -24,8 +25,6 @@ namespace Jenpbiz.Controllers
         private int unique_id_increment = 0;
         internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=";
         internal string StockId = "GOOGLE&relationId=4";
-
-
 
 
         // GET: GoogleAPI
@@ -53,7 +52,7 @@ namespace Jenpbiz.Controllers
             }
             return productList;
         }
-        
+
 
 
         public ActionResult GetProduct()
@@ -89,12 +88,15 @@ namespace Jenpbiz.Controllers
 
             if (productsResponse.Resources != null)
             {
-                Models.GoogleLists fullProductInfo = new Models.GoogleLists()
+                if (productsResponse.Resources != null && productStatusesResponseList.Resources != null)
                 {
-                    Products = productsResponse.Resources.ToList(),
-                    ProductsStatuses = productStatusesResponseList.Resources.ToList()
-                };
-                return View(fullProductInfo);
+                    GoogleLists fullProductInfo = new GoogleLists()
+                    {
+                        Products = productsResponse.Resources.ToList(),
+                        ProductsStatuses = productStatusesResponseList.Resources.ToList()
+                    };
+                    return View(fullProductInfo);
+                }
             }
             return View();
         }
@@ -149,6 +151,7 @@ namespace Jenpbiz.Controllers
                 Condition = Request["selectProductCondition"],
                 GoogleProductCategory = Request["selectProductCategory"],
                 Gtin = Request["inputProductGtin"],
+                IdentifierExists = false,
                 
                 AvailabilityDate = availabilityDateStr,
                 ExpirationDate = expirationDateStr
@@ -394,7 +397,7 @@ namespace Jenpbiz.Controllers
                     Value = "500000",
                     Currency = "SEK"
                 },
-                ProductType = "Software > Computer Software > Business & Productivity Software"
+                ProductType = "Software > Computer Software > Business & Productivity Software",
 
             };
 
@@ -417,6 +420,65 @@ namespace Jenpbiz.Controllers
 
             return RedirectToAction("/GetProduct", "GoogleApi");
 
+        }
+
+        public ActionResult DeletePartTrapProduct(string productId)
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            if (productId.Contains("_"))
+            {
+                productId = productId.Replace('_', ':');
+            }
+
+
+            try
+            {
+                ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+            }
+            catch (Exception Ex)
+            {
+                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeletePartTrapProduct()");
+                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
+                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+        }
+
+        public void JSONStuff()
+        {
+
+            WebClient client = new WebClient();
+
+            Stream data = client.OpenRead("http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4");
+            StreamReader reader = new StreamReader(data);
+            string result = reader.ReadToEnd();
+            data.Close();
+            reader.Close();
+
+            string[] products = System.Text.RegularExpressions.Regex.Split(result, "{\"StockCode\":");
+
+            foreach (string p in products)
+            {
+                Debug.WriteLine(p + "\n\n\n");
+            }
+
+            Debug.WriteLine(products.Count());
+
+            object test = JsonConvert.DeserializeObject(result);
+
+            Debug.WriteLine("obj test: " + test);
+            Debug.WriteLine("obj test tostring: " + test.ToString());
+
+            //Debug.WriteLine("RAW: " + result);
+            //Debug.WriteLine("\n\n\n\n\n");
+            //Debug.WriteLine("---------------END OF THE LINE---------------");
+                
         }
 
         public ActionResult GetProductInfo(string productId)
@@ -468,50 +530,80 @@ namespace Jenpbiz.Controllers
             return unixTimestamp + unique_id_increment.ToString();
         }
 
+
+        // ----------------------------------------------------------------------------------
+
+
+        public JArray GetProductsFromJSON(string url)
+        {
+            List<JToken> productList = new List<JToken>();
+            WebRequest request = WebRequest.Create(url);
+            Stream dataStream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+
+            string response = reader.ReadToEnd();
+            JArray jsonObj = (JArray)JsonConvert.DeserializeObject(response);
+
+            return jsonObj;
+        }
+
+
+        public void InsertProductFromJSON(string url)
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            JArray productsToInsert = GetProductsFromJSON(url);
+            List<Google.Apis.ShoppingContent.v2.Data.Product> googleProducts = new List<Google.Apis.ShoppingContent.v2.Data.Product>();
+
+            //OfferId = GetUniqueId()
+            //Title = "PartTrap One"
+            //Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. "
+            //Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991"
+            //ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png"
+            //ContentLanguage = "sv"
+            //TargetCountry = "SE"
+            //Channel = "online"
+            //Availability = "in stock"
+            //Condition = "new"
+            //GoogleProductCategory = "5300"
+            //IdentifierExists = false
+            //Brand = "PartTrap"
+            //OnlineOnly = true
+            //Price = new Price
+            //{
+            //    Value = "500000"
+            //    Currency = "SEK"
+            //}
+            //ProductType = "Software > Computer Software > Business & Productivity Software"
+
+            foreach (var product in productsToInsert)
+            {
+                Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
+                {
+                    OfferId = product["ProductID"].ToString(),
+                    Title = product["SOMETHING HERE"].ToString()
+                };
+
+                googleProducts.Add(newProduct);
+            }
+
+            try
+            {
+                ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
+                //accountRequest.DryRun = true;
+                accountRequest.Execute();
+                Debug.WriteLine(newProduct.Title + newProduct.Description);
+            }
+            catch (Exception Ex)
+            {
+                Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
+                Debug.WriteLine("Message: " + Ex.Message);
+                Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
+                Debug.WriteLine("Target Site: " + Ex.TargetSite);
+            }
+
+        }
+
     }
-
-
 }
-
-
-//Product newProduct = new Product()
-//{
-//    OfferId = GetUniqueId(),
-//    Title = "PartTrap skjorta",
-//    Description = "En fin, vit t-shirt med PartTrap skriven på den.",
-//    Link = "http://imgur.com/a/ZRGaP",
-//    ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
-//    ContentLanguage = "sv",
-//    TargetCountry = "SE",
-//    Channel = "online",
-//    Availability = "in stock",
-//    Condition = "new",
-//    GoogleProductCategory = "1604",
-//    IdentifierExists = false,
-//    Brand = "PartTrap",
-//    OnlineOnly = true,
-//    Price = new Price
-//    {
-//        Value = "5000",
-//        Currency = "SEK"
-//    },
-
-//};
-
-    
-    
- //foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
-//{
-//    Debug.WriteLine("Status ProductId: " + status.ProductId);
-//    Debug.WriteLine("Status Product Title: " + status.Title);
-//    Debug.WriteLine("Status Product Link: " + status.Link);
-
-//    if (status.DataQualityIssues != null)
-//    {
-//        for (int i = 0; i < status.DataQualityIssues.Count; i++)
-//        {
-//            Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
-//            Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
-//        }
-//    }
-//}

@@ -18,8 +18,24 @@
     <br />
     <br/>
     <div class="text-center">
+<<<<<<< HEAD
              <h3>Products:@Model.Products.Count.ToString()</h3>
         <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+=======
+        @if (Model != null)
+        {
+            <h3>Products: @Model.Products.Count.ToString()</h3>
+            <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+
+        }
+        else
+        {
+            <h3>Products: 0</h3>
+            <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
+
+        }
+
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
     </div>
     <br />
     <br />
@@ -37,7 +53,14 @@
         </tr>
         </thead>
         <tbody>
+<<<<<<< HEAD
             @foreach (var p in Model.Products)
+=======
+        @if (Model != null)
+        {
+
+            foreach (var p in Model.Products)
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
             {
                 string accordionId = Regex.Replace(p.Id, "[:.]", "_");
                 <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
@@ -68,10 +91,17 @@
                                 {
                                     if (error.Severity == "critical")
                                     {
+<<<<<<< HEAD
                                         <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
                                                 <span class="text-danger glyphicon glyphicon-ban-circle"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+=======
+                                        <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                            <td colspan="2" class="">
+                                                <span class="text-danger glyphicon glyphicon-ban-circle"></span>
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -82,10 +112,17 @@
                                     }
                                     else if (error.Severity == "error")
                                     {
+<<<<<<< HEAD
                                         <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
                                                 <span class="text-warning glyphicon glyphicon-warning-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+=======
+                                        <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                            <td colspan="2" class="">
+                                                <span class="text-warning glyphicon glyphicon-warning-sign"></span>
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -96,10 +133,17 @@
                                     }
                                     else if (error.Severity == "suggestion")
                                     {
+<<<<<<< HEAD
                                         <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
                                                 <span class="text-info glyphicon glyphicon-info-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
+=======
+                                        <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+
+                                            <td colspan="2" class="">
+                                                <span class="text-info glyphicon glyphicon-info-sign"></span>
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -110,7 +154,11 @@
                                     }
                                     else
                                     {
+<<<<<<< HEAD
                                         <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
+=======
+                                        <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
 
                                             <td colspan="2" class="">
                                                 @error.Severity
@@ -135,6 +183,10 @@
                 }
 
             }
+<<<<<<< HEAD
+=======
+    }
+>>>>>>> e5fe59c11abcdef679bcc87c175ed1571eaa9ee8
         </tbody>
     </table>
 
