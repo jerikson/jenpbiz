@@ -193,6 +193,7 @@
     </Compile>
     <Compile Include="Models\GoogleLists.cs" />
     <Compile Include="Models\JenpbizContext.cs" />
+    <Compile Include="Models\Model.cs" />
     <Compile Include="Models\Price.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

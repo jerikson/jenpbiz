@@ -136,17 +136,18 @@ namespace Jenpbiz.Controllers
         // AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8
         public void GetMerchantProduct()
         {
-            ////Debug.WriteLine("asd");
-            
-            ////WebRequest request = WebRequest.Create("https://www.googleapis.com/content/v2/113298073/products?includeInvalidInsertedItems=true&key={AIzaSyBwAM56fn0HOMYZehTLcNCTGVPzYauEEs8}");
-            
-            //Stream dataStream = request.GetResponse().GetResponseStream();
-            //StreamReader reader = new StreamReader(dataStream);
-            ////WebResponse response = request.GetResponse();
-            //string response = reader.ReadToEnd();
+            //Debug.WriteLine("asd");
 
-            ////return Json(response);
-        
+            WebRequest request = WebRequest.Create("http://one.dev.parttrap.com/catalog/GetProductsByStockCode?stockcode=GOOGLE");
+
+            Stream dataStream = request.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            //WebResponse response = request.GetResponse();
+            string response = reader.ReadToEnd();
+
+            Console.WriteLine(Json(response));
+            //return Json(response);
+
 
             //using (var client = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate }))
             //{
@@ -161,6 +162,6 @@ namespace Jenpbiz.Controllers
 
 
 
-      
+
     }
 }

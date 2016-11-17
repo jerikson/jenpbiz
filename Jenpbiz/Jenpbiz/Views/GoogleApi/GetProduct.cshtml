@@ -1,4 +1,6 @@
-﻿@using System.Text.RegularExpressions
+﻿@using System.Runtime.Serialization
+@using System.Text.RegularExpressions
+@using Microsoft.Ajax.Utilities
 @*@model List<Google.Apis.ShoppingContent.v2.Data.Product>*@
 @model Jenpbiz.Models.GoogleLists
 @{
@@ -16,6 +18,7 @@
     <br />
     <br/>
     <div class="text-center">
+
         @if (Model != null)
         {
             <h3>Products: @Model.Products.Count.ToString()</h3>
@@ -80,10 +83,10 @@
                                 {
                                     if (error.Severity == "critical")
                                     {
-                                        <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                        <tr class="danger accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
-                                                <span class="text-danger glyphicon glyphicon-ban-circle"></span>
+                                                <span class="text-danger glyphicon glyphicon-ban-circle"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -94,10 +97,10 @@
                                     }
                                     else if (error.Severity == "error")
                                     {
-                                        <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                        <tr class="warning accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
-                                                <span class="text-warning glyphicon glyphicon-warning-sign"></span>
+                                                <span class="text-warning glyphicon glyphicon-warning-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -108,10 +111,10 @@
                                     }
                                     else if (error.Severity == "suggestion")
                                     {
-                                        <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                        <tr class="info accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
-                                                <span class="text-info glyphicon glyphicon-info-sign"></span>
+                                                <span class="text-info glyphicon glyphicon-info-sign"></span> <small>@status.LastUpdateDate.AsDateTime().ToString("g") </small>
                                             </td>
                                             <td colspan="6" class="">
                                                 @error.Detail
@@ -122,7 +125,7 @@
                                     }
                                     else
                                     {
-                                        <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display:none;">
+                                        <tr class="active accordion-togglee-@accordionId" id="@accordionId" style="display: none;">
 
                                             <td colspan="2" class="">
                                                 @error.Severity
@@ -133,21 +136,22 @@
 
                                         </tr>
 
-                                    }
+                                    }//End else
 
-                                }
+                                }//End if
 
-                            }
+                            }//End foreach
 
-                        }
+                        }//End if
 
 
-                    }
+                    }//End if
 
-                }
+                }//End foreach
 
-            }
-    }
+            }//End foreach
+        }@*End if*@
+
         </tbody>
     </table>
 

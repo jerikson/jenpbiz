@@ -165,12 +165,6 @@ function getProductInfoForEdit(productId) {
                     
 
                 + '</form>'
-
-                + '<p>Category: ' + returnedProduct.GoogleProductCategory + '</p>'
-                + '<p>Availability: ' + returnedProduct.Availability + '</p>'
-                + '<p>Condition: ' + returnedProduct.Condition + '</p>'
-                + '<p>Target Country: ' + returnedProduct.TargetCountry + '</p>'
-
                 );
 
             //Tilldelning av värden för inputs of selects lists
