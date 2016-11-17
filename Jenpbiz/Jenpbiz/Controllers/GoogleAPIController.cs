@@ -22,23 +22,22 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=";
-        internal string StockId = "GOOGLE&relationId=4";
+        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
 
 
         // GET: GoogleAPI
         public ActionResult Index()
         {
-            List<Model.Product> productList = GetProduct2(Url, StockId);
-            ViewBag.Stockcode = StockId;
+            List<Model.Product> productList = GetProduct2(Url);
+            //ViewBag.Stockcode = StockId;
             return View(productList);
         }
 
 
-        public List<Model.Product> GetProduct2(string url, string stockId)
+        public List<Model.Product> GetProduct2(string url)
         {
             List<Model.Product> productList = new List<Model.Product>();
-            WebRequest request = WebRequest.Create(url + stockId);
+            WebRequest request = WebRequest.Create(url);
             Stream dataStream = request.GetResponse().GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
             string response = reader.ReadToEnd();
@@ -56,6 +55,7 @@ namespace Jenpbiz.Controllers
 
         public ActionResult GetProduct()
         {
+            InsertProductFromJSON(Url);
             ViewBag.Title = "Products";
 
             UserCredential credential = Authenticate();
@@ -76,6 +76,12 @@ namespace Jenpbiz.Controllers
                 accountRequest.PageToken = pageToken;
                 accountRequest.IncludeInvalidInsertedItems = true;
                 productsResponse = accountRequest.Execute();
+
+                ProductstatusesResource.ListRequest productStatusesRequest = service.Productstatuses.List(MERCHANT_ID);
+                productStatusesRequest.MaxResults = maxResults;
+                productStatusesRequest.PageToken = pageToken;
+                productStatusesRequest.IncludeInvalidInsertedItems = true;
+                productStatusesResponseList = productStatusesRequest.Execute();
 
                 if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
                 {
@@ -593,19 +599,22 @@ namespace Jenpbiz.Controllers
             //}
             //ProductType = "Software > Computer Software > Business & Productivity Software"
 
+            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product();
+
+            //Making new google products and adding them in a list of google products.
             foreach (var product in productsToInsert)
             {
-                Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-                {
-                    OfferId = product["ProductID"].ToString(),
-                    Title = product["SOMETHING HERE"].ToString()
-                };
+                newProduct.OfferId = product["ProductID"].ToString();
+                newProduct.Title = product["Description"].ToString();
+                newProduct.Description = product["AdditionalValues"].ToString();
 
                 googleProducts.Add(newProduct);
             }
 
+            //Pushing each google product in the google products list to Google Shopping.
             foreach (var googleProduct in googleProducts)
             {
+
                 try
                 {
                     ProductsResource.InsertRequest accountRequest = service.Products.Insert(googleProduct, MERCHANT_ID);
@@ -622,8 +631,8 @@ namespace Jenpbiz.Controllers
                 }
             }
 
-            
 
+            return;
         }
 
     }
