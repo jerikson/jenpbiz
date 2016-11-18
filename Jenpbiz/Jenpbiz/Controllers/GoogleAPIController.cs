@@ -22,7 +22,7 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
+        internal string Url = "";
 
 
         // GET: GoogleAPI
