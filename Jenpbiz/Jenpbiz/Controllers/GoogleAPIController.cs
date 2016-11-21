@@ -22,7 +22,7 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url = "";
+        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
 
 
         // GET: GoogleAPI
@@ -55,7 +55,7 @@ namespace Jenpbiz.Controllers
 
         public ActionResult GetProduct()
         {
-            InsertProductFromJSON(Url);
+            //InsertProductFromJSON(Url);
             ViewBag.Title = "Products";
 
             UserCredential credential = Authenticate();
@@ -83,12 +83,15 @@ namespace Jenpbiz.Controllers
                 productStatusesRequest.IncludeInvalidInsertedItems = true;
                 productStatusesResponseList = productStatusesRequest.Execute();
 
-                if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
-                {
+                //if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
+                //{
 
+                //}
+                if (productsResponse.NextPageToken != null)
+                {
+                    //pageToken = productsResponse.NextPageToken;
                 }
                 firstRun = false;
-                pageToken = productsResponse.NextPageToken;
             }
 
             if (productsResponse.Resources != null && productStatusesResponseList.Resources != null)
@@ -101,23 +104,6 @@ namespace Jenpbiz.Controllers
                 //DeletePartTrapProduct("online:sv:SE:14787867492");
                 return View(fullProductInfo);
             }
-
-
-            //foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
-            //{
-            //    Debug.WriteLine("Status ProductId: " + status.ProductId);
-            //    Debug.WriteLine("Status Product Title: " + status.Title);
-            //    Debug.WriteLine("Status Product Link: " + status.Link);
-            //    if (status.DataQualityIssues != null)
-            //    {
-            //        for (int i = 0; i < status.DataQualityIssues.Count; i++)
-            //        {
-            //            Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
-            //            Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
-            //        }
-            //    }
-
-            //}
 
 
             return View();
@@ -633,6 +619,152 @@ namespace Jenpbiz.Controllers
 
 
             return;
+        }
+
+        public ActionResult AddTheSameProductManyTimes()
+        {
+
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+            int productsToMake = 10;
+
+            ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
+            List<ProductsCustomBatchRequestEntry> batchRequestEntries = new List<ProductsCustomBatchRequestEntry>();
+
+            int idStart = 0;
+
+            string reduction = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Substring(System.Reflection.Assembly.GetExecutingAssembly().CodeBase.LastIndexOf(':') - 1);
+            string filePath = reduction.Substring(0, reduction.LastIndexOf('/') + 1) + "GoogleProductIds.txt";
+
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath);
+            }
+
+
+            for (int i = 1; i <= productsToMake; i++)
+            {
+
+                Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
+                {
+                    OfferId = (idStart + i).ToString(),
+                    Title = "My Test Product: " + i,
+                    Description = "This is a test product that I made. It is number " + i + " in a series of " + productsToMake + " that I will create.",
+                    Link = "https://www.example.com/products/Product?productId=" + i,
+                    ImageLink = "https://www.example.com/productImages/ProductImage?productId=" + i + "&imageIndex=0",
+                    ContentLanguage = "sv",
+                    TargetCountry = "SE",
+                    Channel = "online",
+                    Availability = "out of stock",
+                    Condition = "new",
+                    GoogleProductCategory = "3219",
+                    IdentifierExists = false,
+                    Price = new Google.Apis.ShoppingContent.v2.Data.Price()
+                    {
+                        Currency = "SEK",
+                        Value = i + "00"
+                    }
+                };
+
+                ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
+                {
+                    Method = "insert",
+                    BatchId = long.Parse(newProduct.OfferId),
+                    MerchantId = MERCHANT_ID,
+                    Product = newProduct
+                };
+
+
+                Debug.WriteLine(filePath);
+                //skriver id:n till fil under testing fas, så att jag inte behöver kolla enskilda id:n o sen skriva ner dem.
+                //Lättare att ta bort produkter helt enkelt.
+                if (System.IO.File.Exists(filePath))
+                {
+                    // This text is always added, making the file longer over time.
+                    System.IO.File.AppendAllLines(filePath, new string[] { newProduct.OfferId });
+                }
+                else
+                {
+                    // Create a file to write to.
+                    System.IO.File.WriteAllLines(filePath, new string[] { newProduct.OfferId });
+                }
+
+                
+                batchRequestEntries.Add(newEntry);
+
+            }
+
+            batchRequest.Entries = batchRequestEntries;
+
+            try
+            {
+                ProductsResource.CustombatchRequest reeeq = service.Products.Custombatch(batchRequest);
+                reeeq.Execute();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("EXCEPTION THROWN @AddTheSameProductManyTimes()");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
+            }
+
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
+        }
+
+        public ActionResult DeleteTheSameProductManyTimes()
+        {
+            UserCredential credential = Authenticate();
+            ShoppingContentService service = CreateService(credential);
+
+            string reduction = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Substring(System.Reflection.Assembly.GetExecutingAssembly().CodeBase.LastIndexOf(':') - 1);
+            string filePath = reduction.Substring(0, reduction.LastIndexOf('/') + 1) + "GoogleProductIds.txt";
+
+            string[] fileValues = null;
+
+            if (System.IO.File.Exists(filePath))
+            {
+                fileValues = System.IO.File.ReadAllLines(filePath);
+            }
+
+            ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
+            List<ProductsCustomBatchRequestEntry> batchEntries = new List<ProductsCustomBatchRequestEntry>();
+
+            int productsToDelete = 10;
+            int idStart = 0;
+
+            for (int i = 1; i <= productsToDelete; i++)
+            {
+                ProductsCustomBatchRequestEntry entry = new ProductsCustomBatchRequestEntry()
+                {
+                    BatchId = idStart + i,
+                    MerchantId = MERCHANT_ID,
+                    Method = "delete",
+                    ProductId = "online:sv:SE:" + fileValues[i - 1]
+                };
+
+                batchEntries.Add(entry);
+            }
+
+            batchRequest.Entries = batchEntries;
+
+
+            try
+            {
+                ProductsResource.CustombatchRequest reeeq = service.Products.Custombatch(batchRequest);
+                reeeq.Execute();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("EXCEPTION THROWN @DeleteTheSameProductManyTimes()");
+                Debug.WriteLine("Message: " + e.Message);
+                Debug.WriteLine("Stack Trace: " + e.StackTrace);
+                Debug.WriteLine("Target Site: " + e.TargetSite);
+            }
+
+
+            return RedirectToAction("/GetProduct", "GoogleApi");
         }
 
     }

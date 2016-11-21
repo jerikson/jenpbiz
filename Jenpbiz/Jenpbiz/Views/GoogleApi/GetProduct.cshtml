@@ -31,7 +31,7 @@
             <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
 
         }
-
+        AddTheSameProductManyTimes   |   DeleteTheSameProductManyTimes
     </div>
     <br />
     <br />
@@ -57,7 +57,8 @@
                 string accordionId = Regex.Replace(p.Id, "[:.]", "_");
                 <tr data-toggle="collapse" data-target=".accordionId" class="accordion-toggle" id="@accordionId">
                     <!--Remove alphabetic characters from google id-->
-                    <td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>
+                    @*<td>@Regex.Replace(p.Id, "[^0-9.]", "")</td>*@
+                    <td>@p.Id</td>
                     <td>@p.Title</td>
                     <td>@p.Description</td>
                     <td>@p.GoogleProductCategory</td>
