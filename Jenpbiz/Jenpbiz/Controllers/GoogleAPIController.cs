@@ -22,7 +22,7 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
+        internal string Url = "";
 
 
         // GET: GoogleAPI
@@ -629,18 +629,9 @@ namespace Jenpbiz.Controllers
             int productsToMake = 10;
 
             ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
-            List<ProductsCustomBatchRequestEntry> batchRequestEntries = new List<ProductsCustomBatchRequestEntry>();
+            batchRequest.Entries = new List<ProductsCustomBatchRequestEntry>();
 
             int idStart = 0;
-
-            string reduction = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Substring(System.Reflection.Assembly.GetExecutingAssembly().CodeBase.LastIndexOf(':') - 1);
-            string filePath = reduction.Substring(0, reduction.LastIndexOf('/') + 1) + "GoogleProductIds.txt";
-
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath);
-            }
-
 
             for (int i = 1; i <= productsToMake; i++)
             {
@@ -673,28 +664,10 @@ namespace Jenpbiz.Controllers
                     MerchantId = MERCHANT_ID,
                     Product = newProduct
                 };
-
-
-                Debug.WriteLine(filePath);
-                //skriver id:n till fil under testing fas, så att jag inte behöver kolla enskilda id:n o sen skriva ner dem.
-                //Lättare att ta bort produkter helt enkelt.
-                if (System.IO.File.Exists(filePath))
-                {
-                    // This text is always added, making the file longer over time.
-                    System.IO.File.AppendAllLines(filePath, new string[] { newProduct.OfferId });
-                }
-                else
-                {
-                    // Create a file to write to.
-                    System.IO.File.WriteAllLines(filePath, new string[] { newProduct.OfferId });
-                }
-
                 
-                batchRequestEntries.Add(newEntry);
-
+                batchRequest.Entries.Add(newEntry);
             }
 
-            batchRequest.Entries = batchRequestEntries;
 
             try
             {
@@ -718,18 +691,9 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
-            string reduction = System.Reflection.Assembly.GetExecutingAssembly().CodeBase.Substring(System.Reflection.Assembly.GetExecutingAssembly().CodeBase.LastIndexOf(':') - 1);
-            string filePath = reduction.Substring(0, reduction.LastIndexOf('/') + 1) + "GoogleProductIds.txt";
-
-            string[] fileValues = null;
-
-            if (System.IO.File.Exists(filePath))
-            {
-                fileValues = System.IO.File.ReadAllLines(filePath);
-            }
 
             ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
-            List<ProductsCustomBatchRequestEntry> batchEntries = new List<ProductsCustomBatchRequestEntry>();
+            batchRequest.Entries = new List<ProductsCustomBatchRequestEntry>();
 
             int productsToDelete = 10;
             int idStart = 0;
@@ -741,13 +705,11 @@ namespace Jenpbiz.Controllers
                     BatchId = idStart + i,
                     MerchantId = MERCHANT_ID,
                     Method = "delete",
-                    ProductId = "online:sv:SE:" + fileValues[i - 1]
+                    ProductId = "online:sv:SE:" + (idStart + i)
                 };
 
-                batchEntries.Add(entry);
+                batchRequest.Entries.Add(entry);
             }
-
-            batchRequest.Entries = batchEntries;
 
 
             try
