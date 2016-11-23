@@ -61,7 +61,6 @@ namespace Jenpbiz.Controllers
             UserCredential credential = Authenticate();
             ShoppingContentService service = CreateService(credential);
 
-            bool firstRun = true;
             string pageToken = null;
 
             const long maxResults = 250;
@@ -69,7 +68,7 @@ namespace Jenpbiz.Controllers
             ProductsListResponse productsResponse = null;
             ProductstatusesListResponse productStatusesResponseList = null;
 
-            while (pageToken != null || firstRun == true)
+            do
             {
                 ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
                 accountRequest.MaxResults = maxResults;
@@ -83,16 +82,13 @@ namespace Jenpbiz.Controllers
                 productStatusesRequest.IncludeInvalidInsertedItems = true;
                 productStatusesResponseList = productStatusesRequest.Execute();
 
-                //if (productsResponse.Resources != null && productsResponse.Resources.Count != 0)
-                //{
-
-                //}
                 if (productsResponse.NextPageToken != null)
                 {
-                    //pageToken = productsResponse.NextPageToken;
+                    pageToken = productsResponse.NextPageToken;
                 }
-                firstRun = false;
             }
+            while (productsResponse.NextPageToken != null);
+
 
             if (productsResponse.Resources != null && productStatusesResponseList.Resources != null)
             {
