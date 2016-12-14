@@ -1,7 +1,23 @@
 ﻿$(document).ready(function () {
 
+    var maxResults = parseInt(getUrlParameter('maxResults'));
+    var page = parseInt(getUrlParameter('page'));
+
+    if (typeof maxResults == 'undefined' || isNaN(maxResults)) {
+        maxResults = 5;
+    }
+    if (typeof page == 'undefined' || isNaN(page)) {
+        page = 1;
+    }
+
 
     accordionFunction();
+    $('#maxProducts').append(maxResults);
+    $('#maxResults').val(maxResults);
+
+    CheckIfNextPageExists(maxResults, page);
+    CheckIfPreviousPageExists(maxResults, page);
+
 
     $('.deleteClick').on('click', function () {
 
@@ -35,9 +51,41 @@
         $('#editProductForm').submit();
         
     });
+    
+    $('#nextPage').on('click', function () {
+
+        window.location.replace('GetProduct?maxResults=' + maxResults + '&page=' + (page + 1));
+    });
+
+    $('#previousPage').on('click', function () {
+
+        window.location.replace('GetProduct?maxResults=' + maxResults + '&page=' + (page - 1));
+    });
+
+    $('#maxResults').on("change", function () {
+        maxResults = $('#maxResults').val();
+        page = 1;
+
+        window.location.replace('GetProduct?maxResults=' + maxResults + '&page=' + page);
+    });
 
 
 });
+
+function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
 
 
 function accordionFunction() {
@@ -52,6 +100,52 @@ function accordionFunction() {
 
 };
 
+function CheckIfNextPageExists(maxResults, page)
+{
+    $.ajax({
+        method: 'POST',
+        url: '/GoogleApi/NextPageExists/',
+        dataType: 'json',
+        data: { maxResults: maxResults, page: page },
+        success: function (data) {
+            var exists = data.exists;
+
+            if (exists) {
+                $('#nextPage').prop("disabled", false);
+            }
+            else {
+
+                $('#nextPage').prop("disabled", true);
+            }
+        }
+    });
+
+};
+
+function CheckIfPreviousPageExists(maxResults, page) {
+    $.ajax({
+        method: 'POST',
+        url: '/GoogleApi/PreviousPageExists/',
+        dataType: 'json',
+        data: { maxResults: maxResults, page: page },
+        success: function (data) {
+            var exists = data.exists;
+
+            if (!exists) {
+                $('#previousPage').prop("disabled", true);
+            }
+            else {
+                if (page > 1) {
+                    $('#previousPage').prop("disabled", false);
+                }
+                else {
+                    $('#previousPage').prop("disabled", true);
+                }
+            }
+        }
+    });
+
+};
 
 function getProductInfoForEdit(productId) {
 

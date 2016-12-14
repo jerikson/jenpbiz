@@ -21,7 +21,7 @@
 
         @if (Model != null)
         {
-            <h3>Products: @Model.Products.Count.ToString()</h3>
+            <h3>Products: @Model.Products.Count.ToString() / <span id="maxProducts"></span></h3>
             <a href="#"><span class="glyphicon glyphicon-plus glyphicon text-success" data-toggle="modal" data-target="#modalCreateProduct"></span></a>
 
         }
@@ -32,8 +32,8 @@
 
         }
         <a href="~/GoogleApi/InsertProduct" class="btn btn-success">Insert Products</a>
-        <a href="~/GoogleApi/EditProduct" class="btn btn-success">Edit Products</a>
-        <a href="~/GoogleApi/DeleteProduct" class="btn btn-success">Delete Products</a>
+        <a href="~/GoogleApi/EditProduct" class="btn btn-info">Edit Products</a>
+        <a href="~/GoogleApi/DeleteProduct" class="btn btn-danger">Delete Products</a>
     </div>
     <br />
     <br />
@@ -157,6 +157,18 @@
 
         </tbody>
     </table>
+    <div id="controls">
+        <select id="maxResults" style="display:inline;">
+            <option value="2">2</option>
+            <option value="5" selected>5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="250">250</option>
+        </select>
+        <button id="nextPage" style="display:inline; float:right;" >&gt;</button>
+        <button id="previousPage" style="display:inline; float:right; margin-right:5px;">&lt;</button>
+
+    </div>
 
 
     <!-- Begin Google Insert Product Modal -->

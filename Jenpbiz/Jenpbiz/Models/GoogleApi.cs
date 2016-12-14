@@ -175,37 +175,6 @@ namespace Jenpbiz.Models
                 }
             }
 
-            //Insert product
-            
-
-
-
-            //foreach (var product in productsToPush)
-            //{
-            //    //Debug.WriteLine("WOAH SETTLE DOWN, HOMEBOY: " + product);
-            //    //////Debug.WriteLine("Type: " + product.Type);
-            //    //////Debug.WriteLine("Product Values: " + product.Values());
-
-
-            //    //////Debug.WriteLine("OfferId: " + product["ProductID"].ToString());
-            //    //////Debug.WriteLine("Description: " + product["Description"].ToString());
-            //    //////Debug.WriteLine("Price, incl VAT: " + product["NetPriceInclVAT"]["Amount"].ToString());
-            //    //////Debug.WriteLine("Currency: " + product["NetPriceInclVAT"]["Currency"]["Code"].ToString());
-            //    //////Debug.WriteLine("Product Page Link: " + product["AdditionalValues"]["DetailLink"].ToString());
-            //    //////Debug.WriteLine("Image Link: " + product["AdditionalValues"]["ImageUrl"].ToString());
-
-            //    if (product["AdditionalValues"]["ProductTextField1"] != null)
-            //        Debug.WriteLine("CHECK DIS 1: " + product["AdditionalValues"]["ProductTextField1"].ToString());
-            //    if (product["AdditionalValues"]["ProductTextField2"] != null)
-            //        Debug.WriteLine("CHECK DIS 2: " + product["AdditionalValues"]["ProductTextField2"].ToString());
-            //    if (product["AdditionalValues"]["Status"] != null)
-            //        Debug.WriteLine("IS DIS WORK?: " + product["AdditionalValues"]["Status"].ToString());
-            //    if (product["ProductFieldsTexts"] != null)
-            //        Debug.WriteLine("PLEASE WORK: " + product["ProductFieldsTexts"].ToString());
-
-            //}
-
-
             try
             {
                 ProductsResource.CustombatchRequest reeeq = _service.Products.Custombatch(batchRequest);
@@ -526,9 +495,23 @@ namespace Jenpbiz.Models
             return allProductStatuses;
         }
 
-        public bool CheckIfNextPageExists(int? maxResults, int? page)
+        public bool NextPageExists(int? maxResults, int? page)
         {
             List<Google.Apis.ShoppingContent.v2.Data.Product> productList = ProductsReturn(maxResults, page + 1);
+
+            if (productList == null || productList.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool PreviousPageExists(int? maxResults, int? page)
+        {
+            List<Google.Apis.ShoppingContent.v2.Data.Product> productList = ProductsReturn(maxResults, page - 1);
 
             if (productList == null || productList.Count == 0)
             {
