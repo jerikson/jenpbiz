@@ -22,13 +22,14 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url = "";
+        internal string Url2 = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
 
+        internal GoogleApi googleObject = new GoogleApi(113298073);
 
         // GET: GoogleAPI
         public ActionResult Index()
         {
-            List<Model.Product> productList = GetProduct2(Url);
+            List<Model.Product> productList = GetProduct2(Url2);
             //ViewBag.Stockcode = StockId;
             return View(productList);
         }
@@ -53,192 +54,170 @@ namespace Jenpbiz.Controllers
         
 
 
-        public ActionResult GetProduct()
+        public ActionResult GetProduct(int? maxResults, int? page)
         {
-            //InsertProductFromJSON(Url);
             ViewBag.Title = "Products";
 
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
+            if (maxResults == null)
+                maxResults = 5;
+            if (page == null)
+                page = 1;
 
-            string pageToken = null;
+            List<Google.Apis.ShoppingContent.v2.Data.Product> productsResponseList = googleObject.ProductsReturn(maxResults, page);
+            List<Google.Apis.ShoppingContent.v2.Data.ProductStatus> productStatusesResponseList = googleObject.ProductStatusesReturn(maxResults, page);
 
-            const long maxResults = 250;
-
-            ProductsListResponse productsResponse = null;
-            ProductstatusesListResponse productStatusesResponseList = null;
-
-            do
-            {
-                ProductsResource.ListRequest accountRequest = service.Products.List(MERCHANT_ID);
-                accountRequest.MaxResults = maxResults;
-                accountRequest.PageToken = pageToken;
-                accountRequest.IncludeInvalidInsertedItems = true;
-                productsResponse = accountRequest.Execute();
-
-                ProductstatusesResource.ListRequest productStatusesRequest = service.Productstatuses.List(MERCHANT_ID);
-                productStatusesRequest.MaxResults = maxResults;
-                productStatusesRequest.PageToken = pageToken;
-                productStatusesRequest.IncludeInvalidInsertedItems = true;
-                productStatusesResponseList = productStatusesRequest.Execute();
-
-                if (productsResponse.NextPageToken != null)
-                {
-                    pageToken = productsResponse.NextPageToken;
-                }
-            }
-            while (productsResponse.NextPageToken != null);
-
-
-            if (productsResponse.Resources != null && productStatusesResponseList.Resources != null)
+            if (productsResponseList != null && productStatusesResponseList != null)
             {
                 Jenpbiz.Models.GoogleLists fullProductInfo = new Models.GoogleLists()
                 {
-                    Products = productsResponse.Resources.ToList(),
-                    ProductsStatuses = productStatusesResponseList.Resources.ToList()
+                    Products = productsResponseList,
+                    ProductsStatuses = productStatusesResponseList
                 };
-                //DeletePartTrapProduct("online:sv:SE:14787867492");
+
                 return View(fullProductInfo);
             }
-
 
             return View();
         }
 
         public ActionResult InsertProduct()
         {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
+            //////UserCredential credential = Authenticate();
+            //////ShoppingContentService service = CreateService(credential);
 
-            string targetCountry = Request["selectProductTargetCountry"].ToUpper();
-            string availabilityDateStr = Request["selectProductAvailabilityDate"];
-            string expirationDateStr = Request["selectProductAvailabilityExpiryDate"];
+            //////string targetCountry = Request["selectProductTargetCountry"].ToUpper();
+            //////string availabilityDateStr = Request["selectProductAvailabilityDate"];
+            //////string expirationDateStr = Request["selectProductAvailabilityExpiryDate"];
 
 
-            DateTime availabilityDate = DateTime.Now;
-            DateTime expirationDate = DateTime.Now.AddDays(7);
-            DateTime.TryParse(availabilityDateStr, out availabilityDate);
-            DateTime.TryParse(expirationDateStr, out expirationDate);
+            //////DateTime availabilityDate = DateTime.Now;
+            //////DateTime expirationDate = DateTime.Now.AddDays(7);
+            //////DateTime.TryParse(availabilityDateStr, out availabilityDate);
+            //////DateTime.TryParse(expirationDateStr, out expirationDate);
 
-            if (!string.IsNullOrWhiteSpace(availabilityDateStr))
-            {
-                availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                availabilityDateStr = null;
-            }
+            //////if (!string.IsNullOrWhiteSpace(availabilityDateStr))
+            //////{
+            //////    availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////}
+            //////else
+            //////{
+            //////    availabilityDateStr = null;
+            //////}
 
-            if (!string.IsNullOrWhiteSpace(expirationDateStr))
-            {
-                expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                expirationDateStr = null;
-            }
+            //////if (!string.IsNullOrWhiteSpace(expirationDateStr))
+            //////{
+            //////    expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////}
+            //////else
+            //////{
+            //////    expirationDateStr = null;
+            //////}
 
-            availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
 
-            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-            {
-                OfferId = GetUniqueId(),
-                Title = Request["inputProductTitle"],
-                Description = Request["inputProductDescription"],
-                Link = Request["inputProductLink"],
-                ImageLink = Request["InputProductImageLink"],
-                //ContentLanguage = Request["selectProductTargetCountry"].ToUpper(),
-                TargetCountry = targetCountry,
-                Channel = "online",
-                Availability = Request["selectProductAvailability"],
-                Condition = Request["selectProductCondition"],
-                GoogleProductCategory = Request["selectProductCategory"],
-                Gtin = Request["inputProductGtin"],
-                IdentifierExists = false,
-                
-                AvailabilityDate = availabilityDateStr,
-                ExpirationDate = expirationDateStr
-            };
+            //////Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
+            //////{
+            //////    OfferId = GetUniqueId(),
+            //////    Title = Request["inputProductTitle"],
+            //////    Description = Request["inputProductDescription"],
+            //////    Link = Request["inputProductLink"],
+            //////    ImageLink = Request["InputProductImageLink"],
+            //////    //ContentLanguage = Request["selectProductTargetCountry"].ToUpper(),
+            //////    TargetCountry = targetCountry,
+            //////    Channel = "online",
+            //////    Availability = Request["selectProductAvailability"],
+            //////    Condition = Request["selectProductCondition"],
+            //////    GoogleProductCategory = Request["selectProductCategory"],
+            //////    Gtin = Request["inputProductGtin"],
+            //////    IdentifierExists = false,
 
-            Google.Apis.ShoppingContent.v2.Data.Price priceInfo = new Google.Apis.ShoppingContent.v2.Data.Price()
-            {
-                Value = Request["inputProductPrice"]
-            };
+            //////    AvailabilityDate = availabilityDateStr,
+            //////    ExpirationDate = expirationDateStr
+            //////};
 
-            switch (targetCountry)
-            {
-                case "SE":
-                    newProduct.ContentLanguage = "sv";
-                    priceInfo.Currency = "SEK";
-                    break;
+            //////Google.Apis.ShoppingContent.v2.Data.Price priceInfo = new Google.Apis.ShoppingContent.v2.Data.Price()
+            //////{
+            //////    Value = Request["inputProductPrice"]
+            //////};
 
-                case "GB":
-                    newProduct.ContentLanguage = "en";
-                    priceInfo.Currency = "GBP";
-                    break;
+            //////switch (targetCountry)
+            //////{
+            //////    case "SE":
+            //////        newProduct.ContentLanguage = "sv";
+            //////        priceInfo.Currency = "SEK";
+            //////        break;
 
-                case "AU":
-                    newProduct.ContentLanguage = "en";
-                    priceInfo.Currency = "AUD";
-                    break;
+            //////    case "GB":
+            //////        newProduct.ContentLanguage = "en";
+            //////        priceInfo.Currency = "GBP";
+            //////        break;
 
-                case "USA":
-                    newProduct.ContentLanguage = "en";
-                    priceInfo.Currency = "USD";
-                    break;
+            //////    case "AU":
+            //////        newProduct.ContentLanguage = "en";
+            //////        priceInfo.Currency = "AUD";
+            //////        break;
 
-                default:
-                    newProduct.ContentLanguage = "en";
-                    priceInfo.Currency = "USD";
-                    break;
-            }
+            //////    case "USA":
+            //////        newProduct.ContentLanguage = "en";
+            //////        priceInfo.Currency = "USD";
+            //////        break;
 
-            newProduct.Price = priceInfo;
+            //////    default:
+            //////        newProduct.ContentLanguage = "en";
+            //////        priceInfo.Currency = "USD";
+            //////        break;
+            //////}
 
-            try
-            {
-                ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
-                //accountRequest.DryRun = true;
-                accountRequest.Execute();
-                Debug.WriteLine(newProduct.Title + newProduct.Description);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
-            
+            //////newProduct.Price = priceInfo;
+
+            //////try
+            //////{
+            //////    ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
+            //////    //accountRequest.DryRun = true;
+            //////    accountRequest.Execute();
+            //////    Debug.WriteLine(newProduct.Title + newProduct.Description);
+            //////}
+            //////catch (Exception e)
+            //////{
+            //////    Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
+            //////    Debug.WriteLine("Message: " + e.Message);
+            //////    Debug.WriteLine("Stack Trace: " + e.StackTrace);
+            //////    Debug.WriteLine("Target Site: " + e.TargetSite);
+            //////}
+
+            googleObject.ProductInsert(Url2, false);
 
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
 
         public ActionResult DeleteProduct(string productId)
         {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
-
-            if (productId.Contains("_"))
-            {
-                productId = productId.Replace('_', ':');
-            }
+            //////UserCredential credential = Authenticate();
+            //////ShoppingContentService service = CreateService(credential);
 
 
-            try
-            {
-                ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
-                //accountRequest.DryRun = true;
-                accountRequest.Execute();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
+            //////if (productId.Contains("_"))
+            //////{
+            //////    productId = productId.Replace('_', ':');
+            //////}
+
+
+            //////try
+            //////{
+            //////    ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
+            //////    //accountRequest.DryRun = true;
+            //////    accountRequest.Execute();
+            //////}
+            //////catch (Exception e)
+            //////{
+            //////    Debug.WriteLine("EXCEPTION THROWN @DeleteProduct()");
+            //////    Debug.WriteLine("Message: " + e.Message);
+            //////    Debug.WriteLine("Stack Trace: " + e.StackTrace);
+            //////    Debug.WriteLine("Target Site: " + e.TargetSite);
+            //////}
+
+            googleObject.ProductDelete(Url2);
 
             return RedirectToAction("/GetProduct", "GoogleApi");
             //return Json(new { successfullyDeleted = successfullyDeleted }, "json", JsonRequestBehavior.DenyGet);
@@ -247,209 +226,132 @@ namespace Jenpbiz.Controllers
         public ActionResult EditProduct()
         {
 
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
+            //////UserCredential credential = Authenticate();
+            //////ShoppingContentService service = CreateService(credential);
 
-            string category = Request["editSelectProductCategory"];
-            string availability = Request["editSelectProductAvailability"];
-            string condition = Request["editSelectProductCondition"];
-            string targetCountry = Request["editSelectProductTargetCountry"];
-            string availabilityDateStr = Request["editSelectProductAvailabilityDate"];
-            string expirationDateStr = Request["editSelectProductAvailabilityExpiryDate"];
+            //////string category = Request["editSelectProductCategory"];
+            //////string availability = Request["editSelectProductAvailability"];
+            //////string condition = Request["editSelectProductCondition"];
+            //////string targetCountry = Request["editSelectProductTargetCountry"];
+            //////string availabilityDateStr = Request["editSelectProductAvailabilityDate"];
+            //////string expirationDateStr = Request["editSelectProductAvailabilityExpiryDate"];
 
-            string id = Request["editProductId"];
-            string title = Request["editProductTitle"];
-            string description = Request["editProductDescription"];
-            string link = Request["editProductLink"];
-            string imageLink = Request["editProductImageLink"];
-            string price = Request["editProductPrice"];
-            string gtin = Request["EditProductGtin"];
-
-
-            DateTime availabilityDate = DateTime.Now;
-            DateTime expirationDate = DateTime.Now.AddDays(7);
-            DateTime.TryParse(availabilityDateStr, out availabilityDate);
-            DateTime.TryParse(expirationDateStr, out expirationDate);
-
-            if (!string.IsNullOrWhiteSpace(availabilityDateStr))
-            {
-                availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                availabilityDateStr = null;
-            }
-
-            if (!string.IsNullOrWhiteSpace(expirationDateStr))
-            {
-                expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                expirationDateStr = null;
-            }
-
-            
-
-            Google.Apis.ShoppingContent.v2.Data.Product updateProduct = new Google.Apis.ShoppingContent.v2.Data.Product();
-
-            try
-            {
-                ProductsResource.GetRequest updateProductRequest = service.Products.Get(MERCHANT_ID, id);
-                updateProduct = updateProductRequest.Execute();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
-
-                updateProduct.ETag = null;
-                updateProduct.GoogleProductCategory = category;
-                updateProduct.Availability = availability;
-                updateProduct.Condition = condition;
-                updateProduct.TargetCountry = targetCountry;
-                updateProduct.AvailabilityDate = availabilityDateStr;
-                updateProduct.ExpirationDate = expirationDateStr;
-
-                updateProduct.Title = title;
-                updateProduct.Description = description;
-                updateProduct.Link = link;
-                updateProduct.ImageLink = imageLink;
-                updateProduct.Price.Value = price;
-                updateProduct.Gtin = gtin;
+            //////string id = Request["editProductId"];
+            //////string title = Request["editProductTitle"];
+            //////string description = Request["editProductDescription"];
+            //////string link = Request["editProductLink"];
+            //////string imageLink = Request["editProductImageLink"];
+            //////string price = Request["editProductPrice"];
+            //////string gtin = Request["EditProductGtin"];
 
 
-            switch (targetCountry)
-            {
-                case "SE":
-                    updateProduct.ContentLanguage = "sv";
-                    updateProduct.Price.Currency = "SEK";
-                    break;
+            //////DateTime availabilityDate = DateTime.Now;
+            //////DateTime expirationDate = DateTime.Now.AddDays(7);
+            //////DateTime.TryParse(availabilityDateStr, out availabilityDate);
+            //////DateTime.TryParse(expirationDateStr, out expirationDate);
 
-                case "GB":
-                    updateProduct.ContentLanguage = "en";
-                    updateProduct.Price.Currency = "GBP";
-                    break;
+            //////if (!string.IsNullOrWhiteSpace(availabilityDateStr))
+            //////{
+            //////    availabilityDateStr = availabilityDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////}
+            //////else
+            //////{
+            //////    availabilityDateStr = null;
+            //////}
 
-                case "AU":
-                    updateProduct.ContentLanguage = "en";
-                    updateProduct.Price.Currency = "AUD";
-                    break;
-
-                case "USA":
-                    updateProduct.ContentLanguage = "en";
-                    updateProduct.Price.Currency = "USD";
-                    break;
-
-                default:
-                    updateProduct.ContentLanguage = "en";
-                    updateProduct.Price.Currency = "USD";
-                    break;
-            }
-
-            List<ProductShipping> shippingList = new List<ProductShipping>()
-            {
-                new ProductShipping { Country = "SE", Price = new Google.Apis.ShoppingContent.v2.Data.Price { Value = "50", Currency = "SEK"  }}
-            };
-
-            updateProduct.Shipping = shippingList;
-
-            try
-            {
-                ProductsResource.InsertRequest accountRequest = service.Products.Insert(updateProduct, MERCHANT_ID);
-                //accountRequest.DryRun = true;
-                accountRequest.Execute();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
+            //////if (!string.IsNullOrWhiteSpace(expirationDateStr))
+            //////{
+            //////    expirationDateStr = expirationDate.ToString("s", System.Globalization.CultureInfo.InvariantCulture);
+            //////}
+            //////else
+            //////{
+            //////    expirationDateStr = null;
+            //////}
 
 
-            return RedirectToAction("/GetProduct", "GoogleApi");
-        }
 
-        public ActionResult CreatePartTrapProduct()
-        {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
+            //////Google.Apis.ShoppingContent.v2.Data.Product updateProduct = new Google.Apis.ShoppingContent.v2.Data.Product();
 
-            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-            {
-                OfferId = GetUniqueId(),
-                Title = "PartTrap One",
-                Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. ",
-                Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991",
-                ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png",
-                ContentLanguage = "sv",
-                TargetCountry = "SE",
-                Channel = "online",
-                Availability = "in stock",
-                Condition = "new",
-                GoogleProductCategory = "5300",
-                IdentifierExists = false,
-                Brand = "PartTrap",
-                OnlineOnly = true,
-                Price = new Google.Apis.ShoppingContent.v2.Data.Price
-                {
-                    Value = "500000",
-                    Currency = "SEK"
-                },
-                ProductType = "Software > Computer Software > Business & Productivity Software",
+            //////try
+            //////{
+            //////    ProductsResource.GetRequest updateProductRequest = service.Products.Get(MERCHANT_ID, id);
+            //////    updateProduct = updateProductRequest.Execute();
+            //////}
+            //////catch (Exception e)
+            //////{
+            //////    Debug.WriteLine("EXCEPTION THROWN @EditProduct() 1");
+            //////    Debug.WriteLine("Message: " + e.Message);
+            //////    Debug.WriteLine("Stack Trace: " + e.StackTrace);
+            //////    Debug.WriteLine("Target Site: " + e.TargetSite);
+            //////}
 
-            };
+            //////    updateProduct.ETag = null;
+            //////    updateProduct.GoogleProductCategory = category;
+            //////    updateProduct.Availability = availability;
+            //////    updateProduct.Condition = condition;
+            //////    updateProduct.TargetCountry = targetCountry;
+            //////    updateProduct.AvailabilityDate = availabilityDateStr;
+            //////    updateProduct.ExpirationDate = expirationDateStr;
+
+            //////    updateProduct.Title = title;
+            //////    updateProduct.Description = description;
+            //////    updateProduct.Link = link;
+            //////    updateProduct.ImageLink = imageLink;
+            //////    updateProduct.Price.Value = price;
+            //////    updateProduct.Gtin = gtin;
 
 
-            try
-            {
-                ProductsResource.InsertRequest accountRequest = service.Products.Insert(newProduct, MERCHANT_ID);
-                //accountRequest.DryRun = true;
-                accountRequest.Execute();
-                Debug.WriteLine(newProduct.Title + newProduct.Description);
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @CreatePartTrapProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + e.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
+            //////switch (targetCountry)
+            //////{
+            //////    case "SE":
+            //////        updateProduct.ContentLanguage = "sv";
+            //////        updateProduct.Price.Currency = "SEK";
+            //////        break;
 
+            //////    case "GB":
+            //////        updateProduct.ContentLanguage = "en";
+            //////        updateProduct.Price.Currency = "GBP";
+            //////        break;
 
-            return RedirectToAction("/GetProduct", "GoogleApi");
+            //////    case "AU":
+            //////        updateProduct.ContentLanguage = "en";
+            //////        updateProduct.Price.Currency = "AUD";
+            //////        break;
 
-        }
+            //////    case "USA":
+            //////        updateProduct.ContentLanguage = "en";
+            //////        updateProduct.Price.Currency = "USD";
+            //////        break;
 
-        public ActionResult DeletePartTrapProduct(string productId)
-        {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
+            //////    default:
+            //////        updateProduct.ContentLanguage = "en";
+            //////        updateProduct.Price.Currency = "USD";
+            //////        break;
+            //////}
 
-            if (productId.Contains("_"))
-            {
-                productId = productId.Replace('_', ':');
-            }
+            //////List<ProductShipping> shippingList = new List<ProductShipping>()
+            //////{
+            //////    new ProductShipping { Country = "SE", Price = new Google.Apis.ShoppingContent.v2.Data.Price { Value = "50", Currency = "SEK"  }}
+            //////};
 
+            //////updateProduct.Shipping = shippingList;
 
-            try
-            {
-                ProductsResource.DeleteRequest accountRequest = service.Products.Delete(MERCHANT_ID, productId);
-                //accountRequest.DryRun = true;
-                accountRequest.Execute();
-            }
-            catch (Exception Ex)
-            {
-                System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @DeletePartTrapProduct()");
-                System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
-            }
+            //////try
+            //////{
+            //////    ProductsResource.InsertRequest accountRequest = service.Products.Insert(updateProduct, MERCHANT_ID);
+            //////    //accountRequest.DryRun = true;
+            //////    accountRequest.Execute();
+            //////}
+            //////catch (Exception e)
+            //////{
+            //////    Debug.WriteLine("EXCEPTION THROWN @EditProduct() 2");
+            //////    Debug.WriteLine("Message: " + e.Message);
+            //////    Debug.WriteLine("Stack Trace: " + e.StackTrace);
+            //////    Debug.WriteLine("Target Site: " + e.TargetSite);
+            //////}
+
+            googleObject.ProductEdit(Url2);
+
 
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
@@ -534,241 +436,8 @@ namespace Jenpbiz.Controllers
             return unixTimestamp + unique_id_increment.ToString();
         }
 
-
-        // ----------------------------------------------------------------------------------
-
-        
-        public JArray GetProductsFromJSON(string url)
-        {
-            List<JToken> productList = new List<JToken>();
-            WebRequest request = WebRequest.Create(url);
-            Stream dataStream = request.GetResponse().GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-
-            string response = reader.ReadToEnd();
-            JArray jsonObj = (JArray)JsonConvert.DeserializeObject(response);
-
-            return jsonObj;
-        }
-
-
-        public void InsertProductFromJSON(string url)
-        {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
-
-            JArray productsToInsert = GetProductsFromJSON(url);
-            List<Google.Apis.ShoppingContent.v2.Data.Product> googleProducts = new List<Google.Apis.ShoppingContent.v2.Data.Product>();
-
-            //OfferId = GetUniqueId()
-            //Title = "PartTrap One"
-            //Description = "En företagstjänst för B2B eller B2C företag. Innehåller CMS, PIM, ERP, eCommerce. "
-            //Link = "https://www.parttrap.com/sv/ExplodedDiagramBooks/Index/8f0fef24-6bfb-4229-a64e-6b2fb0e09991"
-            //ImageLink = "https://media.licdn.com/mpr/mpr/shrink_200_200/AAEAAQAAAAAAAAdRAAAAJGEwNWFlNjk4LTI3NDQtNDdmOS05YzZjLTM5MjQ2Mzk5MzQzMA.png"
-            //ContentLanguage = "sv"
-            //TargetCountry = "SE"
-            //Channel = "online"
-            //Availability = "in stock"
-            //Condition = "new"
-            //GoogleProductCategory = "5300"
-            //IdentifierExists = false
-            //Brand = "PartTrap"
-            //OnlineOnly = true
-            //Price = new Price
-            //{
-            //    Value = "500000"
-            //    Currency = "SEK"
-            //}
-            //ProductType = "Software > Computer Software > Business & Productivity Software"
-
-            Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product();
-
-            //Making new google products and adding them in a list of google products.
-            foreach (var product in productsToInsert)
-            {
-                newProduct.OfferId = product["ProductID"].ToString();
-                newProduct.Title = product["Description"].ToString();
-                newProduct.Description = product["AdditionalValues"].ToString();
-
-                googleProducts.Add(newProduct);
-            }
-
-            //Pushing each google product in the google products list to Google Shopping.
-            foreach (var googleProduct in googleProducts)
-            {
-
-                try
-                {
-                    ProductsResource.InsertRequest accountRequest = service.Products.Insert(googleProduct, MERCHANT_ID);
-                    //accountRequest.DryRun = true;
-                    accountRequest.Execute();
-                    Debug.WriteLine(googleProduct.Title + googleProduct.Description);
-                }
-                catch (Exception Ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("EXCEPTION THROWN @InsertProduct()");
-                    System.Diagnostics.Debug.WriteLine("Message: " + Ex.Message);
-                    System.Diagnostics.Debug.WriteLine("Stack Trace: " + Ex.StackTrace);
-                    System.Diagnostics.Debug.WriteLine("Target Site: " + Ex.TargetSite);
-                }
-            }
-
-
-            return;
-        }
-
-        public ActionResult AddTheSameProductManyTimes()
-        {
-
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
-            int productsToMake = 10;
-
-            ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
-            batchRequest.Entries = new List<ProductsCustomBatchRequestEntry>();
-
-            int idStart = 0;
-
-            for (int i = 1; i <= productsToMake; i++)
-            {
-
-                Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-                {
-                    OfferId = (idStart + i).ToString(),
-                    Title = "My Test Product: " + i,
-                    Description = "This is a test product that I made. It is number " + i + " in a series of " + productsToMake + " that I will create.",
-                    Link = "https://www.example.com/products/Product?productId=" + i,
-                    ImageLink = "https://www.example.com/productImages/ProductImage?productId=" + i + "&imageIndex=0",
-                    ContentLanguage = "sv",
-                    TargetCountry = "SE",
-                    Channel = "online",
-                    Availability = "out of stock",
-                    Condition = "new",
-                    GoogleProductCategory = "3219",
-                    IdentifierExists = false,
-                    Price = new Google.Apis.ShoppingContent.v2.Data.Price()
-                    {
-                        Currency = "SEK",
-                        Value = i + "00"
-                    }
-                };
-
-                ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
-                {
-                    Method = "insert",
-                    BatchId = long.Parse(newProduct.OfferId),
-                    MerchantId = MERCHANT_ID,
-                    Product = newProduct
-                };
-                
-                batchRequest.Entries.Add(newEntry);
-            }
-
-
-            try
-            {
-                ProductsResource.CustombatchRequest reeeq = service.Products.Custombatch(batchRequest);
-                reeeq.Execute();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @AddTheSameProductManyTimes()");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
-
-
-            return RedirectToAction("/GetProduct", "GoogleApi");
-        }
-
-        public ActionResult DeleteTheSameProductManyTimes()
-        {
-            UserCredential credential = Authenticate();
-            ShoppingContentService service = CreateService(credential);
-
-
-            ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
-            batchRequest.Entries = new List<ProductsCustomBatchRequestEntry>();
-
-            int productsToDelete = 10;
-            int idStart = 0;
-
-            for (int i = 1; i <= productsToDelete; i++)
-            {
-                ProductsCustomBatchRequestEntry entry = new ProductsCustomBatchRequestEntry()
-                {
-                    BatchId = idStart + i,
-                    MerchantId = MERCHANT_ID,
-                    Method = "delete",
-                    ProductId = "online:sv:SE:" + (idStart + i)
-                };
-
-                batchRequest.Entries.Add(entry);
-            }
-
-
-            try
-            {
-                ProductsResource.CustombatchRequest reeeq = service.Products.Custombatch(batchRequest);
-                reeeq.Execute();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("EXCEPTION THROWN @DeleteTheSameProductManyTimes()");
-                Debug.WriteLine("Message: " + e.Message);
-                Debug.WriteLine("Stack Trace: " + e.StackTrace);
-                Debug.WriteLine("Target Site: " + e.TargetSite);
-            }
-
-
-            return RedirectToAction("/GetProduct", "GoogleApi");
-        }
-
     }
 
 
 }
 
-
-//Product newProduct = new Product()
-//{
-//    OfferId = GetUniqueId(),
-//    Title = "PartTrap skjorta",
-//    Description = "En fin, vit t-shirt med PartTrap skriven på den.",
-//    Link = "http://imgur.com/a/ZRGaP",
-//    ImageLink = "http://i.imgur.com/79uA7kQ.jpg",
-//    ContentLanguage = "sv",
-//    TargetCountry = "SE",
-//    Channel = "online",
-//    Availability = "in stock",
-//    Condition = "new",
-//    GoogleProductCategory = "1604",
-//    IdentifierExists = false,
-//    Brand = "PartTrap",
-//    OnlineOnly = true,
-//    Price = new Price
-//    {
-//        Value = "5000",
-//        Currency = "SEK"
-//    },
-
-//};
-
-    
-    
- //foreach (var status in fullProductInfo.ProductsStatuses.AsEnumerable())
-//{
-//    Debug.WriteLine("Status ProductId: " + status.ProductId);
-//    Debug.WriteLine("Status Product Title: " + status.Title);
-//    Debug.WriteLine("Status Product Link: " + status.Link);
-
-//    if (status.DataQualityIssues != null)
-//    {
-//        for (int i = 0; i < status.DataQualityIssues.Count; i++)
-//        {
-//            Debug.WriteLine("Issue Timestamp: " + status.DataQualityIssues[i].Timestamp);
-//            Debug.WriteLine(status.DataQualityIssues[i].Severity + " - Issue " + i + ": " + status.DataQualityIssues[i].Detail);
-//        }
-//    }
-//}
