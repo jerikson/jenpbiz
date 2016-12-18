@@ -3,16 +3,11 @@ using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
 using Google.Apis.ShoppingContent.v2.Data;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System;
 using System.Linq;
-using Jenpbiz;
-using System.Diagnostics;
-using System.Dynamic;
-using System.Web.Routing;
+
 
 namespace Jenpbiz.Models
 {
@@ -21,8 +16,6 @@ namespace Jenpbiz.Models
         private UserCredential _credential;
         private ShoppingContentService _service;
         private ulong _merchantID;
-        //private string _clientId = "896777409399-ghva93bgs7qpv293tqj1vp4eefi7n82c.apps.googleusercontent.com";
-        //private string _clientSecret = "Or7cg3mMtWmMsxIhBjecHcRq";
         private string _clientId = "134786682471-b2nh5tpgcq06r9nqpanmnpi027t3aunh.apps.googleusercontent.com";
         private string _clientSecret = "nZiPHZYfF_LDpxqijfToD_oe";
 
@@ -69,9 +62,7 @@ namespace Jenpbiz.Models
             {
                 try
                 {
-                    //Kolla ifall ProductTextField2 finns om man använder JsonConvert.DeserializeObject.
                     string json = client.DownloadString(productUrl);
-                    //jsonObj = (JArray)JsonConvert.DeserializeObject(json);
                     jsonObj = JArray.Parse(json);
                 }
                 catch (Exception e)
@@ -90,7 +81,7 @@ namespace Jenpbiz.Models
         ///Inserts and/or updates products to a Google Shopping account using custombatch method to send multiple requests as one.
         ///<para>productUrl is a URI to something that returns a JSON object.</para>
         /// </summary>
-        public void ProductInsert(string productUrl, bool update)
+        public void ProductInsert(string productUrl)
         {
             JArray productsToPush = ProductGet(productUrl);
             ProductsCustomBatchRequest batchRequest = new ProductsCustomBatchRequest();
@@ -98,82 +89,44 @@ namespace Jenpbiz.Models
 
             string domainUrl = productUrl.Substring(0, _customIndexOf(productUrl, '/', 3));
 
-            if (!update)
+
+            foreach (var product in productsToPush)
             {
-                foreach (var product in productsToPush)
+
+                Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
                 {
-                    Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-                    {
-                        OfferId = product["ProductID"].ToString(),
-                        Title = "Product Title",
-                        Description = "Product description",
-                        Link = "https://www.example.com/products/Product?productId=1",
-                        ImageLink = domainUrl + product["AdditionalValues"]["ImageUrl"].ToString(),
-                        ContentLanguage = "sv",
-                        TargetCountry = "SE",
-                        Channel = "online",
-                        Availability = "out of stock",
-                        Condition = "new",
-                        GoogleProductCategory = "3219",
-                        IdentifierExists = false
-                    };
+                    OfferId = (string)product["ProductID"],
+                    Title = (string)product["GoogleTitle"],
+                    Description = (string)product["GoogleDscription"],
+                    Link = domainUrl + (string)product["AdditionalValues"]["DetailLink"],
+                    ImageLink = domainUrl + (string)product["AdditionalValues"]["ImageUrl"],
+                    ContentLanguage = (string)product["GoogleContentLanguage"],
+                    TargetCountry = (string)product["GoogleTargetCountry"],
+                    Channel = "online",
+                    Availability = (string)product["GoogleAvailability"],
+                    Condition = (string)product["GoogleCondition"],
+                    GoogleProductCategory = (string)product["GoogleProductCategory"],
+                    IdentifierExists = false
+                };
 
-                    newProduct.Price = new Google.Apis.ShoppingContent.v2.Data.Price
-                    {
-                        Currency = "SEK",
-                        Value = "100"
-                    };
-
-                    ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
-                    {
-                        Method = "insert",
-                        BatchId = long.Parse(newProduct.OfferId),
-                        MerchantId = _merchantID,
-                        Product = newProduct
-                    };
-
-                    batchRequest.Entries.Add(newEntry);
-
-                }
-            }
-            else
-            {
-                foreach (var product in productsToPush)
+                newProduct.Price = new Google.Apis.ShoppingContent.v2.Data.Price
                 {
-                    Google.Apis.ShoppingContent.v2.Data.Product newProduct = new Google.Apis.ShoppingContent.v2.Data.Product()
-                    {
-                        OfferId = product["ProductID"].ToString(),
-                        Title = "Product Title",
-                        Description = "Product description",
-                        Link = "https://www.example.com/products/Product?productId=1",
-                        ImageLink = domainUrl + product["AdditionalValues"]["ImageUrl"].ToString(),
-                        ContentLanguage = "sv",
-                        TargetCountry = "SE",
-                        Channel = "online",
-                        Availability = "in stock",
-                        Condition = "used",
-                        GoogleProductCategory = "3219",
-                        IdentifierExists = false
-                    };
+                    Currency = (string)product["NetPriceInclVAT"]["Currency"]["Code"],
+                    Value = (string)product["NetPriceInclVAT"]["Amount"]
+                };
 
-                    newProduct.Price = new Google.Apis.ShoppingContent.v2.Data.Price
-                    {
-                        Currency = "SEK",
-                        Value = "200"
-                    };
+                ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
+                {
+                    Method = "insert",
+                    BatchId = long.Parse(newProduct.OfferId),
+                    MerchantId = _merchantID,
+                    Product = newProduct
+                };
 
-                    ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
-                    {
-                        Method = "insert",
-                        BatchId = long.Parse(newProduct.OfferId),
-                        MerchantId = _merchantID,
-                        Product = newProduct
-                    };
+                batchRequest.Entries.Add(newEntry);
 
-                    batchRequest.Entries.Add(newEntry);
-
-                }
             }
+        
 
             try
             {
@@ -189,11 +142,6 @@ namespace Jenpbiz.Models
             }
 
             return;
-        }
-
-        public void ProductEdit(string productUrl)
-        {
-            ProductInsert(productUrl, true);
         }
 
 
@@ -214,9 +162,7 @@ namespace Jenpbiz.Models
 
             foreach (var product in productsToDelete)
             {
-                // No static later, when we have more data.
-                // idConstruct final: online = Channel, sv = ContentLanguage, SE = TargetCountry
-                idConstruct = "online:sv:SE:" + product["ProductID"].ToString();
+                idConstruct = "online:" + (string)product["GoogleContentLanguage"] + ":" + (string)product["GoogleTargetCountry"] + ":" + (string)product["ProductID"];
                 ProductsCustomBatchRequestEntry newEntry = new ProductsCustomBatchRequestEntry()
                 {
                     BatchId = batchId,
@@ -307,7 +253,6 @@ namespace Jenpbiz.Models
             else
             {
                 return null;
-                //return new List<Product>();
             }
 
 
@@ -377,7 +322,6 @@ namespace Jenpbiz.Models
             else
             {
                 return null;
-                //return new List<Google.Apis.ShoppingContent.v2.Data.ProductStatus>();
             }
 
 
@@ -408,7 +352,7 @@ namespace Jenpbiz.Models
                     MerchantId = _merchantID,
                     Method = "get",
                     //Bygg upp riktig- channel:content_language:TARGET_COUNTRY:OfferId
-                    ProductId = "online:sv:SE:" + product["ProductID"].ToString()
+                    ProductId = "online:" + (string)product["GoogleContentLanguage"] + ":" +  (string)product["GoogleTargetCountry"] + ":" + (string)product["ProductID"]
                 };
                 batchRequest.Entries.Add(newEntry);
             }

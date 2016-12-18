@@ -5,7 +5,6 @@ using System.Threading;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using Google.Apis.ShoppingContent.v2;
-using Google.Apis.ShoppingContent.v2.Data;
 using System;
 using System.Diagnostics;
 using Jenpbiz.Models;
@@ -82,7 +81,7 @@ namespace Jenpbiz.Controllers
 
         public ActionResult InsertProduct()
         {
-            googleObject.ProductInsert(Url2, false);
+            googleObject.ProductInsert(Url2);
 
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
@@ -96,8 +95,7 @@ namespace Jenpbiz.Controllers
 
         public ActionResult EditProduct()
         {
-            googleObject.ProductEdit(Url2);
-
+            googleObject.ProductInsert(Url2);
 
             return RedirectToAction("/GetProduct", "GoogleApi");
         }
