@@ -21,37 +21,15 @@ namespace Jenpbiz.Controllers
         private static string CLIENT_SECRET = "Or7cg3mMtWmMsxIhBjecHcRq";
         private static ulong MERCHANT_ID = 113298073;
         private int unique_id_increment = 0;
-        internal string Url2 = "http://one.dev.parttrap.com/catalog/getrelatedchildproducts/?stockCode=GOOGLE&relationId=4";
+        internal string Url2 = "URL HERE, BRO";
 
         internal GoogleApi googleObject = new GoogleApi(113298073);
 
         // GET: GoogleAPI
         public ActionResult Index()
         {
-            List<Model.Product> productList = GetProduct2(Url2);
-            //ViewBag.Stockcode = StockId;
-            return View(productList);
+            return View();
         }
-
-
-        public List<Model.Product> GetProduct2(string url)
-        {
-            List<Model.Product> productList = new List<Model.Product>();
-            WebRequest request = WebRequest.Create(url);
-            Stream dataStream = request.GetResponse().GetResponseStream();
-            StreamReader reader = new StreamReader(dataStream);
-            string response = reader.ReadToEnd();
-            JArray jsonObj = (JArray)JsonConvert.DeserializeObject(response);
-
-            for (var i = 0; i < jsonObj.Count; i++)
-            {
-                Model.Product a = (Model.Product)JsonConvert.DeserializeObject(jsonObj[i].ToString(), typeof(Model.Product));
-                productList.Add(a);
-            }
-            return productList;
-        }
-        
-
 
         public ActionResult GetProduct(int? maxResults, int? page)
         {
